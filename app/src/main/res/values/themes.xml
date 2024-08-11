@@ -3,7 +3,22 @@
     <style name="Base.Theme.FlexMeals" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">@color/mainColor</item>
+    </style>
+    <style name="Theme.FlexMeals" parent="Base.Theme.FlexMeals" />
+
+    <style name="SplashTheme" parent="Base.Theme.FlexMeals">
+        <item name="colorPrimary">@android:color/white</item>
     </style>
 
-    <style name="Theme.FlexMeals" parent="Base.Theme.FlexMeals" />
+    <style name="ButtonSplash" parent="Base.Theme.FlexMeals">
+        <item name="backgroundTint">@color/mainColor</item>
+        <item name="android:paddingVertical">15dp</item>
+        <item name="textFillColor">@color/white</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:background">@drawable/button_corner</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+
 </resources>
