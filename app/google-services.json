@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "289268537990",
+    "project_id": "flex-bc887",
+    "storage_bucket": "flex-bc887.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:289268537990:android:0b914265fc96848e4e0f07",
+        "android_client_info": {
+          "package_name": "com.iti.flex_meals"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "289268537990-dtrjdh5rk65dhgk9vg5f3rk3g73qbh41.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.iti.flex_meals",
+            "certificate_hash": "4c5f22fbfcb714677fdd84b10d4a26f34b12abfc"
+          }
+        },
+        {
+          "client_id": "289268537990-j7a25ck5tfljirtdpkqhndt2hauqopr0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD4KMoXAxG1Btqo_SevpJXHYTD5ga5KZvA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "289268537990-j7a25ck5tfljirtdpkqhndt2hauqopr0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
