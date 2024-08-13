@@ -48,8 +48,9 @@ dependencies {
     implementation ("androidx.navigation:navigation-fragment:2.5.3")
     implementation ("androidx.navigation:navigation-ui:2.5.3")
 
+    //Animation
     implementation ("com.airbnb.android:lottie:3.4.0")
-
+    //loading indicator
     implementation ("com.github.leandroborgesferreira:loading-button-android:2.3.0")
 
 
