@@ -10,7 +10,7 @@ public class LoginPresenterImpl implements LoginPresenter {
     private IFirebaseAuth firebaseAuth;
     private Context context;
 
-    public LoginPresenterImpl(LoginView view, IFirebaseAuth firebaseAuth , Context context) {
+    public LoginPresenterImpl(LoginView view, IFirebaseAuth firebaseAuth) {
         this.view = view;
         this.firebaseAuth = firebaseAuth;
         this.context = context;
@@ -20,16 +20,36 @@ public class LoginPresenterImpl implements LoginPresenter {
 
     @Override
     public void performGoogleLogin(String idToken, String email) {
+        view.showLoadingIndicator();
         firebaseAuth.signInWithGoogle(idToken, new IFirebaseAuth.AuthResultCallback() {
             @Override
             public void onSuccess(String userId) {
+                view.hideLoadingIndicator();
                 view.onGoogleLoginSuccess(userId, email);
 
             }
 
             @Override
             public void onFailure(String errorMessage) {
+                view.hideLoadingIndicator();
                 view.onGoogleLoginError(errorMessage);
+            }
+        });
+
+    }
+    @Override
+    public void performFirebaseLogin(String email, String password) {
+        view.showLoadingIndicator();
+        firebaseAuth.signInWithEmailAndPassword(email, password, new IFirebaseAuth.AuthResultCallback() {
+            @Override
+            public void onSuccess(String userId) {
+                view.hideLoadingIndicator();
+                view.onLoginSuccess(userId, email);
+            }
+            @Override
+            public void onFailure(String errorMessage) {
+                view.hideLoadingIndicator();
+                view.onLoginFailure(errorMessage);
             }
         });
 

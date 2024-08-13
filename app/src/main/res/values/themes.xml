@@ -8,7 +8,7 @@
     <style name="Theme.FlexMeals" parent="Base.Theme.FlexMeals" />
 
     <style name="SplashTheme" parent="Base.Theme.FlexMeals">
-        <item name="colorPrimary">@color/colorBackgroundLight</item>
+        <item name="colorPrimary">@color/colorPrimaryVariant</item>
     </style>
 
     <style name="MainSplash" parent="Base.Theme.FlexMeals">

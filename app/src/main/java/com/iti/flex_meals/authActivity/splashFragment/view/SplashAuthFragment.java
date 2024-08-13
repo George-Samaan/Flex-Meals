@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
@@ -20,7 +21,7 @@ import com.iti.flex_meals.authActivity.splashFragment.presenter.SplashPresenterI
 
 
 public class SplashAuthFragment extends Fragment  implements SplashView {
-    private static final int SPLASH_TIME_OUT = 6000;
+    private static final int SPLASH_TIME_OUT = 3500;
 
     private Splash presenter;
     @Override
