@@ -16,7 +16,7 @@ import com.iti.flex_meals.R;
 import com.iti.flex_meals.authActivity.registerFragment.presenter.RegisterPresenter;
 import com.iti.flex_meals.authActivity.registerFragment.presenter.RegisterPresenterImpl;
 import com.iti.flex_meals.firebase.FireBaseAuthImpl;
-import com.iti.flex_meals.utils.SnackbarUtils;
+import com.iti.flex_meals.utils.Utils;
 
 public class RegisterFragment extends Fragment implements RegisterView {
 
@@ -79,6 +79,7 @@ public class RegisterFragment extends Fragment implements RegisterView {
                 if (validateInput(email, password, confirmPassword)) {
                     presenter.performRegisterFireBase(email, password);
                 }
+
             }
         });
 
@@ -99,13 +100,14 @@ public class RegisterFragment extends Fragment implements RegisterView {
 
     @Override
     public void showError(String message) {
-        SnackbarUtils.showCustomSnackbar(getView(), message, R.color.colorAccent1, R.color.colorText);
+        Utils.showCustomSnackbar(getView(), message, R.color.colorAccent1, R.color.colorText);
 
     }
 
     @Override
     public void showSuccess() {
-        SnackbarUtils.showCustomSnackbar(getView(), "Register Success", R.color.colorSuccess, R.color.colorText);
+        Utils.showCustomSnackbar(getView(), "Register Success", R.color.colorSuccess, R.color.colorText);
+        navController.popBackStack();
     }
 
     @Override

@@ -17,13 +17,13 @@
             android:layout_width="200dp"
             android:layout_height="200dp"
             android:layout_marginEnd="20dp"
-            android:layout_marginTop="35dp"
+            android:layout_marginTop="65dp"
             android:background="@drawable/ic_hero"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:lottie_autoPlay="true"
             app:lottie_loop="true"
-            app:lottie_rawRes="@raw/food_animation"
+            app:lottie_rawRes="@raw/splash_animation"
             app:lottie_speed="1" />
         <!-- Sign in Title -->
 
@@ -32,14 +32,14 @@
 
         <TextView
             android:id="@+id/title"
-            android:layout_width="155dp"
+            android:layout_width="145dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="28dp"
             android:text="Begin your path to better eating!"
             android:textColor="@color/colorPrimary"
             android:textSize="30sp"
             android:textStyle="bold"
-            android:gravity="center"
+            android:gravity="start"
             app:layout_constraintBottom_toBottomOf="@+id/animationView2"
             app:layout_constraintEnd_toStartOf="@+id/animationView2"
             app:layout_constraintHorizontal_bias="1.0"
@@ -121,6 +121,7 @@
             android:layout_marginTop="35dp"
             android:paddingVertical="2dp"
             android:text="Register"
+            app:spinning_bar_color="@color/colorPrimary"
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

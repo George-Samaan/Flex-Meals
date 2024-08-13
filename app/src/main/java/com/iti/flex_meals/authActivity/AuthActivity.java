@@ -1,11 +1,8 @@
 package com.iti.flex_meals.authActivity;
 
 import android.os.Bundle;
-import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 
 import com.iti.flex_meals.R;
 

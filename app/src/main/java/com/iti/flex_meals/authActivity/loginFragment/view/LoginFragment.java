@@ -28,8 +28,8 @@ import com.iti.flex_meals.R;
 import com.iti.flex_meals.authActivity.loginFragment.presenter.LoginPresenter;
 import com.iti.flex_meals.authActivity.loginFragment.presenter.LoginPresenterImpl;
 import com.iti.flex_meals.firebase.FireBaseAuthImpl;
-import com.iti.flex_meals.firebase.IFirebaseAuth;
-import com.iti.flex_meals.utils.SnackbarUtils;
+import com.iti.flex_meals.homeActivity.HomeActivity;
+import com.iti.flex_meals.utils.Utils;
 
 
 public class LoginFragment extends Fragment implements LoginView {
@@ -69,9 +69,6 @@ public class LoginFragment extends Fragment implements LoginView {
         navigateToRegister();
         onLoginClick();
     }
-
-
-
 
     private void initFireBase() {
         loginPresenter = new LoginPresenterImpl(this, new FireBaseAuthImpl());
@@ -130,7 +127,6 @@ public class LoginFragment extends Fragment implements LoginView {
     @Override
     public void showLoadingIndicator() {
         btnLogin.startAnimation();
-
     }
 
     @Override
@@ -141,13 +137,15 @@ public class LoginFragment extends Fragment implements LoginView {
 
     @Override
     public void onLoginSuccess(String userId, String email) {
-        SnackbarUtils.showCustomSnackbar(getView(), "Login Successfully", R.color.colorSuccess, R.color.colorText);
+        Utils.showCustomSnackbar(getView(), "Login Successfully", R.color.colorSuccess, R.color.colorText);
+        Intent intent = new Intent(getActivity(), HomeActivity.class);
+        startActivity(intent);
+        getActivity().finish();
     }
 
     @Override
     public void onLoginFailure(String message) {
-        SnackbarUtils.showCustomSnackbar(getView(), message, R.color.colorSuccess, R.color.colorText);
-
+        Utils.showCustomSnackbar(getView(), message, R.color.colorSuccess, R.color.colorText);
     }
 
     @Override
@@ -179,10 +177,13 @@ public class LoginFragment extends Fragment implements LoginView {
 
     @Override
     public void onGoogleLoginSuccess(String userID, String email) {
-        SnackbarUtils.showCustomSnackbar(getView(), "Login Successfully", R.color.colorSuccess, R.color.colorText);
+        Utils.showCustomSnackbar(getView(), "Login Successfully", R.color.colorSuccess, R.color.colorText);
+        Intent intent = new Intent(getActivity(), HomeActivity.class);
+        startActivity(intent);
+        getActivity().finish();
     }
     @Override
     public void onGoogleLoginError(String message) {
-        SnackbarUtils.showCustomSnackbar(getView(), "Login Failed", R.color.colorError, R.color.colorText);
+        Utils.showCustomSnackbar(getView(), "Login Failed", R.color.colorError, R.color.colorText);
     }
 }
