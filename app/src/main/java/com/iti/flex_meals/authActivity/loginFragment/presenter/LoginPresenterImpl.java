@@ -1,20 +1,19 @@
 package com.iti.flex_meals.authActivity.loginFragment.presenter;
 
-import android.content.Context;
-
 import com.iti.flex_meals.authActivity.loginFragment.view.LoginView;
+import com.iti.flex_meals.db.repository.Repository;
 import com.iti.flex_meals.firebase.IFirebaseAuth;
 
 public class LoginPresenterImpl implements LoginPresenter {
     LoginView view;
     private IFirebaseAuth firebaseAuth;
-    private Context context;
 
-    public LoginPresenterImpl(LoginView view, IFirebaseAuth firebaseAuth) {
+    private Repository repository;
+
+    public LoginPresenterImpl(LoginView view, IFirebaseAuth firebaseAuth, Repository repository) {
         this.view = view;
         this.firebaseAuth = firebaseAuth;
-        this.context = context;
-
+        this.repository = repository;
     }
 
 
@@ -25,6 +24,8 @@ public class LoginPresenterImpl implements LoginPresenter {
             @Override
             public void onSuccess(String userId) {
                 view.hideLoadingIndicator();
+                repository.saveLoginAuth(idToken);
+                repository.saveEmail(email);
                 view.onGoogleLoginSuccess(userId, email);
 
             }
@@ -43,15 +44,28 @@ public class LoginPresenterImpl implements LoginPresenter {
         firebaseAuth.signInWithEmailAndPassword(email, password, new IFirebaseAuth.AuthResultCallback() {
             @Override
             public void onSuccess(String userId) {
-                view.hideLoadingIndicator();
-                view.onLoginSuccess(userId, email);
+                firebaseAuth.getAuthToken(new IFirebaseAuth.AuthTokenCallback() {
+                    @Override
+                    public void onSuccess(String token) {
+                        view.hideLoadingIndicator();
+                        repository.saveLoginAuth(token); // Save the token
+                        repository.saveEmail(email); // Save the email
+                        view.onLoginSuccess(userId, email);
+                    }
+
+                    @Override
+                    public void onFailure(String errorMessage) {
+                        view.hideLoadingIndicator();
+                        view.onLoginFailure(errorMessage);
+                    }
+                });
             }
+
             @Override
             public void onFailure(String errorMessage) {
                 view.hideLoadingIndicator();
                 view.onLoginFailure(errorMessage);
             }
         });
-
     }
 }

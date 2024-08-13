@@ -27,6 +27,8 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.iti.flex_meals.R;
 import com.iti.flex_meals.authActivity.loginFragment.presenter.LoginPresenter;
 import com.iti.flex_meals.authActivity.loginFragment.presenter.LoginPresenterImpl;
+import com.iti.flex_meals.db.repository.RepositoryImpl;
+import com.iti.flex_meals.db.sharedPreferences.SharedPreferencesDataSourceImpl;
 import com.iti.flex_meals.firebase.FireBaseAuthImpl;
 import com.iti.flex_meals.homeActivity.HomeActivity;
 import com.iti.flex_meals.utils.Utils;
@@ -45,10 +47,11 @@ public class LoginFragment extends Fragment implements LoginView {
     SignInButton googleSignInButton;
     private final int RC_SIGN_IN = 20;
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        loginPresenter = new LoginPresenterImpl(this, new FireBaseAuthImpl(), new RepositoryImpl(SharedPreferencesDataSourceImpl.getInstance(getContext())));
+
     }
 
     @Override
@@ -62,7 +65,6 @@ public class LoginFragment extends Fragment implements LoginView {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initFireBase();
         buildGoogle();
         initViews(view);
         onGoogleClick();
@@ -70,11 +72,9 @@ public class LoginFragment extends Fragment implements LoginView {
         onLoginClick();
     }
 
-    private void initFireBase() {
-        loginPresenter = new LoginPresenterImpl(this, new FireBaseAuthImpl());
-    }
+
     private void buildGoogle() {
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN )
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();

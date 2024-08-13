@@ -1,23 +1,24 @@
 package com.iti.flex_meals.authActivity.splashFragment.view;
 
+import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import com.iti.flex_meals.R;
 import com.iti.flex_meals.authActivity.splashFragment.presenter.Splash;
 import com.iti.flex_meals.authActivity.splashFragment.presenter.SplashPresenterIpml;
+import com.iti.flex_meals.db.repository.RepositoryImpl;
+import com.iti.flex_meals.db.sharedPreferences.SharedPreferencesDataSourceImpl;
+import com.iti.flex_meals.homeActivity.HomeActivity;
 
 
 public class SplashAuthFragment extends Fragment  implements SplashView {
@@ -27,7 +28,8 @@ public class SplashAuthFragment extends Fragment  implements SplashView {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        presenter = new SplashPresenterIpml(this);
+
+        presenter = new SplashPresenterIpml(this, new RepositoryImpl(SharedPreferencesDataSourceImpl.getInstance(requireContext())));
 
     }
     @Override
@@ -35,15 +37,14 @@ public class SplashAuthFragment extends Fragment  implements SplashView {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_splash_auth, container, false);
-
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
+        // Use view directly or check if view is not null
+        new Handler().postDelayed(() -> {
+            if (getView() != null) {
                 presenter.nextPage();
             }
         }, SPLASH_TIME_OUT);
@@ -51,7 +52,9 @@ public class SplashAuthFragment extends Fragment  implements SplashView {
 
     @Override
     public void navigateToHome() {
-
+        Intent intent = new Intent(getActivity(), HomeActivity.class);
+        startActivity(intent);
+        getActivity().finish();
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.iti.flex_meals.homeActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -15,14 +16,19 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.navigation.NavigationView;
 import com.iti.flex_meals.R;
+import com.iti.flex_meals.authActivity.AuthActivity;
+import com.iti.flex_meals.db.repository.Repository;
+import com.iti.flex_meals.db.repository.RepositoryImpl;
+import com.iti.flex_meals.db.sharedPreferences.SharedPreferencesDataSourceImpl;
+import com.iti.flex_meals.utils.Utils;
 
 public class HomeActivity extends AppCompatActivity {
     NavigationView navigationView;
     DrawerLayout drawerLayout;
     ImageView menuIcon;
-
     TextView tv_title;
     NavController navController;
+    Repository repository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +39,7 @@ public class HomeActivity extends AppCompatActivity {
         onMenuIcoClick();
         initPageTitle();
         setDrawerItemListeners();
+        repository = new RepositoryImpl(new SharedPreferencesDataSourceImpl(this));
     }
 
 
@@ -73,7 +80,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void setUpNavigation() {
-        navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        navController = Navigation.findNavController(this, R.id.nav_host_auth_fragment);
         NavigationUI.setupWithNavController(navigationView, navController);
     }
 
@@ -84,25 +91,38 @@ public class HomeActivity extends AppCompatActivity {
         tv_title = findViewById(R.id.pagetitle);
     }
 
-
     private void setDrawerItemListeners() {
         navigationView.setNavigationItemSelectedListener(item -> {
             int itemId = item.getItemId();
             if (itemId == R.id.exit) {
-                // Handle Exit action
-                Toast.makeText(this, "Exiting the app...", Toast.LENGTH_SHORT).show();
-                finish(); // Close the activity, and thus exit the app
+                performExit();
                 return true;
             } else if (itemId == R.id.logout) {
-                // Handle Logout action
-                Toast.makeText(this, "Logging out...", Toast.LENGTH_SHORT).show();
-                // Implement logout logic here (e.g., clear user data, navigate to login screen)
+                performLogOut();
                 return true;
             } else {
                 drawerLayout.closeDrawer(GravityCompat.START);
                 return NavigationUI.onNavDestinationSelected(item, navController)
                         || super.onOptionsItemSelected(item);
             }
+        });
+    }
+
+    private void performExit() {
+        Utils.showConfirmationDialog(this, "Exit", "Are you sure you want to exit?", (dialog, which) -> {
+            Toast.makeText(this, "Exiting the app...", Toast.LENGTH_SHORT).show();
+            finishAffinity();
+        });
+    }
+
+    private void performLogOut() {
+        Utils.showConfirmationDialog(this, "Log Out", "Are you sure you want to log out?", (dialog, which) -> {
+            Toast.makeText(this, "Logging out...", Toast.LENGTH_SHORT).show();
+            repository.clearAuthData();
+            Intent intent = new Intent(this, AuthActivity.class);
+            intent.putExtra("navigateTo", "targetFragment"); // Optional: Pass extra data if needed
+            startActivity(intent);
+            finish();
         });
     }
 

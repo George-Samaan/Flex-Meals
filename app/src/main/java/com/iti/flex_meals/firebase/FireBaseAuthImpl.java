@@ -5,6 +5,7 @@ import android.util.Log;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 public class FireBaseAuthImpl implements IFirebaseAuth {
@@ -69,5 +70,29 @@ public class FireBaseAuthImpl implements IFirebaseAuth {
                     }
                 });
     }
+
+
+    @Override
+    public void getAuthToken(AuthTokenCallback callback) {
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user != null) {
+            user.getIdToken(true)
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            GetTokenResult tokenResult = task.getResult();
+                            if (tokenResult != null) {
+                                callback.onSuccess(tokenResult.getToken());
+                            } else {
+                                callback.onFailure("Failed to get token.");
+                            }
+                        } else {
+                            callback.onFailure(task.getException().getMessage());
+                        }
+                    });
+        } else {
+            callback.onFailure("User is not logged in.");
+        }
+    }
+
 }
 

@@ -1,8 +1,11 @@
 package com.iti.flex_meals.utils;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 
 import com.google.android.material.snackbar.BaseTransientBottomBar;
@@ -20,5 +23,24 @@ public class Utils {
         textView.setTextColor(ContextCompat.getColor(view.getContext(), textColor));
 
         snackbar.show();
+    }
+
+    public static void showConfirmationDialog(Context context, String title, String message,
+                                              DialogInterface.OnClickListener onConfirm,
+                                              DialogInterface.OnClickListener onCancel) {
+        new AlertDialog.Builder(context)
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton("OK", onConfirm)
+                .setNegativeButton("Cancel", onCancel)
+                .create()
+                .show();
+    }
+
+    // Overloaded method with default "Cancel" action
+    public static void showConfirmationDialog(Context context, String title, String message,
+                                              DialogInterface.OnClickListener onConfirm) {
+        showConfirmationDialog(context, title, message, onConfirm,
+                (dialog, which) -> dialog.dismiss());
     }
 }
