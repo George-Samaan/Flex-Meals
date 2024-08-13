@@ -7,7 +7,6 @@ public interface LoginView {
     void onLoginFailure(String message);
     boolean validateInput(String email, String password);
     boolean isValidEmail(String email);
-    void showMessage(String message);
 
     void onGoogleLoginSuccess(String userID,String email);
     void onGoogleLoginError(String message);

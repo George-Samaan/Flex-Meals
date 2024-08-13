@@ -1,60 +1,35 @@
 package com.iti.flex_meals.authActivity.registerFragment.view;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
+import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+
+import com.github.leandroborgesferreira.loadingbutton.customViews.CircularProgressButton;
+import com.google.android.material.textfield.TextInputEditText;
 import com.iti.flex_meals.R;
+import com.iti.flex_meals.authActivity.registerFragment.presenter.RegisterPresenter;
+import com.iti.flex_meals.authActivity.registerFragment.presenter.RegisterPresenterImpl;
+import com.iti.flex_meals.firebase.FireBaseAuthImpl;
+import com.iti.flex_meals.utils.SnackbarUtils;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link RegisterFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class RegisterFragment extends Fragment {
+public class RegisterFragment extends Fragment implements RegisterView {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private RegisterPresenter presenter;
+    ImageView imv_back;
+    NavController navController;
+    TextInputEditText edt_email, edt_password, edt_confirmPassword;
+    CircularProgressButton btn_register;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public RegisterFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment RegisterFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static RegisterFragment newInstance(String param1, String param2) {
-        RegisterFragment fragment = new RegisterFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -62,5 +37,112 @@ public class RegisterFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_register, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        presenter = new RegisterPresenterImpl(this, new FireBaseAuthImpl());
+        initViews(view);
+        onBackClick();
+        onRegisterClick();
+
+
+    }
+
+    private void initViews(View view) {
+        navController = Navigation.findNavController(view);
+        imv_back = view.findViewById(R.id.imgBackInRegister);
+        edt_email = view.findViewById(R.id.emailRegisterEditTetx);
+        edt_password = view.findViewById(R.id.passwordRegisterEditText);
+        edt_confirmPassword = view.findViewById(R.id.confirmPasswordRegisterEditText);
+        btn_register = view.findViewById(R.id.btnRegister);
+    }
+
+    private void onBackClick() {
+        imv_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navController.popBackStack();
+            }
+        });
+    }
+
+    private void onRegisterClick() {
+        btn_register.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String email = edt_email.getText().toString();
+                String password = edt_password.getText().toString();
+                String confirmPassword = edt_confirmPassword.getText().toString();
+
+                if (validateInput(email, password, confirmPassword)) {
+                    presenter.performRegisterFireBase(email, password);
+                }
+            }
+        });
+
+    }
+
+
+    @Override
+    public void showLoading() {
+        btn_register.startAnimation();
+    }
+
+    @Override
+    public void hideLoading() {
+        btn_register.stopAnimation();
+        btn_register.revertAnimation();
+        btn_register.dispose();
+    }
+
+    @Override
+    public void showError(String message) {
+        SnackbarUtils.showCustomSnackbar(getView(), message, R.color.colorAccent1, R.color.colorText);
+
+    }
+
+    @Override
+    public void showSuccess() {
+        SnackbarUtils.showCustomSnackbar(getView(), "Register Success", R.color.colorSuccess, R.color.colorText);
+    }
+
+    @Override
+    public boolean validateInput(String email, String password, String confirmPassword) {
+        if (email.isEmpty()) {
+            edt_email.setError("Please enter email");
+            return false;
+        }
+        if (password.isEmpty()) {
+            edt_password.setError("Please enter password");
+            return false;
+        }
+        if(!password.equals(confirmPassword))
+        {
+            edt_confirmPassword.setError("Password doesn't match");
+            return false;
+        }
+        if (!isEmailValid(email)) {
+            edt_email.setError("Invalid email format");
+            return false;
+        }
+        if(!isValidPassword(password)){
+            edt_password.setError("Password must be at least 4 characters long, include one digit, one uppercase letter, one special character, and no spaces");
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean isEmailValid(String email) {
+        String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+        return email.matches(emailPattern);
+    }
+
+    @Override
+    public boolean isValidPassword(String password) {
+        String passwordPattern = "^(?=.*[0-9])(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{4,}$";
+        return password.matches(passwordPattern);
     }
 }
