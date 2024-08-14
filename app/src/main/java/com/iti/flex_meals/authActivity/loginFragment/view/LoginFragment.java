@@ -78,10 +78,16 @@ public class LoginFragment extends Fragment implements LoginView {
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
-        mGoogleSignInClient = GoogleSignIn.getClient(getContext(), gso);
+        mGoogleSignInClient = GoogleSignIn.getClient(requireContext(), gso);
     }
     private void onGoogleClick() {
-        googleSignInButton.setOnClickListener(v -> startGoogleSignIn());
+        googleSignInButton.setOnClickListener(v -> {
+            if (Utils.isNetworkAvailable(requireContext())) {
+                startGoogleSignIn();
+            } else {
+                Toast.makeText(requireContext(), "Please check your internet connection", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
     private void startGoogleSignIn() {
         Intent intent = mGoogleSignInClient.getSignInIntent();
@@ -116,10 +122,16 @@ public class LoginFragment extends Fragment implements LoginView {
 
     private void onLoginClick() {
         btnLogin.setOnClickListener(v -> {
-            String email = emailEditText.getText().toString();
-            String password = passwordEditText.getText().toString();
-            if (validateInput(email, password)) {
-                loginPresenter.performFirebaseLogin(email, password);
+            if (Utils.isNetworkAvailable(getContext())) {
+                String email = emailEditText.getText().toString();
+                String password = passwordEditText.getText().toString();
+                if (validateInput(email, password)) {
+                    showLoadingIndicator();
+                    loginPresenter.performFirebaseLogin(email, password);
+
+                }
+            } else {
+                Toast.makeText(getContext(), "Please check your internet connection", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -145,7 +157,7 @@ public class LoginFragment extends Fragment implements LoginView {
 
     @Override
     public void onLoginFailure(String message) {
-        Utils.showCustomSnackbar(getView(), message, R.color.colorSuccess, R.color.colorText);
+        Utils.showCustomSnackbar(getView(), message, R.color.colorError, R.color.colorText);
     }
 
     @Override

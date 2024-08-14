@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
@@ -46,8 +47,6 @@ public class RegisterFragment extends Fragment implements RegisterView {
         initViews(view);
         onBackClick();
         onRegisterClick();
-
-
     }
 
     private void initViews(View view) {
@@ -72,14 +71,15 @@ public class RegisterFragment extends Fragment implements RegisterView {
         btn_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email = edt_email.getText().toString();
-                String password = edt_password.getText().toString();
-                String confirmPassword = edt_confirmPassword.getText().toString();
-
-                if (validateInput(email, password, confirmPassword)) {
-                    presenter.performRegisterFireBase(email, password);
+                if (Utils.isNetworkAvailable(requireContext())) {
+                    String email = edt_email.getText().toString();
+                    String password = edt_password.getText().toString();
+                    String confirmPassword = edt_confirmPassword.getText().toString();
+                    if (validateInput(email, password, confirmPassword)) {
+                        presenter.performRegisterFireBase(email, password);
+                    }
                 }
-
+                Toast.makeText(getContext(), "Please check your internet connection", Toast.LENGTH_SHORT).show();
             }
         });
 
