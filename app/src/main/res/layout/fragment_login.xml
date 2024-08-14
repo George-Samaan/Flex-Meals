@@ -57,8 +57,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="30dp"
-            android:hint="Email Address"
             android:layout_marginTop="12dp"
+            android:hint="Email Address"
             app:boxStrokeColor="@color/colorPrimary"
             app:hintTextColor="@color/colorPrimaryVariant"
             app:layout_constraintEnd_toEndOf="parent"
@@ -68,9 +68,11 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/emailLoginEditTetx"
                 android:layout_width="match_parent"
-                android:textColor="@color/colorText"
                 android:layout_height="wrap_content"
-                android:inputType="textEmailAddress|textAutoComplete" />
+                android:drawableStart="@drawable/email"
+                android:drawablePadding="10dp"
+                android:inputType="textEmailAddress|textAutoComplete"
+                android:textColor="@color/colorText" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Password Input Field -->
@@ -78,22 +80,23 @@
             android:id="@+id/passwordField"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:boxStrokeColor="@color/colorPrimary"
-            app:hintTextColor="@color/colorPrimaryVariant"
-            android:layout_marginTop="15dp"
             android:layout_marginHorizontal="30dp"
+            android:layout_marginTop="15dp"
             android:hint="Password"
+            app:boxStrokeColor="@color/colorPrimary"
             app:endIconMode="password_toggle"
+            app:hintTextColor="@color/colorPrimaryVariant"
+
             app:layout_constraintTop_toBottomOf="@id/textField">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/passwordLoginEditText"
                 android:layout_width="match_parent"
-                android:textColor="@color/colorText"
                 android:layout_height="wrap_content"
-
-
-                android:inputType="textPassword" />
+                android:drawableStart="@drawable/password"
+                android:drawablePadding="10dp"
+                android:inputType="textPassword"
+                android:textColor="@color/colorText" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -117,12 +120,12 @@
             android:layout_marginHorizontal="30dp"
             android:layout_marginTop="35dp"
             android:paddingVertical="2dp"
-            app:spinning_bar_color="@color/colorAccent2"
             android:text="Sign in"
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/passwordField"/>
+            app:layout_constraintTop_toBottomOf="@id/passwordField"
+            app:spinning_bar_color="@color/colorAccent2" />
 
         <!-- Register Now Section -->
         <LinearLayout
@@ -190,10 +193,11 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="6"
                 android:text="Use other Methods"
-                android:textColor="@color/colorText"
                 android:textAlignment="center"
+                android:textColor="@color/colorText"
                 android:textSize="12sp"
                 android:textStyle="bold" />
+
             <View
                 android:layout_width="0dp"
                 android:layout_height="1dp"
