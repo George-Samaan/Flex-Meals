@@ -1,6 +1,7 @@
 package com.iti.flex_meals.db.retrofit;
 
 import com.iti.flex_meals.db.retrofit.pojo.categories.CategoryMealResponse;
+import com.iti.flex_meals.db.retrofit.pojo.countries.AllCountryResponse;
 import com.iti.flex_meals.db.retrofit.pojo.randomMeal.RandomMealResponse;
 
 import retrofit2.Call;
@@ -13,4 +14,7 @@ public interface MealApiService {
 
     @GET("categories.php")
     Call<CategoryMealResponse> getCategories();
+
+    @GET("list.php?a=list")
+    Call<AllCountryResponse> getAllCountries();
 }
