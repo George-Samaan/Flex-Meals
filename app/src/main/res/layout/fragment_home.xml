@@ -61,7 +61,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:visibility="gone" />
+                    android:indeterminateTint="@color/colorPrimary"
+                    android:visibility="visible" />
             </FrameLayout>
 
         </androidx.cardview.widget.CardView>
@@ -99,8 +100,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:layout_weight="1"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
                 android:text="Ingrediens"
-                android:textColor="@color/black"
+                android:textColor="@color/colorText"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
@@ -120,21 +124,22 @@
             app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:id="@+id/countriesTextView"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:layout_marginBottom="8dp"
             android:text="Countries"
-            android:textColor="@color/black"
+            android:textColor="@color/colorText"
             android:textSize="20sp"
             android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/categoriesTextView"
             app:layout_constraintTop_toBottomOf="@id/ingredientdRecView" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/areaRecView"
+            android:id="@+id/countriesRecView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/ingredientdRecView" />
+            app:layout_constraintTop_toBottomOf="@id/countriesTextView" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </ScrollView>

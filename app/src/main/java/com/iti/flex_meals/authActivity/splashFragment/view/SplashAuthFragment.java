@@ -16,6 +16,7 @@ import androidx.navigation.Navigation;
 import com.iti.flex_meals.R;
 import com.iti.flex_meals.authActivity.splashFragment.presenter.Splash;
 import com.iti.flex_meals.authActivity.splashFragment.presenter.SplashPresenterIpml;
+import com.iti.flex_meals.db.RemoteData.RemoteDataSourceImpl;
 import com.iti.flex_meals.db.repository.RepositoryImpl;
 import com.iti.flex_meals.db.sharedPreferences.SharedPreferencesDataSourceImpl;
 import com.iti.flex_meals.homeActivity.HomeActivity;
@@ -29,7 +30,9 @@ public class SplashAuthFragment extends Fragment  implements SplashView {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        presenter = new SplashPresenterIpml(this, new RepositoryImpl(SharedPreferencesDataSourceImpl.getInstance(requireContext())));
+        presenter = new SplashPresenterIpml(this,
+                new RepositoryImpl(SharedPreferencesDataSourceImpl.getInstance(requireContext())
+                        , new RemoteDataSourceImpl()));
 
     }
     @Override

@@ -27,6 +27,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.iti.flex_meals.R;
 import com.iti.flex_meals.authActivity.loginFragment.presenter.LoginPresenter;
 import com.iti.flex_meals.authActivity.loginFragment.presenter.LoginPresenterImpl;
+import com.iti.flex_meals.db.RemoteData.RemoteDataSourceImpl;
 import com.iti.flex_meals.db.repository.RepositoryImpl;
 import com.iti.flex_meals.db.sharedPreferences.SharedPreferencesDataSourceImpl;
 import com.iti.flex_meals.firebase.FireBaseAuthImpl;
@@ -50,8 +51,10 @@ public class LoginFragment extends Fragment implements LoginView {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        loginPresenter = new LoginPresenterImpl(this, new FireBaseAuthImpl(), new RepositoryImpl(SharedPreferencesDataSourceImpl.getInstance(getContext())));
-
+        loginPresenter = new LoginPresenterImpl(this,
+                new FireBaseAuthImpl(),
+                new RepositoryImpl(SharedPreferencesDataSourceImpl.getInstance(getContext()),
+                        new RemoteDataSourceImpl()));
     }
 
     @Override
@@ -143,7 +146,6 @@ public class LoginFragment extends Fragment implements LoginView {
 
     @Override
     public void hideLoadingIndicator() {
-        btnLogin.stopAnimation();
         btnLogin.revertAnimation();
     }
 
