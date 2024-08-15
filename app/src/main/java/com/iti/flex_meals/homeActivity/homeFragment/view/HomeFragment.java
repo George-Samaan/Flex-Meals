@@ -16,24 +16,34 @@ import android.widget.ProgressBar;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.iti.flex_meals.R;
+import com.iti.flex_meals.db.RemoteData.RemoteDataSourceImpl;
 import com.iti.flex_meals.db.repository.RepositoryImpl;
+import com.iti.flex_meals.db.retrofit.pojo.categories.CategoriesItem;
 import com.iti.flex_meals.db.retrofit.pojo.randomMeal.RandomMealItem;
 import com.iti.flex_meals.db.sharedPreferences.SharedPreferencesDataSourceImpl;
 import com.iti.flex_meals.homeActivity.homeFragment.presenter.HomePresenterImpl;
+
+import java.util.List;
 
 public class HomeFragment extends Fragment implements RandomMealView {
     ImageView randomMeal;
     ProgressBar progressBar;
     private HomePresenterImpl homePresenter;
+    private CategoriesListAdapter categoriesListAdapter;
+    private RecyclerView recyclerView;
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        homePresenter = new HomePresenterImpl(this, new RepositoryImpl(SharedPreferencesDataSourceImpl.getInstance(getContext())));
+        homePresenter = new HomePresenterImpl(this,
+                new RepositoryImpl(SharedPreferencesDataSourceImpl.getInstance(getContext()),
+                        new RemoteDataSourceImpl()));
     }
 
     @Override
@@ -47,10 +57,23 @@ public class HomeFragment extends Fragment implements RandomMealView {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        initViews(view);
+        initRecyclerView();
+        homePresenter.showRandomMeal();
+        homePresenter.showMealCategories();
+
+    }
+
+    private void initRecyclerView() {
+        categoriesListAdapter = new CategoriesListAdapter();
+        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false));
+        recyclerView.setAdapter(categoriesListAdapter);
+    }
+
+    private void initViews(@NonNull View view) {
         randomMeal = view.findViewById(R.id.imv_single_meal);
         progressBar = view.findViewById(R.id.progress_bar);
-        homePresenter.showRandomMeal();
-
+        recyclerView = view.findViewById(R.id.categoryRecView);
     }
 
     @Override
@@ -73,7 +96,6 @@ public class HomeFragment extends Fragment implements RandomMealView {
         animatorSet.start();
         Animation zoomAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.zoom_in_out_home);
         randomMeal.startAnimation(zoomAnimation);
-
     }
 
     @Override
@@ -89,5 +111,12 @@ public class HomeFragment extends Fragment implements RandomMealView {
     @Override
     public void hideLoadingIndicator() {
         progressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showMealCategories(List<CategoriesItem> categories) {
+        Log.d("TAG", "showMealCategories: " + categories.size());
+        categoriesListAdapter.setCategories(categories);
+        categoriesListAdapter.notifyDataSetChanged();
     }
 }

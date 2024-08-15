@@ -17,6 +17,7 @@ import androidx.navigation.ui.NavigationUI;
 import com.google.android.material.navigation.NavigationView;
 import com.iti.flex_meals.R;
 import com.iti.flex_meals.authActivity.AuthActivity;
+import com.iti.flex_meals.db.RemoteData.RemoteDataSourceImpl;
 import com.iti.flex_meals.db.repository.Repository;
 import com.iti.flex_meals.db.repository.RepositoryImpl;
 import com.iti.flex_meals.db.sharedPreferences.SharedPreferencesDataSourceImpl;
@@ -39,7 +40,8 @@ public class HomeActivity extends AppCompatActivity {
         onMenuIcoClick();
         initPageTitle();
         setDrawerItemListeners();
-        repository = new RepositoryImpl(new SharedPreferencesDataSourceImpl(this));
+        repository = new RepositoryImpl(new SharedPreferencesDataSourceImpl(this),
+                new RemoteDataSourceImpl());
     }
 
 
