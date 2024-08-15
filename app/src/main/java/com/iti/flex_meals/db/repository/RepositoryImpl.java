@@ -3,6 +3,7 @@ package com.iti.flex_meals.db.repository;
 
 import com.iti.flex_meals.db.RemoteData.RemoteDataSource;
 import com.iti.flex_meals.db.retrofit.networkCallBack.OnCategoriesMealNetworkCallBack;
+import com.iti.flex_meals.db.retrofit.networkCallBack.OnCountriesMealNetworkCallBack;
 import com.iti.flex_meals.db.retrofit.networkCallBack.OnRandomMealNetworkCallBack;
 import com.iti.flex_meals.db.sharedPreferences.SharedPreferencesDataSourceImpl;
 
@@ -49,5 +50,11 @@ public class RepositoryImpl implements Repository {
     public void getCategories(OnCategoriesMealNetworkCallBack onCategoriesMealNetworkCallBack) {
         remoteDataSource.getCategories(onCategoriesMealNetworkCallBack);
     }
+
+    @Override
+    public void getAllCountries(OnCountriesMealNetworkCallBack onCountriesMealNetworkCallBack) {
+        remoteDataSource.getAllCountries(onCountriesMealNetworkCallBack);
+    }
+
 
 }

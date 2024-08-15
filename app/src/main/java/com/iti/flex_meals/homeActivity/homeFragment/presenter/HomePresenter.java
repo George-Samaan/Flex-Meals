@@ -4,4 +4,6 @@ public interface HomePresenter {
     void showRandomMeal();
 
     void showMealCategories();
+
+    void showCountriesList();
 }

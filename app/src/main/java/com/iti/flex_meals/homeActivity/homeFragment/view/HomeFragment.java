@@ -16,6 +16,7 @@ import android.widget.ProgressBar;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,6 +25,7 @@ import com.iti.flex_meals.R;
 import com.iti.flex_meals.db.RemoteData.RemoteDataSourceImpl;
 import com.iti.flex_meals.db.repository.RepositoryImpl;
 import com.iti.flex_meals.db.retrofit.pojo.categories.CategoriesItem;
+import com.iti.flex_meals.db.retrofit.pojo.countries.CountryItem;
 import com.iti.flex_meals.db.retrofit.pojo.randomMeal.RandomMealItem;
 import com.iti.flex_meals.db.sharedPreferences.SharedPreferencesDataSourceImpl;
 import com.iti.flex_meals.homeActivity.homeFragment.presenter.HomePresenterImpl;
@@ -35,7 +37,9 @@ public class HomeFragment extends Fragment implements RandomMealView {
     ProgressBar progressBar;
     private HomePresenterImpl homePresenter;
     private CategoriesListAdapter categoriesListAdapter;
-    private RecyclerView recyclerView;
+    private RecyclerView categoriesRecyclerView;
+    private RecyclerView countriesRecyclerView;
+    private CountriesListAdapter countriesListAdapter;
 
 
     @Override
@@ -61,19 +65,25 @@ public class HomeFragment extends Fragment implements RandomMealView {
         initRecyclerView();
         homePresenter.showRandomMeal();
         homePresenter.showMealCategories();
+        homePresenter.showCountriesList();
 
     }
 
     private void initRecyclerView() {
         categoriesListAdapter = new CategoriesListAdapter();
-        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false));
-        recyclerView.setAdapter(categoriesListAdapter);
+        categoriesRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false));
+        categoriesRecyclerView.setAdapter(categoriesListAdapter);
+        //countries recycler
+        countriesListAdapter = new CountriesListAdapter();
+        countriesRecyclerView.setLayoutManager(new GridLayoutManager(requireContext(), 2, RecyclerView.HORIZONTAL, false));
+        countriesRecyclerView.setAdapter(countriesListAdapter);
     }
 
     private void initViews(@NonNull View view) {
         randomMeal = view.findViewById(R.id.imv_single_meal);
         progressBar = view.findViewById(R.id.progress_bar);
-        recyclerView = view.findViewById(R.id.categoryRecView);
+        categoriesRecyclerView = view.findViewById(R.id.categoryRecView);
+        countriesRecyclerView = view.findViewById(R.id.countriesRecView);
     }
 
     @Override
@@ -118,5 +128,13 @@ public class HomeFragment extends Fragment implements RandomMealView {
         Log.d("TAG", "showMealCategories: " + categories.size());
         categoriesListAdapter.setCategories(categories);
         categoriesListAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void showCountriesList(List<CountryItem> countries) {
+        Log.d("TAG", "showCountriesList: " + countries.size());
+        Log.d("TAG", "showCountriesList: " + countries.get(0).getStrArea());
+        countriesListAdapter.setCountries(countries);
+        countriesListAdapter.notifyDataSetChanged();
     }
 }
