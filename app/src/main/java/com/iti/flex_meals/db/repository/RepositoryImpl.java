@@ -66,5 +66,10 @@ public class RepositoryImpl implements Repository {
         remoteDataSource.getCategoriesList(category, onCategoriesMealNetworkCallBack);
     }
 
+    @Override
+    public void getCountriesList(String country, OnCategoriesListCallBack onCategoriesListCallBack) {
+        remoteDataSource.getCountriesList(country, onCategoriesListCallBack);
+    }
+
 
 }

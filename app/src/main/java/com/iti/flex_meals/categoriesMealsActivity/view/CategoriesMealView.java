@@ -9,4 +9,5 @@ public interface CategoriesMealView {
 
     void showError(String message);
 
+    void showCountriesList(List<CategoryListDetailed> countriesList);
 }

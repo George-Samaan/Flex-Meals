@@ -26,6 +26,8 @@ import com.iti.flex_meals.R;
 import com.iti.flex_meals.categories.view.CategoriesListAdapter;
 import com.iti.flex_meals.categories.view.OnCategoryClickListener;
 import com.iti.flex_meals.categoriesMealsActivity.view.CategoriesMealsActivity;
+import com.iti.flex_meals.countries.view.CountriesListAdapter;
+import com.iti.flex_meals.countries.view.OnCountryClickListener;
 import com.iti.flex_meals.db.RemoteData.RemoteDataSourceImpl;
 import com.iti.flex_meals.db.repository.RepositoryImpl;
 import com.iti.flex_meals.db.retrofit.pojo.categories.CategoryListItem;
@@ -36,7 +38,7 @@ import com.iti.flex_meals.homeActivity.homeFragment.presenter.HomePresenterImpl;
 
 import java.util.List;
 
-public class HomeFragment extends Fragment implements RandomMealView, OnCategoryClickListener {
+public class HomeFragment extends Fragment implements RandomMealView, OnCategoryClickListener, OnCountryClickListener {
     ImageView randomMeal;
     ProgressBar progressBar;
     private HomePresenterImpl homePresenter;
@@ -138,7 +140,7 @@ public class HomeFragment extends Fragment implements RandomMealView, OnCategory
     public void showCountriesList(List<CountryItem> countries) {
         Log.d("TAG", "showCountriesList: " + countries.size());
         Log.d("TAG", "showCountriesList: " + countries.get(0).getStrArea());
-        countriesListAdapter.setCountries(countries);
+        countriesListAdapter.setCountries(countries, this);
         countriesListAdapter.notifyDataSetChanged();
     }
 
@@ -146,6 +148,13 @@ public class HomeFragment extends Fragment implements RandomMealView, OnCategory
     public void onCategoryClick(String categoryName) {
         Intent intent = new Intent(requireContext(), CategoriesMealsActivity.class);
         intent.putExtra("CATEGORY_NAME", categoryName);
+        requireContext().startActivity(intent);
+    }
+
+    @Override
+    public void onCountryClick(String countryName) {
+        Intent intent = new Intent(requireContext(), CategoriesMealsActivity.class);
+        intent.putExtra("COUNTRY_NAME", countryName);
         requireContext().startActivity(intent);
     }
 }

@@ -22,4 +22,7 @@ public interface MealApiService {
 
     @GET("filter.php")
     Call<CategoriesListResponse> getCategoriesList(@Query("c") String category);  // Updated method
+
+    @GET("filter.php")
+    Call<CategoriesListResponse> getCountriesList(@Query("a") String country);  // Updated method
 }

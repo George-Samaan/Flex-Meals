@@ -1,5 +1,6 @@
-package com.iti.flex_meals.homeActivity.homeFragment.view;
+package com.iti.flex_meals.countries.view;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,13 +19,15 @@ import java.util.List;
 
 public class CountriesListAdapter extends RecyclerView.Adapter<CountriesListAdapter.ViewHolder> {
     private List<CountryItem> countries;
+    private OnCountryClickListener OnCountryClickListener;
 
     public CountriesListAdapter() {
         countries = new ArrayList<>();
     }
 
-    public void setCountries(List<CountryItem> countries) {
+    public void setCountries(List<CountryItem> countries, OnCountryClickListener OnCountryClickListener) {
         this.countries = countries;
+        this.OnCountryClickListener = OnCountryClickListener;
     }
 
     @NonNull
@@ -41,6 +44,16 @@ public class CountriesListAdapter extends RecyclerView.Adapter<CountriesListAdap
 
         CountryItem country = countries.get(position);
         holder.chip.setText(country.getStrArea());
+
+        holder.chip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (OnCountryClickListener != null) {
+                    OnCountryClickListener.onCountryClick(country.getStrArea());
+                    Log.d("TAG", "onClick: " + country.getStrArea());
+                }
+            }
+        });
     }
 
     @Override

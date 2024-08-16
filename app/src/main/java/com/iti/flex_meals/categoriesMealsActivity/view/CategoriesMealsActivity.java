@@ -24,11 +24,13 @@ public class CategoriesMealsActivity extends AppCompatActivity implements Catego
 
     private CategoriesListImpl presenter;
     private String selectedCategory;
+    private String x;
     private RecyclerView recyclerView;
     private CategoriesDetailedAdapter categoriesDetailedAdapter;
     private ImageView backButton;
     private SearchView searchView;
     private TextView title;
+    private String selectedCountry;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,19 +40,11 @@ public class CategoriesMealsActivity extends AppCompatActivity implements Catego
         presenter = new CategoriesListImpl(this,
                 new RepositoryImpl(SharedPreferencesDataSourceImpl.getInstance(this), new RemoteDataSourceImpl()));
         selectedCategory = getIntent().getStringExtra("CATEGORY_NAME");
-
-
-        recyclerView = findViewById(R.id.recyclerview);
-        backButton = findViewById(R.id.imgBack);
-        searchView = findViewById(R.id.search_view);
-        title = findViewById(R.id.title);
-        title.setText(selectedCategory);
-
+        selectedCountry = getIntent().getStringExtra("COUNTRY_NAME");
+        initViews();
+        toggleTitle();
         backButton.setOnClickListener(v -> finish());
-
-        categoriesDetailedAdapter = new CategoriesDetailedAdapter();
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 2, RecyclerView.VERTICAL, false));
-        recyclerView.setAdapter(categoriesDetailedAdapter);
+        initRecyclerView();
 
         // Setup search functionality
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -66,18 +60,56 @@ public class CategoriesMealsActivity extends AppCompatActivity implements Catego
                 return true;
             }
         });
-        presenter.showCategoriesList(selectedCategory);  // Fetch and set the categories
+        presenter.showCategoriesList(selectedCategory);
+        presenter.showCountriesList(selectedCountry);
+    }
 
+    private void initRecyclerView() {
+        categoriesDetailedAdapter = new CategoriesDetailedAdapter();
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 2, RecyclerView.VERTICAL, false));
+        recyclerView.setAdapter(categoriesDetailedAdapter);
+    }
+
+    private void toggleTitle() {
+        if (selectedCategory != null) {
+            title.setText(selectedCategory);
+        } else if (selectedCountry != null) {
+            title.setText(selectedCountry);
+        }
+    }
+
+    private void initViews() {
+        recyclerView = findViewById(R.id.recyclerview);
+        backButton = findViewById(R.id.imgBack);
+        searchView = findViewById(R.id.search_view);
+        title = findViewById(R.id.title);
     }
 
     @Override
     public void showCategoriesList(List<CategoryListDetailed> categoryListItemList) {
-        categoriesDetailedAdapter.setCategories(categoryListItemList);
-        Log.d("TAG", "showCategoriesList: " + categoryListItemList.size());
+        if (categoryListItemList != null) {
+            categoriesDetailedAdapter.setCategories(categoryListItemList);
+            Log.d("TAG", "showCategoriesList: " + categoryListItemList.size());
+        } else {
+//            Toast.makeText(this, " No Data", Toast.LENGTH_SHORT).show();
+
+        }
+
+
     }
 
     @Override
     public void showError(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showCountriesList(List<CategoryListDetailed> countriesList) {
+        if (countriesList != null) {
+            Log.d("TAG", "showCountriesList: " + countriesList.size());
+            categoriesDetailedAdapter.setCategories(countriesList);
+        } else {
+//            Toast.makeText(this, " No Data", Toast.LENGTH_SHORT).show();
+        }
     }
 }

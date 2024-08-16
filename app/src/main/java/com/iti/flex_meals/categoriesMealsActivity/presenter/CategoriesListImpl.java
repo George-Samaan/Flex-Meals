@@ -31,4 +31,20 @@ public class CategoriesListImpl implements CategoriesList {
             }
         });
     }
+
+    @Override
+    public void showCountriesList(String country) {
+        repository.getCountriesList(country, new OnCategoriesListCallBack() {
+            @Override
+            public void onSuccess(List<CategoryListDetailed> categoriesList) {
+                view.showCountriesList(categoriesList);
+            }
+
+            @Override
+            public void onError(String message) {
+                view.showError(message);
+            }
+        });
+
+    }
 }

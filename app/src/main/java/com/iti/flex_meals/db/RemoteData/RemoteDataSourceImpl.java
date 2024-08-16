@@ -95,5 +95,22 @@ public class RemoteDataSourceImpl implements RemoteDataSource {
         });
     }
 
+    @Override
+    public void getCountriesList(String country, OnCategoriesListCallBack onCategoriesListCallBack) {
+        Call<CategoriesListResponse> call = mealApiService.getCountriesList(country);
+        call.enqueue(new Callback<CategoriesListResponse>() {
+            @Override
+            public void onResponse(Call<CategoriesListResponse> call, Response<CategoriesListResponse> response) {
+                onCategoriesListCallBack.onSuccess(response.body().getCategoriesList());
+            }
+
+            @Override
+            public void onFailure(Call<CategoriesListResponse> call, Throwable throwable) {
+                onCategoriesListCallBack.onError(throwable.getMessage());
+            }
+        });
+
+    }
+
 
 }
