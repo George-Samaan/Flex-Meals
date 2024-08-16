@@ -51,7 +51,7 @@ public class RegisterFragment extends Fragment implements RegisterView {
 
     private void initViews(View view) {
         navController = Navigation.findNavController(view);
-        imv_back = view.findViewById(R.id.imgBackInRegister);
+        imv_back = view.findViewById(R.id.imgBack);
         edt_email = view.findViewById(R.id.emailRegisterEditTetx);
         edt_password = view.findViewById(R.id.passwordRegisterEditText);
         edt_confirmPassword = view.findViewById(R.id.confirmPasswordRegisterEditText);

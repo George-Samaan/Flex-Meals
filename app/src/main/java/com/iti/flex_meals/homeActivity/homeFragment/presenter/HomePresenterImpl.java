@@ -4,7 +4,7 @@ import com.iti.flex_meals.db.repository.RepositoryImpl;
 import com.iti.flex_meals.db.retrofit.networkCallBack.OnCategoriesMealNetworkCallBack;
 import com.iti.flex_meals.db.retrofit.networkCallBack.OnCountriesMealNetworkCallBack;
 import com.iti.flex_meals.db.retrofit.networkCallBack.OnRandomMealNetworkCallBack;
-import com.iti.flex_meals.db.retrofit.pojo.categories.CategoriesItem;
+import com.iti.flex_meals.db.retrofit.pojo.categories.CategoryListItem;
 import com.iti.flex_meals.db.retrofit.pojo.countries.CountryItem;
 import com.iti.flex_meals.db.retrofit.pojo.randomMeal.RandomMealItem;
 import com.iti.flex_meals.homeActivity.homeFragment.view.HomeFragment;
@@ -44,7 +44,7 @@ public class HomePresenterImpl implements HomePresenter {
 //        view.showLoadingIndicator();
         repository.getCategories(new OnCategoriesMealNetworkCallBack() {
             @Override
-            public void onSuccess(List<CategoriesItem> categories) {
+            public void onSuccess(List<CategoryListItem> categories) {
 //                view.hideLoadingIndicator();
                 view.showMealCategories(categories);
             }

@@ -17,7 +17,7 @@
         tools:layout="@layout/fragment_favourites" />
     <fragment
         android:id="@+id/searchFragment"
-        android:name="com.iti.flex_meals.SearchFragment"
+        android:name="com.iti.flex_meals.homeActivity.searchFragment.SearchFragment"
         android:label="fragment_search"
         tools:layout="@layout/fragment_search" />
     <fragment

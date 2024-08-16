@@ -2,6 +2,7 @@ package com.iti.flex_meals.db.repository;
 
 
 import com.iti.flex_meals.db.RemoteData.RemoteDataSource;
+import com.iti.flex_meals.db.retrofit.networkCallBack.OnCategoriesListCallBack;
 import com.iti.flex_meals.db.retrofit.networkCallBack.OnCategoriesMealNetworkCallBack;
 import com.iti.flex_meals.db.retrofit.networkCallBack.OnCountriesMealNetworkCallBack;
 import com.iti.flex_meals.db.retrofit.networkCallBack.OnRandomMealNetworkCallBack;
@@ -22,18 +23,22 @@ public class RepositoryImpl implements Repository {
     public void saveLoginAuth(String token) {
         sharedPreferencesDataSource.saveLoginAuth(token);
     }
+
     @Override
     public void saveEmail(String email) {
         sharedPreferencesDataSource.saveEmail(email);
     }
+
     @Override
     public String getEmail() {
         return sharedPreferencesDataSource.getEmail();
     }
+
     @Override
     public String getLoginAuth() {
         return sharedPreferencesDataSource.getLoginAuth();
     }
+
     @Override
     public void clearAuthData() {
         sharedPreferencesDataSource.clearAuthData();
@@ -54,6 +59,11 @@ public class RepositoryImpl implements Repository {
     @Override
     public void getAllCountries(OnCountriesMealNetworkCallBack onCountriesMealNetworkCallBack) {
         remoteDataSource.getAllCountries(onCountriesMealNetworkCallBack);
+    }
+
+    @Override
+    public void getCategoriesList(String category, OnCategoriesListCallBack onCategoriesMealNetworkCallBack) {
+        remoteDataSource.getCategoriesList(category, onCategoriesMealNetworkCallBack);
     }
 
 

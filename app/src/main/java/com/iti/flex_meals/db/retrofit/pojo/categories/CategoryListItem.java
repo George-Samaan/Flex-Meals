@@ -1,6 +1,6 @@
 package com.iti.flex_meals.db.retrofit.pojo.categories;
 
-public class CategoriesItem {
+public class CategoryListItem {
     private String strCategory;
     private String strCategoryDescription;
     private String idCategory;

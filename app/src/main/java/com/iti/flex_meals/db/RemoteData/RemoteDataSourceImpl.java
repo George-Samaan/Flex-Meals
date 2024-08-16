@@ -2,10 +2,12 @@ package com.iti.flex_meals.db.RemoteData;
 
 import com.iti.flex_meals.db.retrofit.MealApiService;
 import com.iti.flex_meals.db.retrofit.Retrofit;
+import com.iti.flex_meals.db.retrofit.networkCallBack.OnCategoriesListCallBack;
 import com.iti.flex_meals.db.retrofit.networkCallBack.OnCategoriesMealNetworkCallBack;
 import com.iti.flex_meals.db.retrofit.networkCallBack.OnCountriesMealNetworkCallBack;
 import com.iti.flex_meals.db.retrofit.networkCallBack.OnRandomMealNetworkCallBack;
 import com.iti.flex_meals.db.retrofit.pojo.categories.CategoryMealResponse;
+import com.iti.flex_meals.db.retrofit.pojo.categoriesList.CategoriesListResponse;
 import com.iti.flex_meals.db.retrofit.pojo.countries.AllCountryResponse;
 import com.iti.flex_meals.db.retrofit.pojo.randomMeal.RandomMealResponse;
 
@@ -72,4 +74,26 @@ public class RemoteDataSourceImpl implements RemoteDataSource {
             }
         });
     }
+
+    @Override
+    public void getCategoriesList(String category, OnCategoriesListCallBack onCategoriesListCallBack) {
+        Call<CategoriesListResponse> call = mealApiService.getCategoriesList(category);
+        call.enqueue(new Callback<CategoriesListResponse>() {
+            @Override
+            public void onResponse(Call<CategoriesListResponse> call, Response<CategoriesListResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    onCategoriesListCallBack.onSuccess(response.body().getCategoriesList());
+                } else {
+                    onCategoriesListCallBack.onError("Failed to load categories list: " + response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CategoriesListResponse> call, Throwable throwable) {
+                onCategoriesListCallBack.onError("Network error: " + throwable.getMessage());
+            }
+        });
+    }
+
+
 }

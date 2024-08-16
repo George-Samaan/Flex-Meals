@@ -1,5 +1,6 @@
 package com.iti.flex_meals.db.repository;
 
+import com.iti.flex_meals.db.retrofit.networkCallBack.OnCategoriesListCallBack;
 import com.iti.flex_meals.db.retrofit.networkCallBack.OnCategoriesMealNetworkCallBack;
 import com.iti.flex_meals.db.retrofit.networkCallBack.OnCountriesMealNetworkCallBack;
 import com.iti.flex_meals.db.retrofit.networkCallBack.OnRandomMealNetworkCallBack;
@@ -21,4 +22,6 @@ public interface Repository {
     void getCategories(OnCategoriesMealNetworkCallBack onCategoriesMealNetworkCallBack);
 
     void getAllCountries(OnCountriesMealNetworkCallBack onCountriesMealNetworkCallBack);
+
+    void getCategoriesList(String category, OnCategoriesListCallBack onCategoriesListCallBack);
 }

@@ -1,6 +1,6 @@
 package com.iti.flex_meals.homeActivity.homeFragment.view;
 
-import com.iti.flex_meals.db.retrofit.pojo.categories.CategoriesItem;
+import com.iti.flex_meals.db.retrofit.pojo.categories.CategoryListItem;
 import com.iti.flex_meals.db.retrofit.pojo.countries.CountryItem;
 import com.iti.flex_meals.db.retrofit.pojo.randomMeal.RandomMealItem;
 
@@ -15,7 +15,7 @@ public interface RandomMealView {
 
     void hideLoadingIndicator();
 
-    void showMealCategories(List<CategoriesItem> categories);
+    void showMealCategories(List<CategoryListItem> categories);
 
     void showCountriesList(List<CountryItem> countries);
 

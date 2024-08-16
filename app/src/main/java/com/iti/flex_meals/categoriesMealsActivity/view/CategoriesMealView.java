@@ -1,0 +1,12 @@
+package com.iti.flex_meals.categoriesMealsActivity.view;
+
+import com.iti.flex_meals.db.retrofit.pojo.categoriesList.CategoryListDetailed;
+
+import java.util.List;
+
+public interface CategoriesMealView {
+    void showCategoriesList(List<CategoryListDetailed> categoryListItemList);
+
+    void showError(String message);
+
+}

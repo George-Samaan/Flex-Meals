@@ -2,6 +2,7 @@ package com.iti.flex_meals.homeActivity.homeFragment.view;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,9 +23,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.iti.flex_meals.R;
+import com.iti.flex_meals.categories.view.CategoriesListAdapter;
+import com.iti.flex_meals.categories.view.OnCategoryClickListener;
+import com.iti.flex_meals.categoriesMealsActivity.view.CategoriesMealsActivity;
 import com.iti.flex_meals.db.RemoteData.RemoteDataSourceImpl;
 import com.iti.flex_meals.db.repository.RepositoryImpl;
-import com.iti.flex_meals.db.retrofit.pojo.categories.CategoriesItem;
+import com.iti.flex_meals.db.retrofit.pojo.categories.CategoryListItem;
 import com.iti.flex_meals.db.retrofit.pojo.countries.CountryItem;
 import com.iti.flex_meals.db.retrofit.pojo.randomMeal.RandomMealItem;
 import com.iti.flex_meals.db.sharedPreferences.SharedPreferencesDataSourceImpl;
@@ -32,7 +36,7 @@ import com.iti.flex_meals.homeActivity.homeFragment.presenter.HomePresenterImpl;
 
 import java.util.List;
 
-public class HomeFragment extends Fragment implements RandomMealView {
+public class HomeFragment extends Fragment implements RandomMealView, OnCategoryClickListener {
     ImageView randomMeal;
     ProgressBar progressBar;
     private HomePresenterImpl homePresenter;
@@ -124,9 +128,9 @@ public class HomeFragment extends Fragment implements RandomMealView {
     }
 
     @Override
-    public void showMealCategories(List<CategoriesItem> categories) {
+    public void showMealCategories(List<CategoryListItem> categories) {
         Log.d("TAG", "showMealCategories: " + categories.size());
-        categoriesListAdapter.setCategories(categories);
+        categoriesListAdapter.setCategories(categories, this);
         categoriesListAdapter.notifyDataSetChanged();
     }
 
@@ -136,5 +140,12 @@ public class HomeFragment extends Fragment implements RandomMealView {
         Log.d("TAG", "showCountriesList: " + countries.get(0).getStrArea());
         countriesListAdapter.setCountries(countries);
         countriesListAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onCategoryClick(String categoryName) {
+        Intent intent = new Intent(requireContext(), CategoriesMealsActivity.class);
+        intent.putExtra("CATEGORY_NAME", categoryName);
+        requireContext().startActivity(intent);
     }
 }
