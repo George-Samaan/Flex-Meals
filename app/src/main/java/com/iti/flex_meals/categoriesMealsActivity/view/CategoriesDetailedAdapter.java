@@ -1,0 +1,83 @@
+package com.iti.flex_meals.categoriesMealsActivity.view;
+
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
+import com.iti.flex_meals.R;
+import com.iti.flex_meals.db.retrofit.pojo.categoriesList.CategoryListDetailed;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class CategoriesDetailedAdapter extends RecyclerView.Adapter<CategoriesDetailedAdapter.ViewHolder> {
+    private List<CategoryListDetailed> categories;
+    private List<CategoryListDetailed> filteredCategories;
+
+    public CategoriesDetailedAdapter() {
+        categories = new ArrayList<>();
+        filteredCategories = new ArrayList<>(categories);
+    }
+
+    public void setCategories(List<CategoryListDetailed> categories) {
+        this.categories = categories;
+        this.filteredCategories = new ArrayList<>(categories);
+        notifyDataSetChanged();
+    }
+
+    @NonNull
+    @Override
+    public CategoriesDetailedAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.reusable_item, parent, false);
+        return new ViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull CategoriesDetailedAdapter.ViewHolder holder, int position) {
+        Animation animation = AnimationUtils.loadAnimation(holder.itemView.getContext(), R.anim.scale_in_animation);
+        holder.itemView.startAnimation(animation);
+
+        CategoryListDetailed category = filteredCategories.get(position);
+        holder.tvCategoryName.setText(category.getStrMeal());
+        Glide.with(holder.itemView.getContext()).load(category.getStrMealThumb()).into(holder.ivCategory);
+    }
+
+    @Override
+    public int getItemCount() {
+        return filteredCategories.size();
+    }
+
+    public void filter(String text) {
+        filteredCategories.clear();
+        if (text.isEmpty()) {
+            filteredCategories.addAll(categories);
+        } else {
+            text = text.toLowerCase();
+            for (CategoryListDetailed category : categories) {
+                if (category.getStrMeal().toLowerCase().contains(text)) {
+                    filteredCategories.add(category);
+                }
+            }
+        }
+        notifyDataSetChanged();
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        TextView tvCategoryName;
+        ImageView ivCategory;
+
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+            tvCategoryName = itemView.findViewById(R.id.category_name);
+            ivCategory = itemView.findViewById(R.id.category_image);
+        }
+    }
+}

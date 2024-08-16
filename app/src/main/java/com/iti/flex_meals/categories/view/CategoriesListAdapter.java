@@ -1,5 +1,6 @@
-package com.iti.flex_meals.homeActivity.homeFragment.view;
+package com.iti.flex_meals.categories.view;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,20 +14,22 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.iti.flex_meals.R;
-import com.iti.flex_meals.db.retrofit.pojo.categories.CategoriesItem;
+import com.iti.flex_meals.db.retrofit.pojo.categories.CategoryListItem;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CategoriesListAdapter extends RecyclerView.Adapter<CategoriesListAdapter.ViewHolder> {
-    private List<CategoriesItem> categories;
+    private List<CategoryListItem> categories;
+    private OnCategoryClickListener listener;
 
     public CategoriesListAdapter() {
         categories = new ArrayList<>();
     }
 
-    public void setCategories(List<CategoriesItem> categories) {
+    public void setCategories(List<CategoryListItem> categories, OnCategoryClickListener listener) {
         this.categories = categories;
+        this.listener = listener;
     }
 
 
@@ -42,11 +45,20 @@ public class CategoriesListAdapter extends RecyclerView.Adapter<CategoriesListAd
         Animation animation = AnimationUtils.loadAnimation(holder.itemView.getContext(), R.anim.scale_in_animation);
         holder.itemView.startAnimation(animation);
 
-        CategoriesItem category = categories.get(position);
+        CategoryListItem category = categories.get(position);
         holder.tvCategoryName.setText(category.getStrCategory());
         Glide.with(holder.itemView.getContext()).load(category.getStrCategoryThumb()).into(holder.ivCategory);
 
 
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (listener != null) {
+                    listener.onCategoryClick(category.getStrCategory());
+                    Log.d("TAG", "onClick: " + category.getStrCategory());
+                }
+            }
+        });
     }
 
     @Override
