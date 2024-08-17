@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,12 +6,10 @@
     android:layout_marginTop="40dp"
     tools:context=".homeActivity.homeFragment.view.HomeFragment">
 
-    <!-- Scrollable content inside ScrollView -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <!-- Title TextView -->
         <TextView
             android:id="@+id/titleTextView"
             android:layout_width="0dp"
@@ -28,7 +25,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- CardView with ImageView -->
         <androidx.cardview.widget.CardView
             android:id="@+id/cardView"
             android:layout_width="0dp"
@@ -43,31 +39,31 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/titleTextView">
 
-            <!-- Use FrameLayout to overlay ImageView and ProgressBar -->
+
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <!-- ImageView for the meal image -->
+
                 <ImageView
                     android:id="@+id/imv_single_meal"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop" />
 
-                <!-- ProgressBar as the loading indicator -->
-                <ProgressBar
-                    android:id="@+id/progress_bar"
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/lottie_animation_meal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:indeterminateTint="@color/colorPrimary"
-                    android:visibility="visible" />
+                    android:visibility="visible"
+                    app:lottie_autoPlay="true"
+                    app:lottie_loop="true"
+                    app:lottie_rawRes="@raw/random_image" />
             </FrameLayout>
 
         </androidx.cardview.widget.CardView>
 
-        <!-- Categories TextView -->
         <TextView
             android:id="@+id/categoriesTextView"
             android:layout_width="0dp"
@@ -76,35 +72,51 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:text="Categories"
+            android:textColor="@color/colorPrimary"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:textColor="@color/colorPrimary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/cardView" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/categoryRecView"
+        <FrameLayout
+            android:id="@+id/category_frame_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_constraintTop_toBottomOf="@id/categoriesTextView" />
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/categoriesTextView">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/categoryRecView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <!-- ProgressBar for loading -->
+            <ProgressBar
+                android:id="@+id/progress_bar_categories"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:indeterminateTint="@color/colorPrimary"
+                android:visibility="visible" />
+
+        </FrameLayout>
 
         <LinearLayout
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintTop_toBottomOf="@id/categoryRecView">
+            app:layout_constraintTop_toBottomOf="@id/category_frame_layout">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_weight="1"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:text="Ingrediens"
+                android:layout_marginBottom="8dp"
+                android:layout_weight="1"
+                android:text="Ingredients"
                 android:textColor="@color/colorPrimary"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -113,19 +125,35 @@
                 android:id="@+id/seeMoreTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="right"
                 android:layout_marginTop="15dp"
                 android:layout_marginEnd="18dp"
-                android:text="See_more ..."
+                android:gravity="right"
+                android:text="See more..."
                 android:textColor="@color/colorPrimary"
                 android:textStyle="bold" />
         </LinearLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/ingredientdRecView"
+        <FrameLayout
+            android:id="@+id/ingredient_frame_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+            app:layout_constraintTop_toBottomOf="@id/linearLayout">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/ingredientdRecView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+            <ProgressBar
+                android:id="@+id/progress_bar_ingredients"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:indeterminateTint="@color/colorPrimary"
+                android:visibility="visible" />
+        </FrameLayout>
+
 
         <TextView
             android:id="@+id/countriesTextView"
@@ -137,13 +165,29 @@
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@+id/categoriesTextView"
-            app:layout_constraintTop_toBottomOf="@id/ingredientdRecView" />
+            app:layout_constraintTop_toBottomOf="@id/ingredient_frame_layout" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/countriesRecView"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/countriesTextView" />
+            app:layout_constraintTop_toBottomOf="@id/countriesTextView">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/countriesRecView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/countriesTextView" />
+
+            <ProgressBar
+                android:id="@+id/progress_bar_countries"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:indeterminateTint="@color/colorPrimary"
+                android:visibility="visible" />
+        </FrameLayout>
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </ScrollView>

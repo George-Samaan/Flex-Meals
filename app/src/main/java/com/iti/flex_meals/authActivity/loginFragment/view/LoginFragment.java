@@ -1,5 +1,6 @@
 package com.iti.flex_meals.authActivity.loginFragment.view;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -48,6 +49,7 @@ public class LoginFragment extends Fragment implements LoginView {
     SignInButton googleSignInButton;
     private final int RC_SIGN_IN = 20;
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,8 +73,15 @@ public class LoginFragment extends Fragment implements LoginView {
         buildGoogle();
         initViews(view);
         onGoogleClick();
+        onGuestEntranceClick();
         navigateToRegister();
         onLoginClick();
+    }
+
+    private void onGuestEntranceClick() {
+        btnSkip.setOnClickListener(v -> {
+            loginPresenter.handleGuestLogin();
+        });
     }
 
 
@@ -83,6 +92,7 @@ public class LoginFragment extends Fragment implements LoginView {
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(requireContext(), gso);
     }
+
     private void onGoogleClick() {
         googleSignInButton.setOnClickListener(v -> {
             if (Utils.isNetworkAvailable(requireContext())) {
@@ -92,10 +102,12 @@ public class LoginFragment extends Fragment implements LoginView {
             }
         });
     }
+
     private void startGoogleSignIn() {
         Intent intent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(intent, RC_SIGN_IN);
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -119,6 +131,7 @@ public class LoginFragment extends Fragment implements LoginView {
         passwordEditText = view.findViewById(R.id.passwordLoginEditText);
         btnLogin = view.findViewById(R.id.btnSignIn);
     }
+
     private void navigateToRegister() {
         txt_register.setOnClickListener(v -> navController.navigate(R.id.action_loginFragment_to_registerFragment));
     }
@@ -192,12 +205,24 @@ public class LoginFragment extends Fragment implements LoginView {
     @Override
     public void onGoogleLoginSuccess(String userID, String email) {
         Utils.showCustomSnackbar(getView(), "Login Successfully", R.color.colorSuccess, R.color.colorText);
-        Intent intent = new Intent(getActivity(), HomeActivity.class);
-        startActivity(intent);
         getActivity().finish();
     }
+
     @Override
     public void onGoogleLoginError(String message) {
         Utils.showCustomSnackbar(getView(), "Login Failed", R.color.colorError, R.color.colorText);
+    }
+
+    @Override
+    public void showGuestDialog() {
+        new AlertDialog.Builder(getContext())
+                .setTitle("Guest Entrance")
+                .setMessage("Do you want to continue as a guest?")
+                .setPositiveButton("Yes", (dialog, which) -> {
+                    Intent intent = new Intent(getActivity(), HomeActivity.class);
+                    startActivity(intent);
+                })
+                .setNegativeButton("No", null)
+                .show();
     }
 }

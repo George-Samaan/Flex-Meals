@@ -68,4 +68,11 @@ public class LoginPresenterImpl implements LoginPresenter {
             }
         });
     }
+
+    @Override
+    public void handleGuestLogin() {
+        view.showGuestDialog();
+    }
+
+
 }

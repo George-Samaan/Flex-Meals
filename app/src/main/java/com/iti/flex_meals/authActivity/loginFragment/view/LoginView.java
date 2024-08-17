@@ -10,4 +10,6 @@ public interface LoginView {
 
     void onGoogleLoginSuccess(String userID,String email);
     void onGoogleLoginError(String message);
+
+    void showGuestDialog();
 }

@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
 import com.iti.flex_meals.R;
 import com.iti.flex_meals.categories.view.CategoriesListAdapter;
@@ -43,7 +44,10 @@ import java.util.List;
 
 public class HomeFragment extends Fragment implements RandomMealView, OnCategoryClickListener, OnCountryClickListener {
     ImageView randomMeal;
-    ProgressBar progressBar;
+    LottieAnimationView lottieRandomImage;
+    ProgressBar progressBarCategories;
+    ProgressBar progressBarIngredients;
+    ProgressBar progressBarCountries;
     private HomePresenterImpl homePresenter;
     private CategoriesListAdapter categoriesListAdapter;
     private RecyclerView categoriesRecyclerView;
@@ -106,7 +110,10 @@ public class HomeFragment extends Fragment implements RandomMealView, OnCategory
 
     private void initViews(@NonNull View view) {
         randomMeal = view.findViewById(R.id.imv_single_meal);
-        progressBar = view.findViewById(R.id.progress_bar);
+        lottieRandomImage = view.findViewById(R.id.lottie_animation_meal);
+        progressBarCategories = view.findViewById(R.id.progress_bar_categories);
+        progressBarIngredients = view.findViewById(R.id.progress_bar_ingredients);
+        progressBarCountries = view.findViewById(R.id.progress_bar_countries);
         categoriesRecyclerView = view.findViewById(R.id.categoryRecView);
         countriesRecyclerView = view.findViewById(R.id.countriesRecView);
         ingredientsRecyclerView = view.findViewById(R.id.ingredientdRecView);
@@ -142,12 +149,18 @@ public class HomeFragment extends Fragment implements RandomMealView, OnCategory
 
     @Override
     public void showLoadingIndicator() {
-        progressBar.setVisibility(View.VISIBLE);
+        lottieRandomImage.setVisibility(View.VISIBLE);
+        progressBarCategories.setVisibility(View.VISIBLE);
+        progressBarIngredients.setVisibility(View.VISIBLE);
+        progressBarCountries.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideLoadingIndicator() {
-        progressBar.setVisibility(View.GONE);
+        lottieRandomImage.setVisibility(View.GONE);
+        progressBarCategories.setVisibility(View.GONE);
+        progressBarIngredients.setVisibility(View.GONE);
+        progressBarCountries.setVisibility(View.GONE);
     }
 
     @Override
