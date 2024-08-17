@@ -3,6 +3,7 @@ package com.iti.flex_meals.db.RemoteData;
 import com.iti.flex_meals.db.retrofit.networkCallBack.OnCategoriesListCallBack;
 import com.iti.flex_meals.db.retrofit.networkCallBack.OnCategoriesMealNetworkCallBack;
 import com.iti.flex_meals.db.retrofit.networkCallBack.OnCountriesMealNetworkCallBack;
+import com.iti.flex_meals.db.retrofit.networkCallBack.OnIngredientNetworkCallBack;
 import com.iti.flex_meals.db.retrofit.networkCallBack.OnRandomMealNetworkCallBack;
 
 public interface RemoteDataSource {
@@ -15,5 +16,7 @@ public interface RemoteDataSource {
     void getCategoriesList(String category, OnCategoriesListCallBack onCategoriesListCallBack);
 
     void getCountriesList(String country, OnCategoriesListCallBack onCategoriesListCallBack);
+
+    void getIngredients(OnIngredientNetworkCallBack onIngredientNetworkCallBack);
 }
 

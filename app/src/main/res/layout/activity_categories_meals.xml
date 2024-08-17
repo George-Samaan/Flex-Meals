@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="Title"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/colorPrimaryVariant"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/imgBack"

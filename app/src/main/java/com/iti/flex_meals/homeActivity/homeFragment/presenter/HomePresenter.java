@@ -6,4 +6,6 @@ public interface HomePresenter {
     void showMealCategories();
 
     void showCountriesList();
+
+    void showIngredients();
 }

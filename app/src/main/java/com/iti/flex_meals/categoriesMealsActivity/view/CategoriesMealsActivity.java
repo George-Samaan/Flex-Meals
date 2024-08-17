@@ -16,7 +16,9 @@ import com.iti.flex_meals.categoriesMealsActivity.presenter.CategoriesListImpl;
 import com.iti.flex_meals.db.RemoteData.RemoteDataSourceImpl;
 import com.iti.flex_meals.db.repository.RepositoryImpl;
 import com.iti.flex_meals.db.retrofit.pojo.categoriesList.CategoryListDetailed;
+import com.iti.flex_meals.db.retrofit.pojo.ingredients.IngredientItem;
 import com.iti.flex_meals.db.sharedPreferences.SharedPreferencesDataSourceImpl;
+import com.iti.flex_meals.ingredients.view.IngredientsAdapter;
 
 import java.util.List;
 
@@ -31,6 +33,8 @@ public class CategoriesMealsActivity extends AppCompatActivity implements Catego
     private SearchView searchView;
     private TextView title;
     private String selectedCountry;
+    private String allIngredients;
+    private IngredientsAdapter ingredientsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,40 +45,85 @@ public class CategoriesMealsActivity extends AppCompatActivity implements Catego
                 new RepositoryImpl(SharedPreferencesDataSourceImpl.getInstance(this), new RemoteDataSourceImpl()));
         selectedCategory = getIntent().getStringExtra("CATEGORY_NAME");
         selectedCountry = getIntent().getStringExtra("COUNTRY_NAME");
+        allIngredients = getIntent().getStringExtra("INGREDIENT_NAME");
         initViews();
         toggleTitle();
         backButton.setOnClickListener(v -> finish());
-        initRecyclerView();
+
+        if (allIngredients != null) {
+            // Show ingredients
+            initIngredientsRecyclerView();
+            presenter.showIngredients();
+        } else {
+            initCategoriesRecyclerView();
+            presenter.showCategoriesList(selectedCategory);
+            presenter.showCountriesList(selectedCountry);
+        }
+
+//        initRecyclerView();
 
         // Setup search functionality
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                categoriesDetailedAdapter.filter(query);
+                if (allIngredients != null) {
+                    // If ingredients are being displayed
+                    if (ingredientsAdapter != null) {
+                        ingredientsAdapter.filter(query);
+                    }
+                } else {
+                    // If categories or countries are being displayed
+                    if (categoriesDetailedAdapter != null) {
+                        categoriesDetailedAdapter.filter(query);
+                    }
+                }
                 return true;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                categoriesDetailedAdapter.filter(newText);
+                if (allIngredients != null) {
+                    // If ingredients are being displayed
+                    if (ingredientsAdapter != null) {
+                        ingredientsAdapter.filter(newText);
+                    }
+                } else {
+                    // If categories or countries are being displayed
+                    if (categoriesDetailedAdapter != null) {
+                        categoriesDetailedAdapter.filter(newText);
+                    }
+                }
                 return true;
             }
         });
-        presenter.showCategoriesList(selectedCategory);
-        presenter.showCountriesList(selectedCountry);
+
     }
 
-    private void initRecyclerView() {
+    private void initCategoriesRecyclerView() {
         categoriesDetailedAdapter = new CategoriesDetailedAdapter();
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2, RecyclerView.VERTICAL, false));
         recyclerView.setAdapter(categoriesDetailedAdapter);
     }
+
+    private void initIngredientsRecyclerView() {
+        ingredientsAdapter = new IngredientsAdapter(true);
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 5, RecyclerView.VERTICAL, false));
+        recyclerView.setAdapter(ingredientsAdapter);
+    }
+
+//    private void initRecyclerView() {
+//        categoriesDetailedAdapter = new CategoriesDetailedAdapter();
+//        recyclerView.setLayoutManager(new GridLayoutManager(this, 2, RecyclerView.VERTICAL, false));
+//        recyclerView.setAdapter(categoriesDetailedAdapter);
+//    }
 
     private void toggleTitle() {
         if (selectedCategory != null) {
             title.setText(selectedCategory);
         } else if (selectedCountry != null) {
             title.setText(selectedCountry);
+        } else if (allIngredients != null) {
+            title.setText(allIngredients);
         }
     }
 
@@ -94,8 +143,6 @@ public class CategoriesMealsActivity extends AppCompatActivity implements Catego
 //            Toast.makeText(this, " No Data", Toast.LENGTH_SHORT).show();
 
         }
-
-
     }
 
     @Override
@@ -110,6 +157,17 @@ public class CategoriesMealsActivity extends AppCompatActivity implements Catego
             categoriesDetailedAdapter.setCategories(countriesList);
         } else {
 //            Toast.makeText(this, " No Data", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void showIngredients(List<IngredientItem> ingredients) {
+        if (ingredients != null) {
+            Log.d("TAG", "showIngredientsList: " + ingredients.size());
+            ingredientsAdapter.setIngredients(ingredients);
+
+        } else {
+            Toast.makeText(this, " No Data", Toast.LENGTH_SHORT).show();
         }
     }
 }

@@ -21,7 +21,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:text="Our Inspiration Meals"
-            android:textColor="@color/colorText"
+            android:textColor="@color/colorPrimary"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -78,6 +78,7 @@
             android:text="Categories"
             android:textSize="20sp"
             android:textStyle="bold"
+            android:textColor="@color/colorPrimary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/cardView" />
@@ -104,7 +105,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:text="Ingrediens"
-                android:textColor="@color/colorText"
+                android:textColor="@color/colorPrimary"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
@@ -113,7 +114,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="right"
-                android:text="See_more"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="18dp"
+                android:text="See_more ..."
+                android:textColor="@color/colorPrimary"
                 android:textStyle="bold" />
         </LinearLayout>
 
@@ -129,7 +133,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="Countries"
-            android:textColor="@color/colorText"
+            android:textColor="@color/colorPrimary"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@+id/categoriesTextView"

@@ -5,10 +5,12 @@ import com.iti.flex_meals.db.retrofit.Retrofit;
 import com.iti.flex_meals.db.retrofit.networkCallBack.OnCategoriesListCallBack;
 import com.iti.flex_meals.db.retrofit.networkCallBack.OnCategoriesMealNetworkCallBack;
 import com.iti.flex_meals.db.retrofit.networkCallBack.OnCountriesMealNetworkCallBack;
+import com.iti.flex_meals.db.retrofit.networkCallBack.OnIngredientNetworkCallBack;
 import com.iti.flex_meals.db.retrofit.networkCallBack.OnRandomMealNetworkCallBack;
 import com.iti.flex_meals.db.retrofit.pojo.categories.CategoryMealResponse;
 import com.iti.flex_meals.db.retrofit.pojo.categoriesList.CategoriesListResponse;
 import com.iti.flex_meals.db.retrofit.pojo.countries.AllCountryResponse;
+import com.iti.flex_meals.db.retrofit.pojo.ingredients.IngredientsResponse;
 import com.iti.flex_meals.db.retrofit.pojo.randomMeal.RandomMealResponse;
 
 import retrofit2.Call;
@@ -112,5 +114,24 @@ public class RemoteDataSourceImpl implements RemoteDataSource {
 
     }
 
+    @Override
+    public void getIngredients(OnIngredientNetworkCallBack onIngredientNetworkCallBack) {
+        Call<IngredientsResponse> call = mealApiService.getAllIngredients();
+        call.enqueue(new Callback<IngredientsResponse>() {
+            @Override
+            public void onResponse(Call<IngredientsResponse> call, Response<IngredientsResponse> response) {
+                onIngredientNetworkCallBack.onSuccess(response.body().getIngredients());
+            }
+
+            @Override
+            public void onFailure(Call<IngredientsResponse> call, Throwable throwable) {
+                onIngredientNetworkCallBack.onError(throwable.getMessage());
+            }
+        });
+    }
+
 
 }
+
+
+

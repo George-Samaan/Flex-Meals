@@ -13,6 +13,7 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -32,9 +33,11 @@ import com.iti.flex_meals.db.RemoteData.RemoteDataSourceImpl;
 import com.iti.flex_meals.db.repository.RepositoryImpl;
 import com.iti.flex_meals.db.retrofit.pojo.categories.CategoryListItem;
 import com.iti.flex_meals.db.retrofit.pojo.countries.CountryItem;
+import com.iti.flex_meals.db.retrofit.pojo.ingredients.IngredientItem;
 import com.iti.flex_meals.db.retrofit.pojo.randomMeal.RandomMealItem;
 import com.iti.flex_meals.db.sharedPreferences.SharedPreferencesDataSourceImpl;
 import com.iti.flex_meals.homeActivity.homeFragment.presenter.HomePresenterImpl;
+import com.iti.flex_meals.ingredients.view.IngredientsAdapter;
 
 import java.util.List;
 
@@ -45,7 +48,10 @@ public class HomeFragment extends Fragment implements RandomMealView, OnCategory
     private CategoriesListAdapter categoriesListAdapter;
     private RecyclerView categoriesRecyclerView;
     private RecyclerView countriesRecyclerView;
+    private RecyclerView ingredientsRecyclerView;
     private CountriesListAdapter countriesListAdapter;
+    private IngredientsAdapter ingredientsAdapter;
+    private TextView textView;
 
 
     @Override
@@ -69,20 +75,33 @@ public class HomeFragment extends Fragment implements RandomMealView, OnCategory
         super.onViewCreated(view, savedInstanceState);
         initViews(view);
         initRecyclerView();
+        onSeemMoreClick();
+
         homePresenter.showRandomMeal();
         homePresenter.showMealCategories();
         homePresenter.showCountriesList();
+        homePresenter.showIngredients();
+        homePresenter.showIngredients();
+
+
 
     }
+
 
     private void initRecyclerView() {
         categoriesListAdapter = new CategoriesListAdapter();
         categoriesRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false));
         categoriesRecyclerView.setAdapter(categoriesListAdapter);
+
         //countries recycler
         countriesListAdapter = new CountriesListAdapter();
         countriesRecyclerView.setLayoutManager(new GridLayoutManager(requireContext(), 2, RecyclerView.HORIZONTAL, false));
         countriesRecyclerView.setAdapter(countriesListAdapter);
+
+        //ingredients recycler
+        ingredientsAdapter = new IngredientsAdapter(false);
+        ingredientsRecyclerView.setLayoutManager(new GridLayoutManager(requireContext(), 2, RecyclerView.HORIZONTAL, false));
+        ingredientsRecyclerView.setAdapter(ingredientsAdapter);
     }
 
     private void initViews(@NonNull View view) {
@@ -90,6 +109,8 @@ public class HomeFragment extends Fragment implements RandomMealView, OnCategory
         progressBar = view.findViewById(R.id.progress_bar);
         categoriesRecyclerView = view.findViewById(R.id.categoryRecView);
         countriesRecyclerView = view.findViewById(R.id.countriesRecView);
+        ingredientsRecyclerView = view.findViewById(R.id.ingredientdRecView);
+        textView = view.findViewById(R.id.seeMoreTxt);
     }
 
     @Override
@@ -145,6 +166,14 @@ public class HomeFragment extends Fragment implements RandomMealView, OnCategory
     }
 
     @Override
+    public void showIngredients(List<IngredientItem> ingredients) {
+        Log.d("TAG", "showIngredients: " + ingredients.size());
+        ingredientsAdapter.setIngredients(ingredients);
+        ingredientsAdapter.notifyDataSetChanged();
+    }
+
+
+    @Override
     public void onCategoryClick(String categoryName) {
         Intent intent = new Intent(requireContext(), CategoriesMealsActivity.class);
         intent.putExtra("CATEGORY_NAME", categoryName);
@@ -156,5 +185,16 @@ public class HomeFragment extends Fragment implements RandomMealView, OnCategory
         Intent intent = new Intent(requireContext(), CategoriesMealsActivity.class);
         intent.putExtra("COUNTRY_NAME", countryName);
         requireContext().startActivity(intent);
+    }
+
+    private void onSeemMoreClick() {
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(requireContext(), CategoriesMealsActivity.class);
+                intent.putExtra("INGREDIENT_NAME", "All Ingredients");
+                requireContext().startActivity(intent);
+            }
+        });
     }
 }
