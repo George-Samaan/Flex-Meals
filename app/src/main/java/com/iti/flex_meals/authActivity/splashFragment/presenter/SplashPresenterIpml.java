@@ -1,5 +1,7 @@
 package com.iti.flex_meals.authActivity.splashFragment.presenter;
 
+import android.util.Log;
+
 import com.iti.flex_meals.authActivity.splashFragment.view.SplashView;
 import com.iti.flex_meals.db.repository.Repository;
 
@@ -18,9 +20,10 @@ public class SplashPresenterIpml implements Splash {
         String token = repository.getLoginAuth();
         if (token != null && !token.isEmpty()) {
             view.navigateToHome();
+            Log.d("Tag", "token here " + token);
         } else {
             view.navigateToLogin();
-
+            Log.d("Tag", "token null  " + token);
         }
     }
 }

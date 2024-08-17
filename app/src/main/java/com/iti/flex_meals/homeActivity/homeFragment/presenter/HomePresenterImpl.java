@@ -43,17 +43,17 @@ public class HomePresenterImpl implements HomePresenter {
 
     @Override
     public void showMealCategories() {
-//        view.showLoadingIndicator();
+        view.showLoadingIndicator();
         repository.getCategories(new OnCategoriesMealNetworkCallBack() {
             @Override
             public void onSuccess(List<CategoryListItem> categories) {
-//                view.hideLoadingIndicator();
+                view.hideLoadingIndicator();
                 view.showMealCategories(categories);
             }
 
             @Override
             public void onError(String errorMssg) {
-//                view.hideLoadingIndicator();
+                view.hideLoadingIndicator();
                 view.showErrorMessage(errorMssg);
             }
         });

@@ -1,5 +1,6 @@
 package com.iti.flex_meals.homeActivity;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -44,6 +45,12 @@ public class HomeActivity extends AppCompatActivity {
                 new RemoteDataSourceImpl());
     }
 
+    private boolean isUserAuthenticated() {
+        String authToken = repository.getLoginAuth();
+        return authToken == null;
+    }
+
+
 
     private void initPageTitle() {
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
@@ -51,17 +58,16 @@ public class HomeActivity extends AppCompatActivity {
             if (destinationId == R.id.homeFragment) {
                 tv_title.setText("Home");
             } else if (destinationId == R.id.profileFragment) {
+                showGuestLoginDialog();
                 tv_title.setText("Profile");
             } else if (destinationId == R.id.searchFragment) {
                 tv_title.setText("Search");
-
             } else if (destinationId == R.id.favouritesFragment) {
-
+                showGuestLoginDialog();
                 tv_title.setText("Favourites");
-
             } else if (destinationId == R.id.planFragment) {
+                showGuestLoginDialog();
                 tv_title.setText("Today's Meals");
-
             } else {
                 tv_title.setText("404");
             }
@@ -93,6 +99,18 @@ public class HomeActivity extends AppCompatActivity {
         tv_title = findViewById(R.id.pagetitle);
     }
 
+    private void showGuestLoginDialog() {
+        if (isUserAuthenticated()) {
+            return;
+        }
+        new AlertDialog.Builder(this)
+                .setTitle("Login Required")
+                .setMessage("You need to log in to access this feature.")
+                .setPositiveButton("Sign In", (dialog, which) -> finish())
+                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                .show();
+    }
+
     private void setDrawerItemListeners() {
         navigationView.setNavigationItemSelectedListener(item -> {
             int itemId = item.getItemId();
@@ -100,7 +118,10 @@ public class HomeActivity extends AppCompatActivity {
                 performExit();
                 return true;
             } else if (itemId == R.id.logout) {
-                performLogOut();
+                if (isUserAuthenticated()) {
+                    performLogOut();
+                }
+                showGuestLoginDialog();
                 return true;
             } else {
                 drawerLayout.closeDrawer(GravityCompat.START);
@@ -109,7 +130,6 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
     }
-
     private void performExit() {
         Utils.showConfirmationDialog(this, "Exit", "Are you sure you want to exit?", (dialog, which) -> {
             Toast.makeText(this, "Exiting the app...", Toast.LENGTH_SHORT).show();
@@ -122,7 +142,7 @@ public class HomeActivity extends AppCompatActivity {
             Toast.makeText(this, "Logging out...", Toast.LENGTH_SHORT).show();
             repository.clearAuthData();
             Intent intent = new Intent(this, AuthActivity.class);
-            intent.putExtra("navigateTo", "targetFragment"); // Optional: Pass extra data if needed
+            intent.putExtra("navigateTo", "targetFragment");
             startActivity(intent);
             finish();
         });

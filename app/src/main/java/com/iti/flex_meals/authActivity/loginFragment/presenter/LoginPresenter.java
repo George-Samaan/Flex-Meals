@@ -5,5 +5,6 @@ public interface LoginPresenter {
 
     void performFirebaseLogin(String email, String password);
 
+    void handleGuestLogin();
 
 }
