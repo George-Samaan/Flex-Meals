@@ -39,10 +39,11 @@ import com.iti.flex_meals.db.retrofit.pojo.randomMeal.RandomMealItem;
 import com.iti.flex_meals.db.sharedPreferences.SharedPreferencesDataSourceImpl;
 import com.iti.flex_meals.homeActivity.homeFragment.presenter.HomePresenterImpl;
 import com.iti.flex_meals.ingredients.view.IngredientsAdapter;
+import com.iti.flex_meals.ingredients.view.OnIngredientClickListener;
 
 import java.util.List;
 
-public class HomeFragment extends Fragment implements RandomMealView, OnCategoryClickListener, OnCountryClickListener {
+public class HomeFragment extends Fragment implements RandomMealView, OnCategoryClickListener, OnCountryClickListener, OnIngredientClickListener {
     ImageView randomMeal;
     LottieAnimationView lottieRandomImage;
     ProgressBar progressBarCategories;
@@ -103,7 +104,7 @@ public class HomeFragment extends Fragment implements RandomMealView, OnCategory
         countriesRecyclerView.setAdapter(countriesListAdapter);
 
         //ingredients recycler
-        ingredientsAdapter = new IngredientsAdapter(false);
+        ingredientsAdapter = new IngredientsAdapter(false, this);
         ingredientsRecyclerView.setLayoutManager(new GridLayoutManager(requireContext(), 2, RecyclerView.HORIZONTAL, false));
         ingredientsRecyclerView.setAdapter(ingredientsAdapter);
     }
@@ -209,5 +210,12 @@ public class HomeFragment extends Fragment implements RandomMealView, OnCategory
                 requireContext().startActivity(intent);
             }
         });
+    }
+
+    @Override
+    public void onIngredientClick(String ingredientDetail) {
+        Intent intent = new Intent(requireContext(), CategoriesMealsActivity.class);
+        intent.putExtra("INGREDIENT_DETAIL", ingredientDetail);
+        requireContext().startActivity(intent);
     }
 }

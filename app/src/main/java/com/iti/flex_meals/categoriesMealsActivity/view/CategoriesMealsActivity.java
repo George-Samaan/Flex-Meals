@@ -19,12 +19,13 @@ import com.iti.flex_meals.db.retrofit.pojo.categoriesList.CategoryListDetailed;
 import com.iti.flex_meals.db.retrofit.pojo.ingredients.IngredientItem;
 import com.iti.flex_meals.db.sharedPreferences.SharedPreferencesDataSourceImpl;
 import com.iti.flex_meals.ingredients.view.IngredientsAdapter;
+import com.iti.flex_meals.ingredients.view.OnIngredientClickListener;
 
 import java.util.List;
 
-public class CategoriesMealsActivity extends AppCompatActivity implements CategoriesMealView {
+public class CategoriesMealsActivity extends AppCompatActivity implements CategoriesMealView, OnIngredientClickListener {
 
-    private CategoriesListImpl presenter;
+    CategoriesListImpl presenter;
     private String selectedCategory;
     private String x;
     private RecyclerView recyclerView;
@@ -34,6 +35,7 @@ public class CategoriesMealsActivity extends AppCompatActivity implements Catego
     private TextView title;
     private String selectedCountry;
     private String allIngredients;
+    private String ingredientDetail;
     private IngredientsAdapter ingredientsAdapter;
 
     @Override
@@ -45,7 +47,9 @@ public class CategoriesMealsActivity extends AppCompatActivity implements Catego
                 new RepositoryImpl(SharedPreferencesDataSourceImpl.getInstance(this), new RemoteDataSourceImpl()));
         selectedCategory = getIntent().getStringExtra("CATEGORY_NAME");
         selectedCountry = getIntent().getStringExtra("COUNTRY_NAME");
+        ingredientDetail = getIntent().getStringExtra("INGREDIENT_DETAIL");
         allIngredients = getIntent().getStringExtra("INGREDIENT_NAME");
+
         initViews();
         toggleTitle();
         backButton.setOnClickListener(v -> finish());
@@ -58,9 +62,8 @@ public class CategoriesMealsActivity extends AppCompatActivity implements Catego
             initCategoriesRecyclerView();
             presenter.showCategoriesList(selectedCategory);
             presenter.showCountriesList(selectedCountry);
+            presenter.showIngredientsDetails(ingredientDetail);
         }
-
-//        initRecyclerView();
 
         // Setup search functionality
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -106,16 +109,11 @@ public class CategoriesMealsActivity extends AppCompatActivity implements Catego
     }
 
     private void initIngredientsRecyclerView() {
-        ingredientsAdapter = new IngredientsAdapter(true);
+        ingredientsAdapter = new IngredientsAdapter(true, this);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 5, RecyclerView.VERTICAL, false));
         recyclerView.setAdapter(ingredientsAdapter);
     }
 
-//    private void initRecyclerView() {
-//        categoriesDetailedAdapter = new CategoriesDetailedAdapter();
-//        recyclerView.setLayoutManager(new GridLayoutManager(this, 2, RecyclerView.VERTICAL, false));
-//        recyclerView.setAdapter(categoriesDetailedAdapter);
-//    }
 
     private void toggleTitle() {
         if (selectedCategory != null) {
@@ -124,6 +122,8 @@ public class CategoriesMealsActivity extends AppCompatActivity implements Catego
             title.setText(selectedCountry);
         } else if (allIngredients != null) {
             title.setText(allIngredients);
+        } else if (ingredientDetail != null) {
+            title.setText(ingredientDetail);
         }
     }
 
@@ -167,7 +167,22 @@ public class CategoriesMealsActivity extends AppCompatActivity implements Catego
             ingredientsAdapter.setIngredients(ingredients);
 
         } else {
-            Toast.makeText(this, " No Data", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, " No Data", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void showIngredientsDetails(List<CategoryListDetailed> ingredients) {
+        if (ingredients != null) {
+            Log.d("TAG", "showIngredientsDetails: " + ingredients.size());
+            categoriesDetailedAdapter.setCategories(ingredients);
+        } else {
+            Log.e("CategoriesMealsActivity", "Received null ingredients list");
+        }
+    }
+
+    @Override
+    public void onIngredientClick(String ingredientDetail) {
+        Log.d("TAG", "onIngredientClick: " + ingredientDetail);
     }
 }

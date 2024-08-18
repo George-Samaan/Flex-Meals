@@ -64,4 +64,19 @@ public class CategoriesListImpl implements CategoriesList {
             }
         });
     }
+
+    @Override
+    public void showIngredientsDetails(String ingredient) {
+        repository.getIngredientsDetailed(ingredient, new OnCategoriesListCallBack() {
+            @Override
+            public void onSuccess(List<CategoryListDetailed> categoriesList) {
+                view.showIngredientsDetails(categoriesList);
+            }
+
+            @Override
+            public void onError(String message) {
+                view.showError(message);
+            }
+        });
+    }
 }

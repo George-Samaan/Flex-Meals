@@ -13,4 +13,6 @@ public interface CategoriesMealView {
     void showCountriesList(List<CategoryListDetailed> countriesList);
 
     void showIngredients(List<IngredientItem> ingredients);
+
+    void showIngredientsDetails(List<CategoryListDetailed> ingredients);
 }

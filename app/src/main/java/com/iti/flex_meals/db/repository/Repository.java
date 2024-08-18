@@ -28,5 +28,7 @@ public interface Repository {
 
     void getCountriesList(String country, OnCategoriesListCallBack onCategoriesListCallBack);
 
+    void getIngredientsDetailed(String ingredient, OnCategoriesListCallBack onCategoriesListCallBack);
+
     void getIngredients(OnIngredientNetworkCallBack onIngredientNetworkCallBack);
 }

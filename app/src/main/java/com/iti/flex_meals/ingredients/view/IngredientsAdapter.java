@@ -1,5 +1,6 @@
 package com.iti.flex_meals.ingredients.view;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,12 +22,14 @@ import java.util.List;
 public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.ViewHolder> {
     List<IngredientItem> ingredients;
     List<IngredientItem> filteredCategories;
+    OnIngredientClickListener onClick;
     private boolean isExpanded;
 
-    public IngredientsAdapter(boolean isExpanded) {
+    public IngredientsAdapter(boolean isExpanded, OnIngredientClickListener onClick) {
         this.ingredients = new ArrayList<>();
         this.isExpanded = isExpanded;
         this.filteredCategories = new ArrayList<>();
+        this.onClick = onClick;
     }
 
     public void setIngredients(List<IngredientItem> ingredients) {
@@ -47,14 +50,21 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull IngredientsAdapter.ViewHolder holder, int position) {
-        if (position >= 0 && position < filteredCategories.size()) {
-            Animation animation = AnimationUtils.loadAnimation(holder.itemView.getContext(), R.anim.scale_in_animation);
-            holder.itemView.startAnimation(animation);
+        Animation animation = AnimationUtils.loadAnimation(holder.itemView.getContext(), R.anim.scale_in_animation);
+        holder.itemView.startAnimation(animation);
 
             IngredientItem ingredient = filteredCategories.get(position);
             holder.ingredientName.setText(ingredient.getStrIngredient());
             Glide.with(holder.itemView.getContext()).load(ingredient.getImageUrl()).into(holder.imv_ingredient);
-        }
+
+        holder.imv_ingredient.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClick.onIngredientClick(ingredient.getStrIngredient());
+                Log.d("ingredient", ingredient.getStrIngredient());
+            }
+        });
+
     }
 
 

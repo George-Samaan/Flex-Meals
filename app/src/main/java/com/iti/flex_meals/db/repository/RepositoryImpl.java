@@ -73,6 +73,11 @@ public class RepositoryImpl implements Repository {
     }
 
     @Override
+    public void getIngredientsDetailed(String ingredient, OnCategoriesListCallBack onCategoriesListCallBack) {
+        remoteDataSource.getIngredientsList(ingredient, onCategoriesListCallBack);
+    }
+
+    @Override
     public void getIngredients(OnIngredientNetworkCallBack onIngredientNetworkCallBack) {
         remoteDataSource.getIngredients(onIngredientNetworkCallBack);
     }

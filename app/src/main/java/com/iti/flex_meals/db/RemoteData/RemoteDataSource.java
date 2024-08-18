@@ -18,5 +18,7 @@ public interface RemoteDataSource {
     void getCountriesList(String country, OnCategoriesListCallBack onCategoriesListCallBack);
 
     void getIngredients(OnIngredientNetworkCallBack onIngredientNetworkCallBack);
+
+    void getIngredientsList(String ingredient, OnCategoriesListCallBack onCategoriesListCallBack);
 }
 

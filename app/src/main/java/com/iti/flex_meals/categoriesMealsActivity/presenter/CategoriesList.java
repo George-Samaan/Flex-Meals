@@ -7,4 +7,5 @@ public interface CategoriesList {
 
     void showIngredients();
 
+    void showIngredientsDetails(String ingredient);
 }
