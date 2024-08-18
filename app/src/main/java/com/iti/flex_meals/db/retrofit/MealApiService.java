@@ -25,8 +25,11 @@ public interface MealApiService {
     Call<IngredientsResponse> getAllIngredients();
 
     @GET("filter.php")
-    Call<CategoriesListResponse> getCategoriesList(@Query("c") String category);  // Updated method
+    Call<CategoriesListResponse> getCategoriesList(@Query("c") String category);
 
     @GET("filter.php")
-    Call<CategoriesListResponse> getCountriesList(@Query("a") String country);  // Updated method
+    Call<CategoriesListResponse> getCountriesList(@Query("a") String country);
+
+    @GET("filter.php")
+    Call<CategoriesListResponse> getIngredientsList(@Query("i") String ingredient);
 }

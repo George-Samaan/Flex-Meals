@@ -28,8 +28,14 @@ public class CategoriesDetailedAdapter extends RecyclerView.Adapter<CategoriesDe
     }
 
     public void setCategories(List<CategoryListDetailed> categories) {
-        this.categories = categories;
-        this.filteredCategories = new ArrayList<>(categories);
+        if (categories != null) {
+            this.categories = categories;
+            this.filteredCategories = new ArrayList<>(categories);
+        } else {
+            this.categories = new ArrayList<>();
+            this.filteredCategories = new ArrayList<>();
+        }
+
         notifyDataSetChanged();
     }
 
@@ -67,6 +73,12 @@ public class CategoriesDetailedAdapter extends RecyclerView.Adapter<CategoriesDe
                 }
             }
         }
+        notifyDataSetChanged();
+    }
+
+    public void clear() {
+        filteredCategories.clear();
+        categories.clear();
         notifyDataSetChanged();
     }
 
