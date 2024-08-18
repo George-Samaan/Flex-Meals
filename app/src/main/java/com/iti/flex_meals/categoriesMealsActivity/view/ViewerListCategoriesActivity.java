@@ -23,8 +23,7 @@ import com.iti.flex_meals.ingredients.view.OnIngredientClickListener;
 
 import java.util.List;
 
-public class CategoriesMealsActivity extends AppCompatActivity implements CategoriesMealView, OnIngredientClickListener {
-
+public class ViewerListCategoriesActivity extends AppCompatActivity implements CategoriesMealView, OnIngredientClickListener {
     CategoriesListImpl presenter;
     private String selectedCategory;
     private String x;
@@ -37,23 +36,49 @@ public class CategoriesMealsActivity extends AppCompatActivity implements Catego
     private String allIngredients;
     private String ingredientDetail;
     private IngredientsAdapter ingredientsAdapter;
+    private List<IngredientItem> savedIngredientsList; // Save the list of all ingredients
+    private boolean isViewingDetail = false; // Flag to track whether you're viewing a detail
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_categories_meals);
+        setContentView(R.layout.activity_categories_list_viewer);
+        presenter = new CategoriesListImpl(this, new RepositoryImpl(SharedPreferencesDataSourceImpl.getInstance(this), new RemoteDataSourceImpl()));
+        getIntentKeys();
+        initViews();
+        toggleTitle();
+        initPresenters();
+        onSearchQueryListener();
+        onBackButtonClick();
+    }
 
-        presenter = new CategoriesListImpl(this,
-                new RepositoryImpl(SharedPreferencesDataSourceImpl.getInstance(this), new RemoteDataSourceImpl()));
+    private void getIntentKeys() {
         selectedCategory = getIntent().getStringExtra("CATEGORY_NAME");
         selectedCountry = getIntent().getStringExtra("COUNTRY_NAME");
         ingredientDetail = getIntent().getStringExtra("INGREDIENT_DETAIL");
         allIngredients = getIntent().getStringExtra("INGREDIENT_NAME");
+    }
 
-        initViews();
-        toggleTitle();
-        backButton.setOnClickListener(v -> finish());
+    private void initViews() {
+        recyclerView = findViewById(R.id.recyclerview);
+        backButton = findViewById(R.id.imgBack);
+        searchView = findViewById(R.id.search_view);
+        title = findViewById(R.id.title);
+    }
 
+    private void toggleTitle() {
+        if (selectedCategory != null) {
+            title.setText(selectedCategory);
+        } else if (selectedCountry != null) {
+            title.setText(selectedCountry);
+        } else if (allIngredients != null) {
+            title.setText(allIngredients);
+        } else if (ingredientDetail != null) {
+            title.setText(ingredientDetail);
+        }
+    }
+
+    private void initPresenters() {
         if (allIngredients != null) {
             // Show ingredients
             initIngredientsRecyclerView();
@@ -64,42 +89,40 @@ public class CategoriesMealsActivity extends AppCompatActivity implements Catego
             presenter.showCountriesList(selectedCountry);
             presenter.showIngredientsDetails(ingredientDetail);
         }
+    }
 
-        // Setup search functionality
+    private void onSearchQueryListener() {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                if (allIngredients != null) {
-                    // If ingredients are being displayed
-                    if (ingredientsAdapter != null) {
-                        ingredientsAdapter.filter(query);
-                    }
-                } else {
-                    // If categories or countries are being displayed
-                    if (categoriesDetailedAdapter != null) {
-                        categoriesDetailedAdapter.filter(query);
-                    }
-                }
+                performSearch(query);
                 return true;
             }
-
             @Override
             public boolean onQueryTextChange(String newText) {
-                if (allIngredients != null) {
-                    // If ingredients are being displayed
-                    if (ingredientsAdapter != null) {
-                        ingredientsAdapter.filter(newText);
-                    }
-                } else {
-                    // If categories or countries are being displayed
-                    if (categoriesDetailedAdapter != null) {
-                        categoriesDetailedAdapter.filter(newText);
-                    }
-                }
+                performSearch(newText);
                 return true;
             }
         });
+    }
 
+    private void performSearch(String query) {
+        if (isViewingDetail) {
+            // If viewing a detailed ingredient, filter the detailed view
+            if (categoriesDetailedAdapter != null) {
+                categoriesDetailedAdapter.filter(query);
+            }
+        } else if (allIngredients != null) {
+            // If in the general ingredients view, filter the ingredients
+            if (ingredientsAdapter != null) {
+                ingredientsAdapter.filter(query);
+            }
+        } else {
+            // Otherwise, filter the categories or countries list
+            if (categoriesDetailedAdapter != null) {
+                categoriesDetailedAdapter.filter(query);
+            }
+        }
     }
 
     private void initCategoriesRecyclerView() {
@@ -114,26 +137,6 @@ public class CategoriesMealsActivity extends AppCompatActivity implements Catego
         recyclerView.setAdapter(ingredientsAdapter);
     }
 
-
-    private void toggleTitle() {
-        if (selectedCategory != null) {
-            title.setText(selectedCategory);
-        } else if (selectedCountry != null) {
-            title.setText(selectedCountry);
-        } else if (allIngredients != null) {
-            title.setText(allIngredients);
-        } else if (ingredientDetail != null) {
-            title.setText(ingredientDetail);
-        }
-    }
-
-    private void initViews() {
-        recyclerView = findViewById(R.id.recyclerview);
-        backButton = findViewById(R.id.imgBack);
-        searchView = findViewById(R.id.search_view);
-        title = findViewById(R.id.title);
-    }
-
     @Override
     public void showCategoriesList(List<CategoryListDetailed> categoryListItemList) {
         if (categoryListItemList != null) {
@@ -143,11 +146,6 @@ public class CategoriesMealsActivity extends AppCompatActivity implements Catego
 //            Toast.makeText(this, " No Data", Toast.LENGTH_SHORT).show();
 
         }
-    }
-
-    @Override
-    public void showError(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -165,6 +163,7 @@ public class CategoriesMealsActivity extends AppCompatActivity implements Catego
         if (ingredients != null) {
             Log.d("TAG", "showIngredientsList: " + ingredients.size());
             ingredientsAdapter.setIngredients(ingredients);
+            savedIngredientsList = ingredients; // Save the list of all ingredients
 
         } else {
 //            Toast.makeText(this, " No Data", Toast.LENGTH_SHORT).show();
@@ -175,6 +174,7 @@ public class CategoriesMealsActivity extends AppCompatActivity implements Catego
     public void showIngredientsDetails(List<CategoryListDetailed> ingredients) {
         if (ingredients != null) {
             Log.d("TAG", "showIngredientsDetails: " + ingredients.size());
+            initCategoriesRecyclerView();
             categoriesDetailedAdapter.setCategories(ingredients);
         } else {
             Log.e("CategoriesMealsActivity", "Received null ingredients list");
@@ -184,5 +184,50 @@ public class CategoriesMealsActivity extends AppCompatActivity implements Catego
     @Override
     public void onIngredientClick(String ingredientDetail) {
         Log.d("TAG", "onIngredientClick: " + ingredientDetail);
+        if (ingredientDetail != null) {
+            title.setText(ingredientDetail);
+            initCategoriesRecyclerView();
+            isViewingDetail = true; // Set flag to true when viewing detail
+            presenter.showIngredientsDetails(ingredientDetail); // Call presenter to show ingredient details
+        }
     }
+
+    @Override
+    public void showError(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    private void onBackButtonClick() {
+        backButton.setOnClickListener(v -> {
+            if (isViewingDetail) {
+                // If viewing detail, go back to showing all ingredients
+                title.setText(allIngredients); // Set the title back to "All Ingredients"
+                isViewingDetail = false; // No longer viewing a detail
+
+                // Reset the RecyclerView to show the original list of ingredients
+                initIngredientsRecyclerView(); // Reinitialize the ingredients RecyclerView
+                ingredientsAdapter.setIngredients(savedIngredientsList); // Restore the full list
+            } else {
+                // If not viewing a detail, go back as usual
+                finish(); // Close the activity
+            }
+        });
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (isViewingDetail) {
+            // If viewing detail, go back to showing all ingredients
+            title.setText(allIngredients); // Set the title back to "All Ingredients"
+            isViewingDetail = false; // No longer viewing a detail
+
+            // Reset the RecyclerView to show the original list of ingredients
+            initIngredientsRecyclerView(); // Reinitialize the ingredients RecyclerView
+            ingredientsAdapter.setIngredients(savedIngredientsList); // Restore the full list
+        } else {
+            // If not viewing a detail, go back as usual
+            super.onBackPressed(); // This will close the activity
+        }
+    }
+
 }

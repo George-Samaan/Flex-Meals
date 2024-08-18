@@ -27,7 +27,7 @@ import com.bumptech.glide.Glide;
 import com.iti.flex_meals.R;
 import com.iti.flex_meals.categories.view.CategoriesListAdapter;
 import com.iti.flex_meals.categories.view.OnCategoryClickListener;
-import com.iti.flex_meals.categoriesMealsActivity.view.CategoriesMealsActivity;
+import com.iti.flex_meals.categoriesMealsActivity.view.ViewerListCategoriesActivity;
 import com.iti.flex_meals.countries.view.CountriesListAdapter;
 import com.iti.flex_meals.countries.view.OnCountryClickListener;
 import com.iti.flex_meals.db.RemoteData.RemoteDataSourceImpl;
@@ -189,14 +189,14 @@ public class HomeFragment extends Fragment implements RandomMealView, OnCategory
 
     @Override
     public void onCategoryClick(String categoryName) {
-        Intent intent = new Intent(requireContext(), CategoriesMealsActivity.class);
+        Intent intent = new Intent(requireContext(), ViewerListCategoriesActivity.class);
         intent.putExtra("CATEGORY_NAME", categoryName);
         requireContext().startActivity(intent);
     }
 
     @Override
     public void onCountryClick(String countryName) {
-        Intent intent = new Intent(requireContext(), CategoriesMealsActivity.class);
+        Intent intent = new Intent(requireContext(), ViewerListCategoriesActivity.class);
         intent.putExtra("COUNTRY_NAME", countryName);
         requireContext().startActivity(intent);
     }
@@ -205,7 +205,7 @@ public class HomeFragment extends Fragment implements RandomMealView, OnCategory
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(requireContext(), CategoriesMealsActivity.class);
+                Intent intent = new Intent(requireContext(), ViewerListCategoriesActivity.class);
                 intent.putExtra("INGREDIENT_NAME", "All Ingredients");
                 requireContext().startActivity(intent);
             }
@@ -214,7 +214,7 @@ public class HomeFragment extends Fragment implements RandomMealView, OnCategory
 
     @Override
     public void onIngredientClick(String ingredientDetail) {
-        Intent intent = new Intent(requireContext(), CategoriesMealsActivity.class);
+        Intent intent = new Intent(requireContext(), ViewerListCategoriesActivity.class);
         intent.putExtra("INGREDIENT_DETAIL", ingredientDetail);
         requireContext().startActivity(intent);
     }

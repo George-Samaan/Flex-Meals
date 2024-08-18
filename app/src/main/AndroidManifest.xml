@@ -16,7 +16,7 @@
         android:theme="@style/Theme.FlexMeals"
         tools:targetApi="31">
         <activity
-            android:name=".categoriesMealsActivity.view.CategoriesMealsActivity"
+            android:name=".categoriesMealsActivity.view.ViewerListCategoriesActivity"
             android:exported="false" />
         <activity
             android:name=".homeActivity.HomeActivity"

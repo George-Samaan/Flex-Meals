@@ -76,6 +76,12 @@ public class CategoriesDetailedAdapter extends RecyclerView.Adapter<CategoriesDe
         notifyDataSetChanged();
     }
 
+    public void clear() {
+        filteredCategories.clear();
+        categories.clear();
+        notifyDataSetChanged();
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvCategoryName;
         ImageView ivCategory;
