@@ -45,10 +45,12 @@ public class HomeActivity extends AppCompatActivity {
                 new RemoteDataSourceImpl());
     }
 
-    private boolean isUserAuthenticated() {
+    private boolean isGuestUser() {
+        // Check if the authentication data is present in shared preferences.
         String authToken = repository.getLoginAuth();
-        return authToken == null;
+        return authToken == null || authToken.isEmpty(); // Return true if authToken is null or empty, indicating the user is a guest.
     }
+
 
 
 
@@ -58,21 +60,27 @@ public class HomeActivity extends AppCompatActivity {
             if (destinationId == R.id.homeFragment) {
                 tv_title.setText("Home");
             } else if (destinationId == R.id.profileFragment) {
-                showGuestLoginDialog();
-                tv_title.setText("Profile");
+                handleGuestUser("Profile");
             } else if (destinationId == R.id.searchFragment) {
                 tv_title.setText("Search");
             } else if (destinationId == R.id.favouritesFragment) {
-                showGuestLoginDialog();
-                tv_title.setText("Favourites");
+                handleGuestUser("Favourites");
             } else if (destinationId == R.id.planFragment) {
-                showGuestLoginDialog();
-                tv_title.setText("Today's Meals");
+                handleGuestUser("Today's Meals");
             } else {
                 tv_title.setText("404");
             }
         });
     }
+
+    private void handleGuestUser(String pageTitle) {
+        if (isGuestUser()) {
+            showGuestLoginDialog();
+        } else {
+            tv_title.setText(pageTitle);
+        }
+    }
+
 
     private void onMenuIcoClick() {
         menuIcon.setOnClickListener(new View.OnClickListener() {
@@ -100,16 +108,18 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void showGuestLoginDialog() {
-        if (isUserAuthenticated()) {
-            return;
-        }
         new AlertDialog.Builder(this)
                 .setTitle("Login Required")
                 .setMessage("You need to log in to access this feature.")
-                .setPositiveButton("Sign In", (dialog, which) -> finish())
+                .setPositiveButton("Sign In", (dialog, which) -> {
+                    Intent intent = new Intent(this, AuthActivity.class);
+                    startActivity(intent);
+                    finish();
+                })
                 .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
                 .show();
     }
+
 
     private void setDrawerItemListeners() {
         navigationView.setNavigationItemSelectedListener(item -> {
@@ -118,10 +128,7 @@ public class HomeActivity extends AppCompatActivity {
                 performExit();
                 return true;
             } else if (itemId == R.id.logout) {
-                if (isUserAuthenticated()) {
-                    performLogOut();
-                }
-                showGuestLoginDialog();
+                handleLogOut();
                 return true;
             } else {
                 drawerLayout.closeDrawer(GravityCompat.START);
@@ -130,11 +137,13 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
     }
-    private void performExit() {
-        Utils.showConfirmationDialog(this, "Exit", "Are you sure you want to exit?", (dialog, which) -> {
-            Toast.makeText(this, "Exiting the app...", Toast.LENGTH_SHORT).show();
-            finishAffinity();
-        });
+
+    private void handleLogOut() {
+        if (isGuestUser()) {
+            Toast.makeText(this, "Guest user cannot log out.", Toast.LENGTH_SHORT).show();
+        } else {
+            performLogOut();
+        }
     }
 
     private void performLogOut() {
@@ -145,6 +154,13 @@ public class HomeActivity extends AppCompatActivity {
             intent.putExtra("navigateTo", "targetFragment");
             startActivity(intent);
             finish();
+        });
+    }
+
+    private void performExit() {
+        Utils.showConfirmationDialog(this, "Exit", "Are you sure you want to exit?", (dialog, which) -> {
+            Toast.makeText(this, "Exiting the app...", Toast.LENGTH_SHORT).show();
+            finishAffinity();
         });
     }
 
