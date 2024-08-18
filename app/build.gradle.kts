@@ -67,5 +67,12 @@ dependencies {
     //Glide
     implementation("com.github.bumptech.glide:glide:4.16.0")
 
+    //youtube
+    implementation("com.pierfrancescosoffritti.androidyoutubeplayer:chromecast-sender:0.28")
+
+    //Circular image
+    implementation("de.hdodenhof:circleimageview:3.1.0")
+
+
 
 }

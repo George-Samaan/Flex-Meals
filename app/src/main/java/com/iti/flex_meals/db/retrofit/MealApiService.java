@@ -4,6 +4,7 @@ import com.iti.flex_meals.db.retrofit.pojo.categories.CategoryMealResponse;
 import com.iti.flex_meals.db.retrofit.pojo.categoriesList.CategoriesListResponse;
 import com.iti.flex_meals.db.retrofit.pojo.countries.AllCountryResponse;
 import com.iti.flex_meals.db.retrofit.pojo.ingredients.IngredientsResponse;
+import com.iti.flex_meals.db.retrofit.pojo.mealDetails.MealDetailsResponse;
 import com.iti.flex_meals.db.retrofit.pojo.randomMeal.RandomMealResponse;
 
 import retrofit2.Call;
@@ -32,4 +33,7 @@ public interface MealApiService {
 
     @GET("filter.php")
     Call<CategoriesListResponse> getIngredientsList(@Query("i") String ingredient);
+
+    @GET("lookup.php")
+    Call<MealDetailsResponse> getMealDetails(@Query("i") String id);
 }

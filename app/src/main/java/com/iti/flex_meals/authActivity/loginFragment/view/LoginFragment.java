@@ -205,6 +205,8 @@ public class LoginFragment extends Fragment implements LoginView {
     @Override
     public void onGoogleLoginSuccess(String userID, String email) {
         Utils.showCustomSnackbar(getView(), "Login Successfully", R.color.colorSuccess, R.color.colorText);
+        Intent intent = new Intent(getActivity(), HomeActivity.class);
+        startActivity(intent);
         getActivity().finish();
     }
 

@@ -25,11 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
 import com.iti.flex_meals.R;
-import com.iti.flex_meals.categories.view.CategoriesListAdapter;
-import com.iti.flex_meals.categories.view.OnCategoryClickListener;
 import com.iti.flex_meals.categoriesMealsActivity.view.ViewerListCategoriesActivity;
-import com.iti.flex_meals.countries.view.CountriesListAdapter;
-import com.iti.flex_meals.countries.view.OnCountryClickListener;
 import com.iti.flex_meals.db.RemoteData.RemoteDataSourceImpl;
 import com.iti.flex_meals.db.repository.RepositoryImpl;
 import com.iti.flex_meals.db.retrofit.pojo.categories.CategoryListItem;
@@ -38,8 +34,7 @@ import com.iti.flex_meals.db.retrofit.pojo.ingredients.IngredientItem;
 import com.iti.flex_meals.db.retrofit.pojo.randomMeal.RandomMealItem;
 import com.iti.flex_meals.db.sharedPreferences.SharedPreferencesDataSourceImpl;
 import com.iti.flex_meals.homeActivity.homeFragment.presenter.HomePresenterImpl;
-import com.iti.flex_meals.ingredients.view.IngredientsAdapter;
-import com.iti.flex_meals.ingredients.view.OnIngredientClickListener;
+import com.iti.flex_meals.mealDetailedActivity.view.MealDetailedActivity;
 
 import java.util.List;
 
@@ -128,6 +123,15 @@ public class HomeFragment extends Fragment implements RandomMealView, OnCategory
                 .load(item.getStrMealThumb())
                 .into(randomMeal);
         animation();
+        randomMeal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(requireContext(), MealDetailedActivity.class);
+                intent.putExtra("RANDOM_MEAL_ID", item.getIdMeal());
+                requireContext().startActivity(intent);
+                Log.d("TAG", "onClick: " + item.getIdMeal());
+            }
+        });
     }
 
     private void animation() {
