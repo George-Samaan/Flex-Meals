@@ -52,8 +52,6 @@ public class HomeActivity extends AppCompatActivity {
     }
 
 
-
-
     private void initPageTitle() {
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
             int destinationId = destination.getId();
@@ -80,7 +78,6 @@ public class HomeActivity extends AppCompatActivity {
             tv_title.setText(pageTitle);
         }
     }
-
 
     private void onMenuIcoClick() {
         menuIcon.setOnClickListener(new View.OnClickListener() {
@@ -116,8 +113,10 @@ public class HomeActivity extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 })
-                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
-                .show();
+                .setNegativeButton("Cancel", (dialog, which) -> {
+                    dialog.dismiss();
+                    navController.navigate(R.id.homeFragment);
+                }).show();
     }
 
 

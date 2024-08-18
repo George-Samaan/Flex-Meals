@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingEnd="15dp">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/ingredientImage"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/app_logo" />
+
+    <TextView
+        android:id="@+id/ingredientName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:maxLines="1"
+        android:textColor="@android:color/black"
+        android:textSize="14sp"
+        tools:text="ingredientName" />
+
+    <TextView
+        android:id="@+id/ingredientMeasure"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:maxLines="1"
+        android:textColor="@android:color/black"
+        android:textSize="14sp"
+        tools:text="ingredientMeasure" />
+
+</LinearLayout>

@@ -23,4 +23,6 @@
     <color name="colorError">#F44336</color>
 
 
+    <color name="colorFavorite">#FF0000</color> <!-- Red color for favorite -->
+    <color name="colorNonFavorite">@color/colorPrimaryVariant</color> <!-- Your original color -->
 </resources>

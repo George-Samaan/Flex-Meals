@@ -34,16 +34,14 @@
             android:id="@+id/title"
             android:layout_width="145dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="28dp"
             android:gravity="start"
             android:text="Begin your path to better eating!"
             android:textColor="@color/colorPrimary"
             android:textSize="30sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/animationView2"
-            app:layout_constraintEnd_toStartOf="@+id/animationView2"
             app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/textField"
             app:layout_constraintTop_toTopOf="@+id/animationView2"
             app:layout_constraintVertical_bias="0.9" />
 
@@ -135,13 +133,14 @@
 
         <ImageView
             android:id="@+id/imgBack"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="45dp"
-            android:adjustViewBounds="false"
+            android:layout_width="65dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="20dp"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            app:layout_constraintStart_toStartOf="parent"
             android:src="@drawable/ic_back_img"
             app:layout_constraintBottom_toTopOf="@+id/title"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 

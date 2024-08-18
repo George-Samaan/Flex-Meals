@@ -4,6 +4,7 @@ import com.iti.flex_meals.db.retrofit.networkCallBack.OnCategoriesListCallBack;
 import com.iti.flex_meals.db.retrofit.networkCallBack.OnCategoriesMealNetworkCallBack;
 import com.iti.flex_meals.db.retrofit.networkCallBack.OnCountriesMealNetworkCallBack;
 import com.iti.flex_meals.db.retrofit.networkCallBack.OnIngredientNetworkCallBack;
+import com.iti.flex_meals.db.retrofit.networkCallBack.OnMealDetailsNetworkCallBack;
 import com.iti.flex_meals.db.retrofit.networkCallBack.OnRandomMealNetworkCallBack;
 
 public interface Repository {
@@ -31,4 +32,6 @@ public interface Repository {
     void getIngredientsDetailed(String ingredient, OnCategoriesListCallBack onCategoriesListCallBack);
 
     void getIngredients(OnIngredientNetworkCallBack onIngredientNetworkCallBack);
+
+    void getMealById(String id, OnMealDetailsNetworkCallBack onMealDetailsNetworkCallBack);
 }

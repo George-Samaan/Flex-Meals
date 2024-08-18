@@ -6,6 +6,7 @@ import com.iti.flex_meals.db.retrofit.networkCallBack.OnCategoriesListCallBack;
 import com.iti.flex_meals.db.retrofit.networkCallBack.OnCategoriesMealNetworkCallBack;
 import com.iti.flex_meals.db.retrofit.networkCallBack.OnCountriesMealNetworkCallBack;
 import com.iti.flex_meals.db.retrofit.networkCallBack.OnIngredientNetworkCallBack;
+import com.iti.flex_meals.db.retrofit.networkCallBack.OnMealDetailsNetworkCallBack;
 import com.iti.flex_meals.db.retrofit.networkCallBack.OnRandomMealNetworkCallBack;
 import com.iti.flex_meals.db.sharedPreferences.SharedPreferencesDataSourceImpl;
 
@@ -80,6 +81,11 @@ public class RepositoryImpl implements Repository {
     @Override
     public void getIngredients(OnIngredientNetworkCallBack onIngredientNetworkCallBack) {
         remoteDataSource.getIngredients(onIngredientNetworkCallBack);
+    }
+
+    @Override
+    public void getMealById(String id, OnMealDetailsNetworkCallBack onMealDetailsNetworkCallBack) {
+        remoteDataSource.getMealDetailById(id, onMealDetailsNetworkCallBack);
     }
 
 

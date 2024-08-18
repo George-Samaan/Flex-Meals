@@ -6,11 +6,13 @@ import com.iti.flex_meals.db.retrofit.networkCallBack.OnCategoriesListCallBack;
 import com.iti.flex_meals.db.retrofit.networkCallBack.OnCategoriesMealNetworkCallBack;
 import com.iti.flex_meals.db.retrofit.networkCallBack.OnCountriesMealNetworkCallBack;
 import com.iti.flex_meals.db.retrofit.networkCallBack.OnIngredientNetworkCallBack;
+import com.iti.flex_meals.db.retrofit.networkCallBack.OnMealDetailsNetworkCallBack;
 import com.iti.flex_meals.db.retrofit.networkCallBack.OnRandomMealNetworkCallBack;
 import com.iti.flex_meals.db.retrofit.pojo.categories.CategoryMealResponse;
 import com.iti.flex_meals.db.retrofit.pojo.categoriesList.CategoriesListResponse;
 import com.iti.flex_meals.db.retrofit.pojo.countries.AllCountryResponse;
 import com.iti.flex_meals.db.retrofit.pojo.ingredients.IngredientsResponse;
+import com.iti.flex_meals.db.retrofit.pojo.mealDetails.MealDetailsResponse;
 import com.iti.flex_meals.db.retrofit.pojo.randomMeal.RandomMealResponse;
 
 import retrofit2.Call;
@@ -142,6 +144,22 @@ public class RemoteDataSourceImpl implements RemoteDataSource {
             @Override
             public void onFailure(Call<CategoriesListResponse> call, Throwable throwable) {
                 onCategoriesListCallBack.onError(throwable.getMessage());
+            }
+        });
+    }
+
+    @Override
+    public void getMealDetailById(String id, OnMealDetailsNetworkCallBack onMealDetailsNetworkCallBack) {
+        Call<MealDetailsResponse> call = mealApiService.getMealDetails(id);
+        call.enqueue(new Callback<MealDetailsResponse>() {
+            @Override
+            public void onResponse(Call<MealDetailsResponse> call, Response<MealDetailsResponse> response) {
+                onMealDetailsNetworkCallBack.onSuccess(response.body().getMealDetails().get(0));
+            }
+
+            @Override
+            public void onFailure(Call<MealDetailsResponse> call, Throwable throwable) {
+                onMealDetailsNetworkCallBack.onError(throwable.getMessage());
             }
         });
     }

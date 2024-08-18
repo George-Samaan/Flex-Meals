@@ -1,5 +1,6 @@
 package com.iti.flex_meals.categoriesMealsActivity.view;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,8 +23,11 @@ public class CategoriesDetailedAdapter extends RecyclerView.Adapter<CategoriesDe
     private List<CategoryListDetailed> categories;
     private List<CategoryListDetailed> filteredCategories;
 
-    public CategoriesDetailedAdapter() {
+    private OnMealClick listener;
+
+    public CategoriesDetailedAdapter(OnMealClick listener) {
         categories = new ArrayList<>();
+        this.listener = listener;
         filteredCategories = new ArrayList<>(categories);
     }
 
@@ -54,6 +58,14 @@ public class CategoriesDetailedAdapter extends RecyclerView.Adapter<CategoriesDe
         CategoryListDetailed category = filteredCategories.get(position);
         holder.tvCategoryName.setText(category.getStrMeal());
         Glide.with(holder.itemView.getContext()).load(category.getStrMealThumb()).into(holder.ivCategory);
+
+        holder.ivCategory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onMealClick(category.getIdMeal());
+                Log.d("TAG", "onClick: " + category.getIdMeal());
+            }
+        });
     }
 
     @Override

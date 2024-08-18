@@ -1,5 +1,6 @@
 package com.iti.flex_meals.categoriesMealsActivity.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
@@ -12,21 +13,22 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.iti.flex_meals.R;
+import com.iti.flex_meals.categoriesMealsActivity.presenter.CategoriesList;
 import com.iti.flex_meals.categoriesMealsActivity.presenter.CategoriesListImpl;
 import com.iti.flex_meals.db.RemoteData.RemoteDataSourceImpl;
 import com.iti.flex_meals.db.repository.RepositoryImpl;
 import com.iti.flex_meals.db.retrofit.pojo.categoriesList.CategoryListDetailed;
 import com.iti.flex_meals.db.retrofit.pojo.ingredients.IngredientItem;
 import com.iti.flex_meals.db.sharedPreferences.SharedPreferencesDataSourceImpl;
-import com.iti.flex_meals.ingredients.view.IngredientsAdapter;
-import com.iti.flex_meals.ingredients.view.OnIngredientClickListener;
+import com.iti.flex_meals.homeActivity.homeFragment.view.IngredientsAdapter;
+import com.iti.flex_meals.homeActivity.homeFragment.view.OnIngredientClickListener;
+import com.iti.flex_meals.mealDetailedActivity.view.MealDetailedActivity;
 
 import java.util.List;
 
-public class ViewerListCategoriesActivity extends AppCompatActivity implements CategoriesMealView, OnIngredientClickListener {
-    CategoriesListImpl presenter;
+public class ViewerListCategoriesActivity extends AppCompatActivity implements CategoriesMealView, OnIngredientClickListener, OnMealClick {
+    private CategoriesList presenter;
     private String selectedCategory;
-    private String x;
     private RecyclerView recyclerView;
     private CategoriesDetailedAdapter categoriesDetailedAdapter;
     private ImageView backButton;
@@ -126,7 +128,7 @@ public class ViewerListCategoriesActivity extends AppCompatActivity implements C
     }
 
     private void initCategoriesRecyclerView() {
-        categoriesDetailedAdapter = new CategoriesDetailedAdapter();
+        categoriesDetailedAdapter = new CategoriesDetailedAdapter(this);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2, RecyclerView.VERTICAL, false));
         recyclerView.setAdapter(categoriesDetailedAdapter);
     }
@@ -230,4 +232,10 @@ public class ViewerListCategoriesActivity extends AppCompatActivity implements C
         }
     }
 
+    @Override
+    public void onMealClick(String id) {
+        Intent intent = new Intent(this, MealDetailedActivity.class);
+        intent.putExtra("MEAL_ID", id);
+        startActivity(intent);
+    }
 }
