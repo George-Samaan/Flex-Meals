@@ -1,26 +1,35 @@
 package com.iti.flex_meals.db.repository;
 
 
-import com.iti.flex_meals.db.RemoteData.RemoteDataSource;
+import androidx.lifecycle.LiveData;
+
+import com.iti.flex_meals.db.localData.LocalDataSource;
+import com.iti.flex_meals.db.remoteData.RemoteDataSource;
 import com.iti.flex_meals.db.retrofit.networkCallBack.OnCategoriesListCallBack;
 import com.iti.flex_meals.db.retrofit.networkCallBack.OnCategoriesMealNetworkCallBack;
 import com.iti.flex_meals.db.retrofit.networkCallBack.OnCountriesMealNetworkCallBack;
 import com.iti.flex_meals.db.retrofit.networkCallBack.OnIngredientNetworkCallBack;
 import com.iti.flex_meals.db.retrofit.networkCallBack.OnMealDetailsNetworkCallBack;
 import com.iti.flex_meals.db.retrofit.networkCallBack.OnRandomMealNetworkCallBack;
+import com.iti.flex_meals.db.retrofit.pojo.mealDetails.MealsItem;
 import com.iti.flex_meals.db.sharedPreferences.SharedPreferencesDataSourceImpl;
+
+import java.util.List;
 
 
 public class RepositoryImpl implements Repository {
 
     private final SharedPreferencesDataSourceImpl sharedPreferencesDataSource;
     private final RemoteDataSource remoteDataSource;
+    private final LocalDataSource localDataSource;
 
-    public RepositoryImpl(SharedPreferencesDataSourceImpl sharedPreferencesDataSource, RemoteDataSource remoteDataSource) {
+    public RepositoryImpl(SharedPreferencesDataSourceImpl sharedPreferencesDataSource, RemoteDataSource remoteDataSource, LocalDataSource localDataSource) {
         this.sharedPreferencesDataSource = sharedPreferencesDataSource;
         this.remoteDataSource = remoteDataSource;
+        this.localDataSource = localDataSource;
     }
 
+    //Shared Preferences
     @Override
     public void saveLoginAuth(String token) {
         sharedPreferencesDataSource.saveLoginAuth(token);
@@ -45,6 +54,7 @@ public class RepositoryImpl implements Repository {
     public void clearAuthData() {
         sharedPreferencesDataSource.clearAuthData();
     }
+
 
 
     // Remote Data Source
@@ -86,6 +96,24 @@ public class RepositoryImpl implements Repository {
     @Override
     public void getMealById(String id, OnMealDetailsNetworkCallBack onMealDetailsNetworkCallBack) {
         remoteDataSource.getMealDetailById(id, onMealDetailsNetworkCallBack);
+    }
+
+
+    // Local Data Source
+    @Override
+    public void addMealToFavourites(MealsItem meal) {
+        localDataSource.insertMeal(meal);
+    }
+
+    @Override
+    public void removeMealFromFavourites(MealsItem meal) {
+        localDataSource.deleteMeal(meal);
+    }
+
+    @Override
+    public LiveData<List<MealsItem>> getAllFavouritesMeals() {
+        return localDataSource.getAllFavoriteMeals();
+
     }
 
 

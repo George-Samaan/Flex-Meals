@@ -20,10 +20,10 @@ public class SplashPresenterIpml implements Splash {
         String token = repository.getLoginAuth();
         if (token != null && !token.isEmpty()) {
             view.navigateToHome();
-            Log.d("Tag", "token here " + token);
+            Log.d("Token", "token here " + token);
         } else {
             view.navigateToLogin();
-            Log.d("Tag", "token null  " + token);
+            Log.d("Token", "token null  " + token);
         }
     }
 }

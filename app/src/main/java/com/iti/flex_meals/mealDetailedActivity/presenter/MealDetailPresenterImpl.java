@@ -29,4 +29,40 @@ public class MealDetailPresenterImpl implements MealDetailPresenter {
             }
         });
     }
+
+    @Override
+    public void saveMealToFavorites(String id) {
+        repository.getMealById(id, new OnMealDetailsNetworkCallBack() {
+            @Override
+            public void onSuccess(MealsItem mealDetails) {
+                repository.addMealToFavourites(mealDetails);
+                view.onMealSaved();
+            }
+
+            @Override
+            public void onError(String message) {
+                view.showError(message);
+            }
+        });
+    }
+
+    @Override
+    public void removeMealFromFavorites(String id) {
+        repository.getMealById(id, new OnMealDetailsNetworkCallBack() {
+            @Override
+            public void onSuccess(MealsItem mealDetails) {
+                repository.removeMealFromFavourites(mealDetails);
+                view.onMealRemoved();
+            }
+
+            @Override
+            public void onError(String message) {
+                view.showError(message);
+            }
+        });
+
+    }
+
+
+
 }

@@ -15,7 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.iti.flex_meals.R;
-import com.iti.flex_meals.db.RemoteData.RemoteDataSourceImpl;
+import com.iti.flex_meals.db.localData.LocalDataSourceImpl;
+import com.iti.flex_meals.db.remoteData.RemoteDataSourceImpl;
 import com.iti.flex_meals.db.repository.RepositoryImpl;
 import com.iti.flex_meals.db.retrofit.pojo.mealDetails.MealsItem;
 import com.iti.flex_meals.db.sharedPreferences.SharedPreferencesDataSourceImpl;
@@ -48,23 +49,36 @@ public class MealDetailedActivity extends AppCompatActivity implements MealDetai
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mel_detailed);
-        presenter = new MealDetailPresenterImpl(this, new RepositoryImpl(SharedPreferencesDataSourceImpl.getInstance(this), new RemoteDataSourceImpl()));
+        presenter = new MealDetailPresenterImpl(this,
+                new RepositoryImpl(SharedPreferencesDataSourceImpl.getInstance(this),
+                        new RemoteDataSourceImpl(),
+                        new LocalDataSourceImpl(this)));
         getIntentKey();
         initViews();
         checkWhichIdToRun();
         onBackClick();
         initRecyclerView();
         onFavouriteClick();
-
-
     }
-
     private void onFavouriteClick() {
         favClick.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String selectedKey = (randomKey != null && !randomKey.isEmpty()) ? randomKey : key;
+                if (selectedKey == null || selectedKey.isEmpty()) {
+                    Toast.makeText(MealDetailedActivity.this, "Invalid key", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (isFavorite) {
+                    presenter.removeMealFromFavorites(selectedKey);
+                    favClick.setColorFilter(ContextCompat.getColor(MealDetailedActivity.this, R.color.colorBackgroundLight));
+                    Toast.makeText(MealDetailedActivity.this, "Removed from favourites", Toast.LENGTH_SHORT).show();
+                } else {
+                    presenter.saveMealToFavorites(selectedKey);
+                    favClick.setColorFilter(ContextCompat.getColor(MealDetailedActivity.this, R.color.colorAccent1));
+                    Toast.makeText(MealDetailedActivity.this, "Added to favourites", Toast.LENGTH_SHORT).show();
+                }
                 isFavorite = !isFavorite;
-                testToggleFav();
             }
         });
     }
@@ -110,16 +124,6 @@ public class MealDetailedActivity extends AppCompatActivity implements MealDetai
         favClick = findViewById(R.id.imv_favourite);
     }
 
-    private void testToggleFav() {
-        if (isFavorite) {
-            favClick.setColorFilter(ContextCompat.getColor(this, R.color.colorAccent1));
-            Toast.makeText(this, "Added to favourites", Toast.LENGTH_SHORT).show();
-
-        } else {
-            favClick.setColorFilter(ContextCompat.getColor(this, R.color.colorBackgroundLight));
-            Toast.makeText(this, "Removed from favourites", Toast.LENGTH_SHORT).show();
-        }
-    }
 
     @Override
     public void showMealDetails(MealsItem meal) {
@@ -157,5 +161,15 @@ public class MealDetailedActivity extends AppCompatActivity implements MealDetai
     @Override
     public void showError(String errorMssg) {
         Toast.makeText(this, errorMssg, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onMealSaved() {
+        Toast.makeText(this, "Meal saved successfully", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onMealRemoved() {
+        Toast.makeText(this, "Meal removed successfully", Toast.LENGTH_SHORT).show();
     }
 }
