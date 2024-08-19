@@ -23,7 +23,10 @@ public interface MealDao {
     @Query("SELECT * FROM MealDetailsTable WHERE idMeal = :id")
     MealsItem getMealById(String id);
 
+    @Query("Select * from MealDetailsTable WHERE UID = :uid")
+    LiveData<List<MealsItem>> getAllFavoriteMeals(String uid);
 
-    @Query("Select * from MealDetailsTable")
-    LiveData<List<MealsItem>> getAllFavoriteMeals();
+    @Query("SELECT COUNT(*) > 0 FROM MealDetailsTable WHERE idMeal = :mealId")
+    boolean isMealExistsInFavourite(String mealId);
+
 }

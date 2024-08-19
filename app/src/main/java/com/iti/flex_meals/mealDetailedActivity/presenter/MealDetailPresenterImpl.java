@@ -1,8 +1,13 @@
 package com.iti.flex_meals.mealDetailedActivity.presenter;
 
+import com.iti.flex_meals.db.localData.LocalDataSourceImpl;
+import com.iti.flex_meals.db.localData.OnMealExistsCallback;
+import com.iti.flex_meals.db.remoteData.RemoteDataSourceImpl;
 import com.iti.flex_meals.db.repository.Repository;
+import com.iti.flex_meals.db.repository.RepositoryImpl;
 import com.iti.flex_meals.db.retrofit.networkCallBack.OnMealDetailsNetworkCallBack;
 import com.iti.flex_meals.db.retrofit.pojo.mealDetails.MealsItem;
+import com.iti.flex_meals.db.sharedPreferences.SharedPreferencesDataSourceImpl;
 import com.iti.flex_meals.mealDetailedActivity.view.MealDetailedActivity;
 
 public class MealDetailPresenterImpl implements MealDetailPresenter {
@@ -35,10 +40,19 @@ public class MealDetailPresenterImpl implements MealDetailPresenter {
         repository.getMealById(id, new OnMealDetailsNetworkCallBack() {
             @Override
             public void onSuccess(MealsItem mealDetails) {
-                repository.addMealToFavourites(mealDetails);
-                view.onMealSaved();
+                if (mealDetails.isFavorite()) {
+                    view.showMessage("Meal already in favorites");
+                } else {
+                    RepositoryImpl repository = new RepositoryImpl(SharedPreferencesDataSourceImpl.getInstance(view.getApplicationContext()),
+                            new RemoteDataSourceImpl(),
+                            new LocalDataSourceImpl(view.getApplicationContext()));
+                    String userUid = repository.getUserUid();
+                    mealDetails.setUID(userUid);
+                    repository.addMealToFavourites(mealDetails);
+                    mealDetails.setFavorite(true);
+                    view.onMealSaved();
+                }
             }
-
             @Override
             public void onError(String message) {
                 view.showError(message);
@@ -52,6 +66,7 @@ public class MealDetailPresenterImpl implements MealDetailPresenter {
             @Override
             public void onSuccess(MealsItem mealDetails) {
                 repository.removeMealFromFavourites(mealDetails);
+                mealDetails.setFavorite(false);
                 view.onMealRemoved();
             }
 
@@ -63,6 +78,15 @@ public class MealDetailPresenterImpl implements MealDetailPresenter {
 
     }
 
+    @Override
+    public void isMealExistsInFavourite(String mealId, OnMealExistsCallback callback) {
+        repository.isMealExistsInFavourite(mealId, new OnMealExistsCallback() {
+            @Override
+            public void onResult(boolean exists) {
+                callback.onResult(exists);
+            }
+        });
+    }
 
 
 }

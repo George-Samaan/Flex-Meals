@@ -6,6 +6,8 @@ public interface IFirebaseAuth {
     void signUnWithEmailAndPassword(String email, String password, AuthResultCallback callback);
     void getAuthToken(AuthTokenCallback callback);
 
+    void getUserUid(AuthUserUidCallBack callback);
+
 
     interface AuthResultCallback {
         void onSuccess(String userId);
@@ -15,6 +17,11 @@ public interface IFirebaseAuth {
     interface AuthTokenCallback {
         void onSuccess(String token);
 
+        void onFailure(String errorMessage);
+    }
+
+    interface AuthUserUidCallBack {
+        void onSuccess(String uid);
         void onFailure(String errorMessage);
     }
 }

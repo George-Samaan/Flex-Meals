@@ -4,6 +4,7 @@ package com.iti.flex_meals.db.repository;
 import androidx.lifecycle.LiveData;
 
 import com.iti.flex_meals.db.localData.LocalDataSource;
+import com.iti.flex_meals.db.localData.OnMealExistsCallback;
 import com.iti.flex_meals.db.remoteData.RemoteDataSource;
 import com.iti.flex_meals.db.retrofit.networkCallBack.OnCategoriesListCallBack;
 import com.iti.flex_meals.db.retrofit.networkCallBack.OnCategoriesMealNetworkCallBack;
@@ -41,6 +42,11 @@ public class RepositoryImpl implements Repository {
     }
 
     @Override
+    public void saveUserUid(String uid) {
+        sharedPreferencesDataSource.saveUserUid(uid);
+    }
+
+    @Override
     public String getEmail() {
         return sharedPreferencesDataSource.getEmail();
     }
@@ -49,6 +55,14 @@ public class RepositoryImpl implements Repository {
     public String getLoginAuth() {
         return sharedPreferencesDataSource.getLoginAuth();
     }
+
+
+    @Override
+    public String getUserUid() {
+        return sharedPreferencesDataSource.getUserUid();
+    }
+
+
 
     @Override
     public void clearAuthData() {
@@ -111,10 +125,12 @@ public class RepositoryImpl implements Repository {
     }
 
     @Override
-    public LiveData<List<MealsItem>> getAllFavouritesMeals() {
-        return localDataSource.getAllFavoriteMeals();
-
+    public LiveData<List<MealsItem>> getAllFavoriteMeals(String uid) {
+        return localDataSource.getAllFavoriteMeals(uid);
     }
 
-
+    @Override
+    public void isMealExistsInFavourite(String mealId, OnMealExistsCallback callback) {
+        localDataSource.isMealExistsInFavourite(mealId, callback);
+    }
 }

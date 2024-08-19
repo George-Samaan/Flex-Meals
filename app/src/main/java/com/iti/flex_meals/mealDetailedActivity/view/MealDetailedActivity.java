@@ -1,5 +1,6 @@
 package com.iti.flex_meals.mealDetailedActivity.view;
 
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.iti.flex_meals.R;
 import com.iti.flex_meals.db.localData.LocalDataSourceImpl;
+import com.iti.flex_meals.db.localData.OnMealExistsCallback;
 import com.iti.flex_meals.db.remoteData.RemoteDataSourceImpl;
 import com.iti.flex_meals.db.repository.RepositoryImpl;
 import com.iti.flex_meals.db.retrofit.pojo.mealDetails.MealsItem;
@@ -58,28 +60,25 @@ public class MealDetailedActivity extends AppCompatActivity implements MealDetai
         checkWhichIdToRun();
         onBackClick();
         initRecyclerView();
+        checkFavoriteStatus();
         onFavouriteClick();
     }
     private void onFavouriteClick() {
-        favClick.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String selectedKey = (randomKey != null && !randomKey.isEmpty()) ? randomKey : key;
-                if (selectedKey == null || selectedKey.isEmpty()) {
-                    Toast.makeText(MealDetailedActivity.this, "Invalid key", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if (isFavorite) {
-                    presenter.removeMealFromFavorites(selectedKey);
-                    favClick.setColorFilter(ContextCompat.getColor(MealDetailedActivity.this, R.color.colorBackgroundLight));
-                    Toast.makeText(MealDetailedActivity.this, "Removed from favourites", Toast.LENGTH_SHORT).show();
-                } else {
-                    presenter.saveMealToFavorites(selectedKey);
-                    favClick.setColorFilter(ContextCompat.getColor(MealDetailedActivity.this, R.color.colorAccent1));
-                    Toast.makeText(MealDetailedActivity.this, "Added to favourites", Toast.LENGTH_SHORT).show();
-                }
-                isFavorite = !isFavorite;
+        favClick.setOnClickListener(v -> {
+            String selectedKey = (randomKey != null && !randomKey.isEmpty()) ? randomKey : key;
+            if (selectedKey == null || selectedKey.isEmpty()) {
+                Toast.makeText(MealDetailedActivity.this, "Invalid key", Toast.LENGTH_SHORT).show();
+                return;
             }
+            if (isFavorite) {
+                presenter.removeMealFromFavorites(selectedKey);
+                favClick.setColorFilter(ContextCompat.getColor(MealDetailedActivity.this, R.color.colorBackgroundLight));
+            } else {
+
+                presenter.saveMealToFavorites(selectedKey);
+                favClick.setColorFilter(ContextCompat.getColor(MealDetailedActivity.this, R.color.colorAccent1));
+            }
+            isFavorite = !isFavorite;
         });
     }
 
@@ -124,7 +123,6 @@ public class MealDetailedActivity extends AppCompatActivity implements MealDetai
         favClick = findViewById(R.id.imv_favourite);
     }
 
-
     @Override
     public void showMealDetails(MealsItem meal) {
         Log.d("meal_name", meal.getStrMeal());
@@ -133,6 +131,22 @@ public class MealDetailedActivity extends AppCompatActivity implements MealDetai
         mealInstructions.setText(meal.getStrInstructions());
         mealArea.setText(meal.getStrArea());
         mealCategory.setText(meal.getStrCategory());
+        youtubePlayerView(meal);
+        adapter.setIngredientsAndMeasurements(meal.filterIngredientsAndMeasurements());
+
+//        RepositoryImpl repository =  new RepositoryImpl(SharedPreferencesDataSourceImpl.getInstance(this),
+//                new RemoteDataSourceImpl(),
+//                new LocalDataSourceImpl(this));
+//
+//        String userUid = repository.getUserUid();
+//        if (userUid != null && !userUid.isEmpty()) {
+//            Log.d("user_uid", userUid);
+//        }
+//
+//        meal.setUID(userUid);
+    }
+
+    private void youtubePlayerView(MealsItem meal) {
         youTubePlayerView.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
             @Override
             public void onReady(@NonNull YouTubePlayer youTubePlayer) {
@@ -153,9 +167,6 @@ public class MealDetailedActivity extends AppCompatActivity implements MealDetai
                 }
             }
         });
-        adapter.setIngredientsAndMeasurements(meal.filterIngredientsAndMeasurements());
-
-
     }
 
     @Override
@@ -165,11 +176,43 @@ public class MealDetailedActivity extends AppCompatActivity implements MealDetai
 
     @Override
     public void onMealSaved() {
-        Toast.makeText(this, "Meal saved successfully", Toast.LENGTH_SHORT).show();
+        Toast.makeText(MealDetailedActivity.this, "Added to favourites", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onMealRemoved() {
-        Toast.makeText(this, "Meal removed successfully", Toast.LENGTH_SHORT).show();
+        Toast.makeText(MealDetailedActivity.this, "Removed from favourites", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showMessage(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+
+    }
+
+    private void doesMealExist(String mealId, OnMealExistsCallback callback) {
+        presenter.isMealExistsInFavourite(mealId, exists -> callback.onResult(exists));
+    }
+
+    /// Call updateFabColor to set the initial color when the activity is loaded
+    private void checkFavoriteStatus() {
+        String selectedKey = (randomKey != null && !randomKey.isEmpty()) ? randomKey : key;
+        if (selectedKey != null && !selectedKey.isEmpty()) {
+            doesMealExist(selectedKey, exists -> {
+                runOnUiThread(() -> {
+                    isFavorite = exists;
+                    updateFabColor(selectedKey);  // Set the initial color based on the favorite status
+                });
+            });
+        }
+    }
+
+    private void updateFabColor(String mealId) {
+        if (isFavorite) {
+            favClick.setColorFilter(ContextCompat.getColor(MealDetailedActivity.this, R.color.colorAccent1));
+        } else {
+            favClick.setColorFilter(ContextCompat.getColor(MealDetailedActivity.this, R.color.colorBackgroundLight));
+        }
     }
 }
+

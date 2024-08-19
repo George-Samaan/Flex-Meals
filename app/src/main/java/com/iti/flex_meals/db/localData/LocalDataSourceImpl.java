@@ -29,8 +29,23 @@ public class LocalDataSourceImpl implements LocalDataSource {
     }
 
     @Override
-    public LiveData<List<MealsItem>> getAllFavoriteMeals() {
-        return mealDao.getAllFavoriteMeals();
+    public LiveData<List<MealsItem>> getAllFavoriteMeals(String uid) {
+        return mealDao.getAllFavoriteMeals(uid);
     }
+
+//    @Override
+//    public void updateFavouriteStatus(String id, boolean isFavourite) {
+//        new Thread(() -> mealDao.updateFavoriteStatus(id, isFavourite)).start();
+//
+//    }
+
+    @Override
+    public void isMealExistsInFavourite(String mealId, OnMealExistsCallback callback) {
+        new Thread(() -> {
+            boolean exists = mealDao.isMealExistsInFavourite(mealId);
+            callback.onResult(exists);
+        }).start();
+    }
+
 
 }
