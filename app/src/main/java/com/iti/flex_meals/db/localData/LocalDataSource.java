@@ -9,7 +9,7 @@ import java.util.List;
 public interface LocalDataSource {
     void insertMeal(MealsItem meal);
 
-    void deleteMeal(MealsItem meal);
+    void deleteMeal(final String mealId);
 
     LiveData<List<MealsItem>> getAllFavoriteMeals(String uid);
 

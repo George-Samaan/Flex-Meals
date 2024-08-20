@@ -92,6 +92,7 @@ public class MealDetailedActivity extends AppCompatActivity implements MealDetai
             // Toggle favorite status and update UI accordingly
             if (isFavorite) {
                 presenter.removeMealFromFavorites(selectedKey);
+                Log.d("jeooo", "mas7thhha");
                 favClick.setColorFilter(ContextCompat.getColor(MealDetailedActivity.this, R.color.colorBackgroundLight));
             } else {
                 presenter.saveMealToFavorites(selectedKey);

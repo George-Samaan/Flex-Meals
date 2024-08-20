@@ -3,6 +3,8 @@ package com.iti.flex_meals.homeActivity.favouriteFragment.view;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -37,6 +39,9 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull FavouritesAdapter.ViewHolder holder, int position) {
+        Animation animation = AnimationUtils.loadAnimation(holder.itemView.getContext(), R.anim.scale_in_animation);
+        holder.itemView.startAnimation(animation);
+        
         MealsItem meal = favourites.get(position);
 
         holder.mealName.setText(meal.getStrMeal());

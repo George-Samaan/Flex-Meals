@@ -55,20 +55,8 @@ public class MealDetailPresenterImpl implements MealDetailPresenter {
 
     @Override
     public void removeMealFromFavorites(String id) {
-        repository.getMealById(id, new OnMealDetailsNetworkCallBack() {
-            @Override
-            public void onSuccess(MealsItem mealDetails) {
-                repository.removeMealFromFavourites(mealDetails);
-                mealDetails.setFavorite(false);
-                view.onMealRemoved();
-            }
-
-            @Override
-            public void onError(String message) {
-                view.showError(message);
-            }
-        });
-
+        repository.removeMealFromFavourites(id);
+        view.onMealRemoved();
     }
 
     @Override

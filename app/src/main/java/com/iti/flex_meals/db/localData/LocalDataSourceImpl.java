@@ -24,20 +24,19 @@ public class LocalDataSourceImpl implements LocalDataSource {
     }
 
     @Override
-    public void deleteMeal(MealsItem meal) {
-        new Thread(() -> mealDao.deleteMeal(meal)).start();
+    public void deleteMeal(String mealId) {
+        new Thread(() -> {
+            MealsItem mealToDelete = mealDao.getMealById(mealId);
+            if (mealToDelete != null) {
+                mealDao.deleteMeal(mealToDelete);
+            }
+        }).start();
     }
 
     @Override
     public LiveData<List<MealsItem>> getAllFavoriteMeals(String uid) {
         return mealDao.getAllFavoriteMeals(uid);
     }
-
-//    @Override
-//    public void updateFavouriteStatus(String id, boolean isFavourite) {
-//        new Thread(() -> mealDao.updateFavoriteStatus(id, isFavourite)).start();
-//
-//    }
 
     @Override
     public void isMealExistsInFavourite(String mealId, String uid, OnMealExistsCallback callback) {

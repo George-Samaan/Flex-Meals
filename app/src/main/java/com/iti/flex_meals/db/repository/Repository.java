@@ -52,7 +52,7 @@ public interface Repository {
     // Local Data Source (Favourites)
     void addMealToFavourites(MealsItem meal);
 
-    void removeMealFromFavourites(MealsItem meal);
+    void removeMealFromFavourites(String mealId);
 
     LiveData<List<MealsItem>> getAllFavoriteMeals(String uid);
 

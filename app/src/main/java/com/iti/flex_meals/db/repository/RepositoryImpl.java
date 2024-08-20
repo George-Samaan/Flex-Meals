@@ -120,8 +120,8 @@ public class RepositoryImpl implements Repository {
     }
 
     @Override
-    public void removeMealFromFavourites(MealsItem meal) {
-        localDataSource.deleteMeal(meal);
+    public void removeMealFromFavourites(String mealId) {
+        localDataSource.deleteMeal(mealId);
     }
 
     @Override
