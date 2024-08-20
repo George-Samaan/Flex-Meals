@@ -1,4 +1,4 @@
-package com.iti.flex_meals.db.RemoteData;
+package com.iti.flex_meals.db.remoteData;
 
 import com.iti.flex_meals.db.retrofit.networkCallBack.OnCategoriesListCallBack;
 import com.iti.flex_meals.db.retrofit.networkCallBack.OnCategoriesMealNetworkCallBack;

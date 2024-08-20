@@ -15,7 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.iti.flex_meals.R;
 import com.iti.flex_meals.categoriesMealsActivity.presenter.CategoriesList;
 import com.iti.flex_meals.categoriesMealsActivity.presenter.CategoriesListImpl;
-import com.iti.flex_meals.db.RemoteData.RemoteDataSourceImpl;
+import com.iti.flex_meals.db.localData.LocalDataSourceImpl;
+import com.iti.flex_meals.db.remoteData.RemoteDataSourceImpl;
 import com.iti.flex_meals.db.repository.RepositoryImpl;
 import com.iti.flex_meals.db.retrofit.pojo.categoriesList.CategoryListDetailed;
 import com.iti.flex_meals.db.retrofit.pojo.ingredients.IngredientItem;
@@ -45,7 +46,7 @@ public class ViewerListCategoriesActivity extends AppCompatActivity implements C
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_categories_list_viewer);
-        presenter = new CategoriesListImpl(this, new RepositoryImpl(SharedPreferencesDataSourceImpl.getInstance(this), new RemoteDataSourceImpl()));
+        presenter = new CategoriesListImpl(this, new RepositoryImpl(SharedPreferencesDataSourceImpl.getInstance(this), new RemoteDataSourceImpl(), new LocalDataSourceImpl(this)));
         getIntentKeys();
         initViews();
         toggleTitle();

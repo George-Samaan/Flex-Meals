@@ -1,26 +1,36 @@
 package com.iti.flex_meals.db.repository;
 
 
-import com.iti.flex_meals.db.RemoteData.RemoteDataSource;
+import androidx.lifecycle.LiveData;
+
+import com.iti.flex_meals.db.localData.LocalDataSource;
+import com.iti.flex_meals.db.localData.OnMealExistsCallback;
+import com.iti.flex_meals.db.remoteData.RemoteDataSource;
 import com.iti.flex_meals.db.retrofit.networkCallBack.OnCategoriesListCallBack;
 import com.iti.flex_meals.db.retrofit.networkCallBack.OnCategoriesMealNetworkCallBack;
 import com.iti.flex_meals.db.retrofit.networkCallBack.OnCountriesMealNetworkCallBack;
 import com.iti.flex_meals.db.retrofit.networkCallBack.OnIngredientNetworkCallBack;
 import com.iti.flex_meals.db.retrofit.networkCallBack.OnMealDetailsNetworkCallBack;
 import com.iti.flex_meals.db.retrofit.networkCallBack.OnRandomMealNetworkCallBack;
+import com.iti.flex_meals.db.retrofit.pojo.mealDetails.MealsItem;
 import com.iti.flex_meals.db.sharedPreferences.SharedPreferencesDataSourceImpl;
+
+import java.util.List;
 
 
 public class RepositoryImpl implements Repository {
 
     private final SharedPreferencesDataSourceImpl sharedPreferencesDataSource;
     private final RemoteDataSource remoteDataSource;
+    private final LocalDataSource localDataSource;
 
-    public RepositoryImpl(SharedPreferencesDataSourceImpl sharedPreferencesDataSource, RemoteDataSource remoteDataSource) {
+    public RepositoryImpl(SharedPreferencesDataSourceImpl sharedPreferencesDataSource, RemoteDataSource remoteDataSource, LocalDataSource localDataSource) {
         this.sharedPreferencesDataSource = sharedPreferencesDataSource;
         this.remoteDataSource = remoteDataSource;
+        this.localDataSource = localDataSource;
     }
 
+    //Shared Preferences
     @Override
     public void saveLoginAuth(String token) {
         sharedPreferencesDataSource.saveLoginAuth(token);
@@ -29,6 +39,11 @@ public class RepositoryImpl implements Repository {
     @Override
     public void saveEmail(String email) {
         sharedPreferencesDataSource.saveEmail(email);
+    }
+
+    @Override
+    public void saveUserUid(String uid) {
+        sharedPreferencesDataSource.saveUserUid(uid);
     }
 
     @Override
@@ -41,10 +56,19 @@ public class RepositoryImpl implements Repository {
         return sharedPreferencesDataSource.getLoginAuth();
     }
 
+
+    @Override
+    public String getUserUid() {
+        return sharedPreferencesDataSource.getUserUid();
+    }
+
+
+
     @Override
     public void clearAuthData() {
         sharedPreferencesDataSource.clearAuthData();
     }
+
 
 
     // Remote Data Source
@@ -89,4 +113,24 @@ public class RepositoryImpl implements Repository {
     }
 
 
+    // Local Data Source
+    @Override
+    public void addMealToFavourites(MealsItem meal) {
+        localDataSource.insertMeal(meal);
+    }
+
+    @Override
+    public void removeMealFromFavourites(MealsItem meal) {
+        localDataSource.deleteMeal(meal);
+    }
+
+    @Override
+    public LiveData<List<MealsItem>> getAllFavoriteMeals(String uid) {
+        return localDataSource.getAllFavoriteMeals(uid);
+    }
+
+    @Override
+    public void isMealExistsInFavourite(String mealId, String uid, OnMealExistsCallback callback) {
+        localDataSource.isMealExistsInFavourite(mealId, uid, callback);
+    }
 }

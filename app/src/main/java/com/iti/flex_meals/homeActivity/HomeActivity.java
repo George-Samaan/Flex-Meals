@@ -1,6 +1,5 @@
 package com.iti.flex_meals.homeActivity;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -18,7 +17,8 @@ import androidx.navigation.ui.NavigationUI;
 import com.google.android.material.navigation.NavigationView;
 import com.iti.flex_meals.R;
 import com.iti.flex_meals.authActivity.AuthActivity;
-import com.iti.flex_meals.db.RemoteData.RemoteDataSourceImpl;
+import com.iti.flex_meals.db.localData.LocalDataSourceImpl;
+import com.iti.flex_meals.db.remoteData.RemoteDataSourceImpl;
 import com.iti.flex_meals.db.repository.Repository;
 import com.iti.flex_meals.db.repository.RepositoryImpl;
 import com.iti.flex_meals.db.sharedPreferences.SharedPreferencesDataSourceImpl;
@@ -42,7 +42,9 @@ public class HomeActivity extends AppCompatActivity {
         initPageTitle();
         setDrawerItemListeners();
         repository = new RepositoryImpl(new SharedPreferencesDataSourceImpl(this),
-                new RemoteDataSourceImpl());
+                new RemoteDataSourceImpl(), new LocalDataSourceImpl(this));
+//        drawerLayout.setScrimColor(Color.argb(50, 0, 0, 0));
+
     }
 
     private boolean isGuestUser() {
@@ -105,18 +107,18 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void showGuestLoginDialog() {
-        new AlertDialog.Builder(this)
-                .setTitle("Login Required")
-                .setMessage("You need to log in to access this feature.")
-                .setPositiveButton("Sign In", (dialog, which) -> {
+        Utils.showConfirmationDialog(
+                this,
+                "Login Required", " You need to log in to access this feature.", (dialog, which) -> {
                     Intent intent = new Intent(this, AuthActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                     finish();
-                })
-                .setNegativeButton("Cancel", (dialog, which) -> {
+                }, (dialog, which) -> {
                     dialog.dismiss();
-                    navController.navigate(R.id.homeFragment);
-                }).show();
+                    navController.popBackStack();
+                }
+        );
     }
 
 

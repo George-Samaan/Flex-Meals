@@ -7,6 +7,7 @@ public class SharedPreferencesDataSourceImpl implements SharePreferenceDataSourc
     private static final String KEY_TOKEN = "token";
     private static final String KEY_EMAIL = "email";
     private static final String PREFERENCE_NAME = "shared_preferences";
+    private static final String KEY_USER_UID = "user_uid";
     private static SharedPreferencesDataSourceImpl instance;
     private SharedPreferences sharedPreferences;
 
@@ -26,6 +27,18 @@ public class SharedPreferencesDataSourceImpl implements SharePreferenceDataSourc
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(KEY_TOKEN, token);
         editor.apply();
+    }
+
+    @Override
+    public void saveUserUid(String uid) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(KEY_USER_UID, uid);
+        editor.apply();
+    }
+
+    @Override
+    public String getUserUid() {
+        return sharedPreferences.getString(KEY_USER_UID, "");
     }
 
     @Override

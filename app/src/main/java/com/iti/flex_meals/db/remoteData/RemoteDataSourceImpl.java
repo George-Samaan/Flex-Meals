@@ -1,4 +1,4 @@
-package com.iti.flex_meals.db.RemoteData;
+package com.iti.flex_meals.db.remoteData;
 
 import com.iti.flex_meals.db.retrofit.MealApiService;
 import com.iti.flex_meals.db.retrofit.Retrofit;

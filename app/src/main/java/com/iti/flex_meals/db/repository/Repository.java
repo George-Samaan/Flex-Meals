@@ -1,22 +1,35 @@
 package com.iti.flex_meals.db.repository;
 
+import androidx.lifecycle.LiveData;
+
+import com.iti.flex_meals.db.localData.OnMealExistsCallback;
 import com.iti.flex_meals.db.retrofit.networkCallBack.OnCategoriesListCallBack;
 import com.iti.flex_meals.db.retrofit.networkCallBack.OnCategoriesMealNetworkCallBack;
 import com.iti.flex_meals.db.retrofit.networkCallBack.OnCountriesMealNetworkCallBack;
 import com.iti.flex_meals.db.retrofit.networkCallBack.OnIngredientNetworkCallBack;
 import com.iti.flex_meals.db.retrofit.networkCallBack.OnMealDetailsNetworkCallBack;
 import com.iti.flex_meals.db.retrofit.networkCallBack.OnRandomMealNetworkCallBack;
+import com.iti.flex_meals.db.retrofit.pojo.mealDetails.MealsItem;
+
+import java.util.List;
 
 public interface Repository {
+
+    // Shared Preferences
     void saveLoginAuth(String token);
 
     void saveEmail(String email);
+
+    public void saveUserUid(String uid);
 
     String getEmail();
 
     String getLoginAuth();
 
+    String getUserUid();
+
     void clearAuthData();
+
 
     // Remote Data Source
     void getRandomMeal(OnRandomMealNetworkCallBack onRandomMealNetworkCallBack);
@@ -34,4 +47,16 @@ public interface Repository {
     void getIngredients(OnIngredientNetworkCallBack onIngredientNetworkCallBack);
 
     void getMealById(String id, OnMealDetailsNetworkCallBack onMealDetailsNetworkCallBack);
+
+
+    // Local Data Source (Favourites)
+    void addMealToFavourites(MealsItem meal);
+
+    void removeMealFromFavourites(MealsItem meal);
+
+    LiveData<List<MealsItem>> getAllFavoriteMeals(String uid);
+
+
+    void isMealExistsInFavourite(String mealId, String uid, OnMealExistsCallback callback);
+
 }

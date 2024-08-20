@@ -26,7 +26,8 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
 import com.iti.flex_meals.R;
 import com.iti.flex_meals.categoriesMealsActivity.view.ViewerListCategoriesActivity;
-import com.iti.flex_meals.db.RemoteData.RemoteDataSourceImpl;
+import com.iti.flex_meals.db.localData.LocalDataSourceImpl;
+import com.iti.flex_meals.db.remoteData.RemoteDataSourceImpl;
 import com.iti.flex_meals.db.repository.RepositoryImpl;
 import com.iti.flex_meals.db.retrofit.pojo.categories.CategoryListItem;
 import com.iti.flex_meals.db.retrofit.pojo.countries.CountryItem;
@@ -59,7 +60,7 @@ public class HomeFragment extends Fragment implements RandomMealView, OnCategory
         super.onCreate(savedInstanceState);
         homePresenter = new HomePresenterImpl(this,
                 new RepositoryImpl(SharedPreferencesDataSourceImpl.getInstance(getContext()),
-                        new RemoteDataSourceImpl()));
+                        new RemoteDataSourceImpl(), new LocalDataSourceImpl(requireContext())));
     }
 
     @Override

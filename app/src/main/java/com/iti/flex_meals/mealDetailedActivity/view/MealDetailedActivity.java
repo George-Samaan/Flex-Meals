@@ -1,5 +1,7 @@
 package com.iti.flex_meals.mealDetailedActivity.view;
 
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -15,12 +17,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.iti.flex_meals.R;
-import com.iti.flex_meals.db.RemoteData.RemoteDataSourceImpl;
+import com.iti.flex_meals.authActivity.AuthActivity;
+import com.iti.flex_meals.db.localData.LocalDataSourceImpl;
+import com.iti.flex_meals.db.remoteData.RemoteDataSourceImpl;
 import com.iti.flex_meals.db.repository.RepositoryImpl;
 import com.iti.flex_meals.db.retrofit.pojo.mealDetails.MealsItem;
 import com.iti.flex_meals.db.sharedPreferences.SharedPreferencesDataSourceImpl;
 import com.iti.flex_meals.mealDetailedActivity.presenter.MealDetailPresenter;
 import com.iti.flex_meals.mealDetailedActivity.presenter.MealDetailPresenterImpl;
+import com.iti.flex_meals.utils.Utils;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
@@ -48,25 +53,60 @@ public class MealDetailedActivity extends AppCompatActivity implements MealDetai
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mel_detailed);
-        presenter = new MealDetailPresenterImpl(this, new RepositoryImpl(SharedPreferencesDataSourceImpl.getInstance(this), new RemoteDataSourceImpl()));
+        presenter = new MealDetailPresenterImpl(this,
+                new RepositoryImpl(SharedPreferencesDataSourceImpl.getInstance(this),
+                        new RemoteDataSourceImpl(),
+                        new LocalDataSourceImpl(this)));
         getIntentKey();
         initViews();
         checkWhichIdToRun();
         onBackClick();
         initRecyclerView();
+        checkFavoriteStatus();
         onFavouriteClick();
-
-
     }
 
+
     private void onFavouriteClick() {
-        favClick.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                isFavorite = !isFavorite;
-                testToggleFav();
+        favClick.setOnClickListener(v -> {
+            // Check if the user is logged in
+            if (!presenter.checkingCredentialOfUser()) {
+                // Show the dialog if the user is not logged in
+                Utils.showConfirmationDialog(
+                        this,
+                        "Login Required",
+                        "You must log in to save this meal",
+                        (dialog, which) -> navigateToStartAsUser(),  // Navigate to login
+                        (dialog, which) -> dialog.dismiss()  // Dismiss dialog
+                );
+                return;
             }
+
+            // Proceed with favorite/unfavorite functionality if the user is logged in
+            String selectedKey = (randomKey != null && !randomKey.isEmpty()) ? randomKey : key;
+            if (selectedKey == null || selectedKey.isEmpty()) {
+                Toast.makeText(MealDetailedActivity.this, "Invalid key", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // Toggle favorite status and update UI accordingly
+            if (isFavorite) {
+                presenter.removeMealFromFavorites(selectedKey);
+                favClick.setColorFilter(ContextCompat.getColor(MealDetailedActivity.this, R.color.colorBackgroundLight));
+            } else {
+                presenter.saveMealToFavorites(selectedKey);
+                favClick.setColorFilter(ContextCompat.getColor(MealDetailedActivity.this, R.color.colorAccent1));
+            }
+            isFavorite = !isFavorite;
         });
+    }
+
+
+    private void navigateToStartAsUser() {
+        Intent intent = new Intent(this, AuthActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
     }
 
     private void initRecyclerView() {
@@ -110,17 +150,6 @@ public class MealDetailedActivity extends AppCompatActivity implements MealDetai
         favClick = findViewById(R.id.imv_favourite);
     }
 
-    private void testToggleFav() {
-        if (isFavorite) {
-            favClick.setColorFilter(ContextCompat.getColor(this, R.color.colorAccent1));
-            Toast.makeText(this, "Added to favourites", Toast.LENGTH_SHORT).show();
-
-        } else {
-            favClick.setColorFilter(ContextCompat.getColor(this, R.color.colorBackgroundLight));
-            Toast.makeText(this, "Removed from favourites", Toast.LENGTH_SHORT).show();
-        }
-    }
-
     @Override
     public void showMealDetails(MealsItem meal) {
         Log.d("meal_name", meal.getStrMeal());
@@ -129,6 +158,11 @@ public class MealDetailedActivity extends AppCompatActivity implements MealDetai
         mealInstructions.setText(meal.getStrInstructions());
         mealArea.setText(meal.getStrArea());
         mealCategory.setText(meal.getStrCategory());
+        youtubePlayerView(meal);
+        adapter.setIngredientsAndMeasurements(meal.filterIngredientsAndMeasurements());
+    }
+
+    private void youtubePlayerView(MealsItem meal) {
         youTubePlayerView.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
             @Override
             public void onReady(@NonNull YouTubePlayer youTubePlayer) {
@@ -149,13 +183,53 @@ public class MealDetailedActivity extends AppCompatActivity implements MealDetai
                 }
             }
         });
-        adapter.setIngredientsAndMeasurements(meal.filterIngredientsAndMeasurements());
-
-
     }
 
     @Override
     public void showError(String errorMssg) {
         Toast.makeText(this, errorMssg, Toast.LENGTH_SHORT).show();
     }
+
+    @Override
+    public void onMealSaved() {
+        Toast.makeText(MealDetailedActivity.this, "Added to favourites", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onMealRemoved() {
+        Toast.makeText(MealDetailedActivity.this, "Removed from favourites", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showMessage(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+
+    }
+
+//    private void doesMealExist(String mealId, OnMealExistsCallback callback) {
+//        presenter.isMealExistsInFavourite(mealId, exists -> callback.onResult(exists));
+//    }
+
+    /// Call updateFabColor to set the initial color when the activity is loaded
+    private void checkFavoriteStatus() {
+        String selectedKey = (randomKey != null && !randomKey.isEmpty()) ? randomKey : key;
+        if (selectedKey != null && !selectedKey.isEmpty()) {
+            presenter.isMealExistsInFavourite(selectedKey, presenter.getUserUid(), exists -> {
+                runOnUiThread(() -> {
+                    isFavorite = exists;
+                    updateFabColor(presenter.getUserUid());  // Update the FAB color based on the favorite status
+                });
+            });
+        }
+    }
+
+
+    private void updateFabColor(String mealId) {
+        if (isFavorite) {
+            favClick.setColorFilter(ContextCompat.getColor(MealDetailedActivity.this, R.color.colorAccent1));
+        } else {
+            favClick.setColorFilter(ContextCompat.getColor(MealDetailedActivity.this, R.color.colorBackgroundLight));
+        }
+    }
 }
+
