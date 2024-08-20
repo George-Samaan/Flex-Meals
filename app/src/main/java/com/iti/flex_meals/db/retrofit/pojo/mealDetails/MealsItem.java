@@ -4,26 +4,32 @@ import android.util.Pair;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
-import androidx.room.PrimaryKey;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity(tableName = "MealDetailsTable")
+@Entity(tableName = "MealDetailsTable", primaryKeys = {"idMeal", "UID"})
 public class MealsItem {
     @NonNull
-    @PrimaryKey
     private String idMeal;
-    private boolean isFavorite; // Add this field
+    @NonNull
+    private String UID;
+    private boolean isFavorite;
+
+    public String getUID() {
+        return UID;
+    }
+
+    public void setUID(String UID) {
+        this.UID = UID;
+    }
 
     public boolean isFavorite() {
         return isFavorite;
     }
-
     public void setFavorite(boolean favorite) {
         isFavorite = favorite;
     }
-
     public void setStrIngredient10(String strIngredient10) {
         this.strIngredient10 = strIngredient10;
     }

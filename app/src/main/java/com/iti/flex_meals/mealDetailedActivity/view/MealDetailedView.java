@@ -11,4 +11,9 @@ public interface MealDetailedView {
     void onMealSaved();
 
     void onMealRemoved();
+
+
+    void showMessage(String message);
+
+
 }

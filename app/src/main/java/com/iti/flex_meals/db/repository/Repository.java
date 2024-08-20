@@ -2,6 +2,7 @@ package com.iti.flex_meals.db.repository;
 
 import androidx.lifecycle.LiveData;
 
+import com.iti.flex_meals.db.localData.OnMealExistsCallback;
 import com.iti.flex_meals.db.retrofit.networkCallBack.OnCategoriesListCallBack;
 import com.iti.flex_meals.db.retrofit.networkCallBack.OnCategoriesMealNetworkCallBack;
 import com.iti.flex_meals.db.retrofit.networkCallBack.OnCountriesMealNetworkCallBack;
@@ -19,9 +20,13 @@ public interface Repository {
 
     void saveEmail(String email);
 
+    public void saveUserUid(String uid);
+
     String getEmail();
 
     String getLoginAuth();
+
+    String getUserUid();
 
     void clearAuthData();
 
@@ -49,5 +54,9 @@ public interface Repository {
 
     void removeMealFromFavourites(MealsItem meal);
 
-    LiveData<List<MealsItem>> getAllFavouritesMeals();
+    LiveData<List<MealsItem>> getAllFavoriteMeals(String uid);
+
+
+    void isMealExistsInFavourite(String mealId, String uid, OnMealExistsCallback callback);
+
 }

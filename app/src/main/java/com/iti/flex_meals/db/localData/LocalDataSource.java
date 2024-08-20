@@ -11,5 +11,8 @@ public interface LocalDataSource {
 
     void deleteMeal(MealsItem meal);
 
-    LiveData<List<MealsItem>> getAllFavoriteMeals();
+    LiveData<List<MealsItem>> getAllFavoriteMeals(String uid);
+
+    void isMealExistsInFavourite(String mealId, String uid, OnMealExistsCallback callback);
+
 }

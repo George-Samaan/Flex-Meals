@@ -145,7 +145,6 @@ public class LoginFragment extends Fragment implements LoginView {
                 if (validateInput(email, password)) {
                     showLoadingIndicator();
                     loginPresenter.performFirebaseLogin(email, password);
-
                 }
             } else {
                 Toast.makeText(getContext(), "Please check your internet connection", Toast.LENGTH_SHORT).show();

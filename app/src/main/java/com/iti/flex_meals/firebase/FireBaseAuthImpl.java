@@ -94,5 +94,15 @@ public class FireBaseAuthImpl implements IFirebaseAuth {
         }
     }
 
+    @Override
+    public void getUserUid(AuthUserUidCallBack callBack) {
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user != null) {
+            callBack.onSuccess(user.getUid());
+        } else {
+            callBack.onFailure("User is not logged in.");
+        }
+    }
+
 }
 

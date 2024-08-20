@@ -23,6 +23,19 @@ public class LoginPresenterImpl implements LoginPresenter {
         firebaseAuth.signInWithGoogle(idToken, new IFirebaseAuth.AuthResultCallback() {
             @Override
             public void onSuccess(String userId) {
+                firebaseAuth.getUserUid(new IFirebaseAuth.AuthUserUidCallBack() {
+                    @Override
+                    public void onSuccess(String uid) {
+                        view.showLoadingIndicator();
+                        repository.saveUserUid(uid);
+                    }
+
+                    @Override
+                    public void onFailure(String errorMessage) {
+                        view.showLoadingIndicator();
+                        view.onGoogleLoginError(errorMessage);
+                    }
+                });
                 view.hideLoadingIndicator();
                 repository.saveLoginAuth(idToken);
                 repository.saveEmail(email);
@@ -38,6 +51,7 @@ public class LoginPresenterImpl implements LoginPresenter {
         });
 
     }
+
     @Override
     public void performFirebaseLogin(String email, String password) {
         view.showLoadingIndicator();
@@ -47,10 +61,24 @@ public class LoginPresenterImpl implements LoginPresenter {
                 firebaseAuth.getAuthToken(new IFirebaseAuth.AuthTokenCallback() {
                     @Override
                     public void onSuccess(String token) {
+                        firebaseAuth.getUserUid(new IFirebaseAuth.AuthUserUidCallBack() {
+                            @Override
+                            public void onSuccess(String uid) {
+                                view.showLoadingIndicator();
+                                repository.saveUserUid(uid);
+                            }
+
+                            @Override
+                            public void onFailure(String errorMessage) {
+                                view.showLoadingIndicator();
+                                view.onLoginFailure(errorMessage);
+                            }
+                        });
                         view.hideLoadingIndicator();
                         repository.saveLoginAuth(token); // Save the token
                         repository.saveEmail(email); // Save the email
                         view.onLoginSuccess(userId, email);
+
                     }
 
                     @Override
@@ -74,5 +102,5 @@ public class LoginPresenterImpl implements LoginPresenter {
         view.showGuestDialog();
     }
 
-
 }
+
