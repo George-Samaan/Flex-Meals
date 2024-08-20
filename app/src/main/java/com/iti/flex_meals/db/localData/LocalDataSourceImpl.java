@@ -40,12 +40,11 @@ public class LocalDataSourceImpl implements LocalDataSource {
 //    }
 
     @Override
-    public void isMealExistsInFavourite(String mealId, OnMealExistsCallback callback) {
+    public void isMealExistsInFavourite(String mealId, String uid, OnMealExistsCallback callback) {
         new Thread(() -> {
-            boolean exists = mealDao.isMealExistsInFavourite(mealId);
+            boolean exists = mealDao.isMealExistsInFavourite(mealId, uid);
             callback.onResult(exists);
         }).start();
     }
-
 
 }

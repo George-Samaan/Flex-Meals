@@ -9,6 +9,9 @@ public interface MealDetailPresenter {
 
     void removeMealFromFavorites(String id);
 
-    void isMealExistsInFavourite(String mealId, OnMealExistsCallback callback);
+    void isMealExistsInFavourite(String mealId, String uid, OnMealExistsCallback callback);
 
+    boolean checkingCredentialOfUser();
+
+    String getUserUid();
 }

@@ -14,7 +14,7 @@ import java.util.List;
 @Dao
 public interface MealDao {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insertMeal(MealsItem meal);
 
     @Delete
@@ -26,7 +26,7 @@ public interface MealDao {
     @Query("Select * from MealDetailsTable WHERE UID = :uid")
     LiveData<List<MealsItem>> getAllFavoriteMeals(String uid);
 
-    @Query("SELECT COUNT(*) > 0 FROM MealDetailsTable WHERE idMeal = :mealId")
-    boolean isMealExistsInFavourite(String mealId);
+    @Query("SELECT COUNT(*) > 0 FROM MealDetailsTable WHERE idMeal = :mealId AND uid = :uid")
+    boolean isMealExistsInFavourite(String mealId, String uid);
 
 }

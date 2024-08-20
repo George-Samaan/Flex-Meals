@@ -13,7 +13,6 @@ public interface LocalDataSource {
 
     LiveData<List<MealsItem>> getAllFavoriteMeals(String uid);
 
-
-    void isMealExistsInFavourite(String mealId, OnMealExistsCallback callback);
+    void isMealExistsInFavourite(String mealId, String uid, OnMealExistsCallback callback);
 
 }

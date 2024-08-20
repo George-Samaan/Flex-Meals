@@ -130,7 +130,7 @@ public class RepositoryImpl implements Repository {
     }
 
     @Override
-    public void isMealExistsInFavourite(String mealId, OnMealExistsCallback callback) {
-        localDataSource.isMealExistsInFavourite(mealId, callback);
+    public void isMealExistsInFavourite(String mealId, String uid, OnMealExistsCallback callback) {
+        localDataSource.isMealExistsInFavourite(mealId, uid, callback);
     }
 }
