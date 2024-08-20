@@ -1,6 +1,7 @@
 package com.iti.flex_meals.mealDetailedActivity.view;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,14 +17,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.iti.flex_meals.R;
+import com.iti.flex_meals.authActivity.AuthActivity;
 import com.iti.flex_meals.db.localData.LocalDataSourceImpl;
-import com.iti.flex_meals.db.localData.OnMealExistsCallback;
 import com.iti.flex_meals.db.remoteData.RemoteDataSourceImpl;
 import com.iti.flex_meals.db.repository.RepositoryImpl;
 import com.iti.flex_meals.db.retrofit.pojo.mealDetails.MealsItem;
 import com.iti.flex_meals.db.sharedPreferences.SharedPreferencesDataSourceImpl;
 import com.iti.flex_meals.mealDetailedActivity.presenter.MealDetailPresenter;
 import com.iti.flex_meals.mealDetailedActivity.presenter.MealDetailPresenterImpl;
+import com.iti.flex_meals.utils.Utils;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
@@ -63,23 +65,48 @@ public class MealDetailedActivity extends AppCompatActivity implements MealDetai
         checkFavoriteStatus();
         onFavouriteClick();
     }
+
+
     private void onFavouriteClick() {
         favClick.setOnClickListener(v -> {
+            // Check if the user is logged in
+            if (!presenter.checkingCredentialOfUser()) {
+                // Show the dialog if the user is not logged in
+                Utils.showConfirmationDialog(
+                        this,
+                        "Login Required",
+                        "You must log in to save this meal",
+                        (dialog, which) -> navigateToStartAsUser(),  // Navigate to login
+                        (dialog, which) -> dialog.dismiss()  // Dismiss dialog
+                );
+                return;
+            }
+
+            // Proceed with favorite/unfavorite functionality if the user is logged in
             String selectedKey = (randomKey != null && !randomKey.isEmpty()) ? randomKey : key;
             if (selectedKey == null || selectedKey.isEmpty()) {
                 Toast.makeText(MealDetailedActivity.this, "Invalid key", Toast.LENGTH_SHORT).show();
                 return;
             }
+
+            // Toggle favorite status and update UI accordingly
             if (isFavorite) {
                 presenter.removeMealFromFavorites(selectedKey);
                 favClick.setColorFilter(ContextCompat.getColor(MealDetailedActivity.this, R.color.colorBackgroundLight));
             } else {
-
                 presenter.saveMealToFavorites(selectedKey);
                 favClick.setColorFilter(ContextCompat.getColor(MealDetailedActivity.this, R.color.colorAccent1));
             }
             isFavorite = !isFavorite;
         });
+    }
+
+
+    private void navigateToStartAsUser() {
+        Intent intent = new Intent(this, AuthActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
     }
 
     private void initRecyclerView() {
@@ -133,17 +160,6 @@ public class MealDetailedActivity extends AppCompatActivity implements MealDetai
         mealCategory.setText(meal.getStrCategory());
         youtubePlayerView(meal);
         adapter.setIngredientsAndMeasurements(meal.filterIngredientsAndMeasurements());
-
-//        RepositoryImpl repository =  new RepositoryImpl(SharedPreferencesDataSourceImpl.getInstance(this),
-//                new RemoteDataSourceImpl(),
-//                new LocalDataSourceImpl(this));
-//
-//        String userUid = repository.getUserUid();
-//        if (userUid != null && !userUid.isEmpty()) {
-//            Log.d("user_uid", userUid);
-//        }
-//
-//        meal.setUID(userUid);
     }
 
     private void youtubePlayerView(MealsItem meal) {
@@ -190,22 +206,23 @@ public class MealDetailedActivity extends AppCompatActivity implements MealDetai
 
     }
 
-    private void doesMealExist(String mealId, OnMealExistsCallback callback) {
-        presenter.isMealExistsInFavourite(mealId, exists -> callback.onResult(exists));
-    }
+//    private void doesMealExist(String mealId, OnMealExistsCallback callback) {
+//        presenter.isMealExistsInFavourite(mealId, exists -> callback.onResult(exists));
+//    }
 
     /// Call updateFabColor to set the initial color when the activity is loaded
     private void checkFavoriteStatus() {
         String selectedKey = (randomKey != null && !randomKey.isEmpty()) ? randomKey : key;
         if (selectedKey != null && !selectedKey.isEmpty()) {
-            doesMealExist(selectedKey, exists -> {
+            presenter.isMealExistsInFavourite(selectedKey, presenter.getUserUid(), exists -> {
                 runOnUiThread(() -> {
                     isFavorite = exists;
-                    updateFabColor(selectedKey);  // Set the initial color based on the favorite status
+                    updateFabColor(presenter.getUserUid());  // Update the FAB color based on the favorite status
                 });
             });
         }
     }
+
 
     private void updateFabColor(String mealId) {
         if (isFavorite) {
