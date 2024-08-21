@@ -1,5 +1,6 @@
 package com.iti.flex_meals.homeActivity.favouriteFragment.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,6 +22,7 @@ import com.iti.flex_meals.db.repository.Repository;
 import com.iti.flex_meals.db.repository.RepositoryImpl;
 import com.iti.flex_meals.db.retrofit.pojo.mealDetails.MealsItem;
 import com.iti.flex_meals.db.sharedPreferences.SharedPreferencesDataSourceImpl;
+import com.iti.flex_meals.mealDetailedActivity.view.MealDetailedActivity;
 
 import java.util.List;
 
@@ -65,6 +67,8 @@ public class FavouritesFragment extends Fragment implements OnMealClick {
 
     @Override
     public void onMealClick(String id) {
-
+        Intent intent = new Intent(requireContext(), MealDetailedActivity.class);
+        intent.putExtra("FAVORITE_ID", id);
+        startActivity(intent);
     }
 }

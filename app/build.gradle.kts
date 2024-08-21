@@ -73,11 +73,16 @@ dependencies {
     //Circular image
     implementation("de.hdodenhof:circleimageview:3.1.0")
 
-
+    //Room
     val room_version = "2.6.1"
     implementation("androidx.room:room-runtime:$room_version")
     annotationProcessor("androidx.room:room-compiler:$room_version")
 
+    //Calendar
+    implementation("com.github.prolificinteractive:material-calendarview:2.0.0")
+
+//    implementation ("io.reactivex.rxjava3:rxandroid:3.1.9")
+//    implementation ("io.reactivex.rxjava3:rxjava:3.1.9")
 
 
 }

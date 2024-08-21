@@ -10,6 +10,7 @@ import com.iti.flex_meals.db.retrofit.networkCallBack.OnIngredientNetworkCallBac
 import com.iti.flex_meals.db.retrofit.networkCallBack.OnMealDetailsNetworkCallBack;
 import com.iti.flex_meals.db.retrofit.networkCallBack.OnRandomMealNetworkCallBack;
 import com.iti.flex_meals.db.retrofit.pojo.mealDetails.MealsItem;
+import com.iti.flex_meals.homeActivity.planFragment.model.MealPlan;
 
 import java.util.List;
 
@@ -49,6 +50,7 @@ public interface Repository {
     void getMealById(String id, OnMealDetailsNetworkCallBack onMealDetailsNetworkCallBack);
 
 
+
     // Local Data Source (Favourites)
     void addMealToFavourites(MealsItem meal);
 
@@ -56,7 +58,14 @@ public interface Repository {
 
     LiveData<List<MealsItem>> getAllFavoriteMeals(String uid);
 
+    LiveData<MealsItem> getFavoriteMealById(String mealId);
+
 
     void isMealExistsInFavourite(String mealId, String uid, OnMealExistsCallback callback);
+
+    void addMealToMealPlan(MealPlan mealPlan);
+
+    void removeMealFromMealPlan(String mealId);
+
 
 }

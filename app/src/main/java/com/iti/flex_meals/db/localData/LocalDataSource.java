@@ -3,6 +3,7 @@ package com.iti.flex_meals.db.localData;
 import androidx.lifecycle.LiveData;
 
 import com.iti.flex_meals.db.retrofit.pojo.mealDetails.MealsItem;
+import com.iti.flex_meals.homeActivity.planFragment.model.MealPlan;
 
 import java.util.List;
 
@@ -14,5 +15,13 @@ public interface LocalDataSource {
     LiveData<List<MealsItem>> getAllFavoriteMeals(String uid);
 
     void isMealExistsInFavourite(String mealId, String uid, OnMealExistsCallback callback);
+
+    LiveData<MealsItem> getFavoriteMeal(String mealId);
+
+
+    void insertMeal(MealPlan mealPlan);
+
+    void deletePlanMeal(final String mealId);
+
 
 }

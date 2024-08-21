@@ -29,4 +29,7 @@ public interface MealDao {
     @Query("SELECT COUNT(*) > 0 FROM MealDetailsTable WHERE idMeal = :mealId AND uid = :uid")
     boolean isMealExistsInFavourite(String mealId, String uid);
 
+    @Query("SELECT * FROM MealDetailsTable WHERE idMeal = :mealId LIMIT 1")
+    LiveData<MealsItem> getFavoriteMeal(String mealId);
+
 }

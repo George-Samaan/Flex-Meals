@@ -14,6 +14,7 @@ import com.iti.flex_meals.db.retrofit.networkCallBack.OnMealDetailsNetworkCallBa
 import com.iti.flex_meals.db.retrofit.networkCallBack.OnRandomMealNetworkCallBack;
 import com.iti.flex_meals.db.retrofit.pojo.mealDetails.MealsItem;
 import com.iti.flex_meals.db.sharedPreferences.SharedPreferencesDataSourceImpl;
+import com.iti.flex_meals.homeActivity.planFragment.model.MealPlan;
 
 import java.util.List;
 
@@ -61,8 +62,6 @@ public class RepositoryImpl implements Repository {
     public String getUserUid() {
         return sharedPreferencesDataSource.getUserUid();
     }
-
-
 
     @Override
     public void clearAuthData() {
@@ -130,7 +129,22 @@ public class RepositoryImpl implements Repository {
     }
 
     @Override
+    public LiveData<MealsItem> getFavoriteMealById(String mealId) {
+        return localDataSource.getFavoriteMeal(mealId);
+    }
+
+    @Override
     public void isMealExistsInFavourite(String mealId, String uid, OnMealExistsCallback callback) {
         localDataSource.isMealExistsInFavourite(mealId, uid, callback);
+    }
+
+    @Override
+    public void addMealToMealPlan(MealPlan mealPlan) {
+        localDataSource.insertMeal(mealPlan);
+    }
+
+    @Override
+    public void removeMealFromMealPlan(String mealId) {
+        localDataSource.deleteMeal(mealId);
     }
 }

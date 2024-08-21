@@ -1,10 +1,16 @@
 package com.iti.flex_meals.mealDetailedActivity.presenter;
 
+import android.util.Log;
+
+import androidx.lifecycle.Observer;
+
 import com.iti.flex_meals.db.localData.OnMealExistsCallback;
 import com.iti.flex_meals.db.repository.Repository;
 import com.iti.flex_meals.db.retrofit.networkCallBack.OnMealDetailsNetworkCallBack;
 import com.iti.flex_meals.db.retrofit.pojo.mealDetails.MealsItem;
+import com.iti.flex_meals.homeActivity.planFragment.model.MealPlan;
 import com.iti.flex_meals.mealDetailedActivity.view.MealDetailedActivity;
+
 
 public class MealDetailPresenterImpl implements MealDetailPresenter {
 
@@ -36,21 +42,28 @@ public class MealDetailPresenterImpl implements MealDetailPresenter {
         repository.getMealById(id, new OnMealDetailsNetworkCallBack() {
             @Override
             public void onSuccess(MealsItem mealDetails) {
-                if (mealDetails.isFavorite()) {
-                    view.showMessage("Meal already in favorites");
-                } else {
                     String userUid = repository.getUserUid();
                     mealDetails.setUID(userUid);
                     repository.addMealToFavourites(mealDetails);
-                    mealDetails.setFavorite(true);
                     view.onMealSaved();
-                }
             }
             @Override
             public void onError(String message) {
                 view.showError(message);
             }
         });
+    }
+
+    @Override
+    public void saveMealToMealPlan(MealPlan mealPlan) {
+        try {
+            String userUid = repository.getUserUid();
+            mealPlan.setUID(userUid);
+            repository.addMealToMealPlan(mealPlan);
+            Log.d("MealPlan", "Meal saved successfully: " + mealPlan.getStrMeal());
+        } catch (Exception e) {
+            Log.e("MealPlan", "Error saving meal plan", e);
+        }
     }
 
     @Override
@@ -70,7 +83,6 @@ public class MealDetailPresenterImpl implements MealDetailPresenter {
         });
     }
 
-
     @Override
     public boolean checkingCredentialOfUser() {
         String userUid = repository.getUserUid();
@@ -81,5 +93,20 @@ public class MealDetailPresenterImpl implements MealDetailPresenter {
     public String getUserUid() {
         return repository.getUserUid();
     }
+
+    @Override
+    public void getFavoriteMealDetail(String mealId) {
+        repository.getFavoriteMealById(mealId).observe(view.getLifecycleOwner(), new Observer<MealsItem>() {
+            @Override
+            public void onChanged(MealsItem mealsItem) {
+                if (mealsItem != null) {
+                    view.showMealDetails(mealsItem);
+                } else {
+                    view.showError("Meal not found");
+                }
+            }
+        });
+    }
+
 
 }
