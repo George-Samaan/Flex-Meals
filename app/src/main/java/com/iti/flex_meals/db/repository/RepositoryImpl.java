@@ -163,5 +163,16 @@ public class RepositoryImpl implements Repository {
         return localDataSource.getDinnerMealsForUid(uid);
     }
 
+    @Override
+    public void getMealByUidAndDate(String uid, long date, MealFetchCallBack mealFetchCallBack) {
+        LiveData<List<MealPlan>> breakfastMeals = localDataSource.getBreakfastMealsByUidAndDate(uid, date);
+        LiveData<List<MealPlan>> lunchMeals = localDataSource.getLunchMealsByUidAndDate(uid, date);
+        LiveData<List<MealPlan>> dinnerMeals = localDataSource.getDinnerMealsByUidAndDate(uid, date);
+
+        mealFetchCallBack.onBreakfastMealsFetched(breakfastMeals);
+        mealFetchCallBack.onLunchMealsFetched(lunchMeals);
+        mealFetchCallBack.onDinnerMealsFetched(dinnerMeals);
+    }
+
 
 }

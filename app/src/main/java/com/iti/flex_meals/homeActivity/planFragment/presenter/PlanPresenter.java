@@ -7,9 +7,9 @@ public interface PlanPresenter {
     void fetchLunchMealsFromRoom();
 
     void fetchDinnerMealsFromRoom();
-//    void onDestroy();
-
 
     void deleteMeal(String mealId);
+
+    void fetchMealsByDate(long date); // New method
 
 }

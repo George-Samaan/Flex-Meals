@@ -14,7 +14,7 @@ public class MealPlan {
     private String idMeal;
     @NonNull
     private String UID;
-    private String date;
+    private long date;
     private String mealType;
     private String dayName;
     private String strIngredient10;
@@ -74,11 +74,11 @@ public class MealPlan {
         this.UID = UID;
     }
 
-    public String getDate() {
+    public long getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(long date) {
         this.date = date;
     }
 

@@ -32,4 +32,13 @@ public interface MealPlanDao {
     @Query("SELECT * FROM MEAL_PLAN WHERE UID = :uid AND mealType = 'Dinner'")
     LiveData<List<MealPlan>> getDinnerMealsForUid(String uid);
 
+    @Query("SELECT * FROM MEAL_PLAN WHERE UID = :uid AND mealType = 'Breakfast' AND date = :date")
+    LiveData<List<MealPlan>> getBreakfastMealsForUidAndDate(String uid, long date);
+
+    @Query("SELECT * FROM MEAL_PLAN WHERE UID = :uid AND mealType = 'Lunch' AND date = :date")
+    LiveData<List<MealPlan>> getLunchMealsForUidAndDate(String uid, long date);
+
+    @Query("SELECT * FROM MEAL_PLAN WHERE UID = :uid AND mealType = 'Dinner' AND date = :date")
+    LiveData<List<MealPlan>> getDinnerMealsForUidAndDate(String uid, long date);
+
 }
