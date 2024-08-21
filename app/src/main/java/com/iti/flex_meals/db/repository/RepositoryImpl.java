@@ -145,6 +145,34 @@ public class RepositoryImpl implements Repository {
 
     @Override
     public void removeMealFromMealPlan(String mealId) {
-        localDataSource.deleteMeal(mealId);
+        localDataSource.deletePlanMeal(mealId);
     }
+
+    @Override
+    public LiveData<List<MealPlan>> getBreakfastMeals(String uid) {
+        return localDataSource.getBreakfastMeals(uid);
+    }
+
+    @Override
+    public LiveData<List<MealPlan>> getLunchMealsForUid(String uid) {
+        return localDataSource.getLunchMealsForUid(uid);
+    }
+
+    @Override
+    public LiveData<List<MealPlan>> getDinnerMealsForUid(String uid) {
+        return localDataSource.getDinnerMealsForUid(uid);
+    }
+
+    @Override
+    public void getMealByUidAndDate(String uid, long date, MealFetchCallBack mealFetchCallBack) {
+        LiveData<List<MealPlan>> breakfastMeals = localDataSource.getBreakfastMealsByUidAndDate(uid, date);
+        LiveData<List<MealPlan>> lunchMeals = localDataSource.getLunchMealsByUidAndDate(uid, date);
+        LiveData<List<MealPlan>> dinnerMeals = localDataSource.getDinnerMealsByUidAndDate(uid, date);
+
+        mealFetchCallBack.onBreakfastMealsFetched(breakfastMeals);
+        mealFetchCallBack.onLunchMealsFetched(lunchMeals);
+        mealFetchCallBack.onDinnerMealsFetched(dinnerMeals);
+    }
+
+
 }

@@ -1,6 +1,8 @@
 package com.iti.flex_meals.mealDetailedActivity.view;
 
 
+import static com.iti.flex_meals.utils.Utils.getDateOnly;
+
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,7 +22,6 @@ import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.room.Room;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -34,7 +35,6 @@ import com.iti.flex_meals.db.remoteData.RemoteDataSourceImpl;
 import com.iti.flex_meals.db.repository.RepositoryImpl;
 import com.iti.flex_meals.db.retrofit.pojo.mealDetails.MealsItem;
 import com.iti.flex_meals.db.room.MealDao;
-import com.iti.flex_meals.db.room.MealDatabase;
 import com.iti.flex_meals.db.sharedPreferences.SharedPreferencesDataSourceImpl;
 import com.iti.flex_meals.homeActivity.planFragment.model.MealPlan;
 import com.iti.flex_meals.mealDetailedActivity.presenter.MealDetailPresenter;
@@ -79,12 +79,13 @@ public class MealDetailedActivity extends AppCompatActivity implements MealDetai
     private MealDao mealDao; // Declare DAO
     private MealsItem currentMeal;
     private RepositoryImpl repository;
+    Calendar calendarDateOnly;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        MealDatabase db = Room.databaseBuilder(getApplicationContext(), MealDatabase.class, "meals_database").build();
-        mealDao = db.mealDao();
+//        MealDatabase db = Room.databaseBuilder(getApplicationContext(), MealDatabase.class, "meals_database").build();
+//        mealDao = db.mealDao();
         setContentView(R.layout.activity_mel_detailed);
         presenter = new MealDetailPresenterImpl(this,
                 new RepositoryImpl(SharedPreferencesDataSourceImpl.getInstance(this),
@@ -148,7 +149,13 @@ public class MealDetailedActivity extends AppCompatActivity implements MealDetai
         mealPlan.setStrYoutube(meal.getStrYoutube());
         mealPlan.setIngredientsAndMeasurements(meal.filterIngredientsAndMeasurements());
         mealPlan.setMealType(selectedMeal);
-        mealPlan.setDate(selectedDate);
+        calendarDateOnly = Calendar.getInstance();
+        calendarDateOnly.set(Calendar.DAY_OF_MONTH, Integer.parseInt(selectedDate.split("/")[0]));
+        calendarDateOnly.set(Calendar.MONTH, Integer.parseInt(selectedDate.split("/")[1]) - 1);
+        calendarDateOnly.set(Calendar.YEAR, Integer.parseInt(selectedDate.split("/")[2]));
+        long dateOnly = getDateOnly(calendarDateOnly);
+        mealPlan.setDate(dateOnly);
+        Log.d("Date", "Date Saved in DataBase is: " + String.valueOf(dateOnly));
         return mealPlan;
     }
 
@@ -173,6 +180,7 @@ public class MealDetailedActivity extends AppCompatActivity implements MealDetai
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
         return formatter.format(calendar.getTime());
     }
+
 
     private boolean isValidated() {
         boolean isValid = true;
@@ -367,8 +375,5 @@ public class MealDetailedActivity extends AppCompatActivity implements MealDetai
         });
     }
 
-    public void onMealPlanSaved() {
-//        Toast.makeText(this, "Meal plan saved", Toast.LENGTH_SHORT).show();
-    }
 }
 

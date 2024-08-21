@@ -80,9 +80,8 @@ dependencies {
 
     //Calendar
     implementation("com.github.prolificinteractive:material-calendarview:2.0.0")
+    implementation("com.jakewharton.threetenabp:threetenabp:1.4.0")
 
-//    implementation ("io.reactivex.rxjava3:rxandroid:3.1.9")
-//    implementation ("io.reactivex.rxjava3:rxjava:3.1.9")
 
 
 }

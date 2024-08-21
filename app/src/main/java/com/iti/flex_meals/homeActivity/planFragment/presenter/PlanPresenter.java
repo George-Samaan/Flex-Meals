@@ -1,8 +1,15 @@
 package com.iti.flex_meals.homeActivity.planFragment.presenter;
 
 public interface PlanPresenter {
-//    void insert(MealPlan mealPlan);
-//    void delete(MealPlan mealPlan);
 
+    void fetchBreakfastMealsFromRoom();
+
+    void fetchLunchMealsFromRoom();
+
+    void fetchDinnerMealsFromRoom();
+
+    void deleteMeal(String mealId);
+
+    void fetchMealsByDate(long date); // New method
 
 }

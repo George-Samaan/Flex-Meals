@@ -3,11 +3,14 @@ package com.iti.flex_meals.mealDetailedActivity.presenter;
 import android.util.Log;
 
 import androidx.lifecycle.Observer;
+import androidx.room.Room;
 
 import com.iti.flex_meals.db.localData.OnMealExistsCallback;
 import com.iti.flex_meals.db.repository.Repository;
 import com.iti.flex_meals.db.retrofit.networkCallBack.OnMealDetailsNetworkCallBack;
 import com.iti.flex_meals.db.retrofit.pojo.mealDetails.MealsItem;
+import com.iti.flex_meals.db.room.MealDao;
+import com.iti.flex_meals.db.room.MealDatabase;
 import com.iti.flex_meals.homeActivity.planFragment.model.MealPlan;
 import com.iti.flex_meals.mealDetailedActivity.view.MealDetailedActivity;
 
@@ -16,10 +19,13 @@ public class MealDetailPresenterImpl implements MealDetailPresenter {
 
     private MealDetailedActivity view;
     private Repository repository;
+    MealDao mealDao;
 
     public MealDetailPresenterImpl(MealDetailedActivity view, Repository repository) {
         this.view = view;
         this.repository = repository;
+        MealDatabase db = Room.databaseBuilder(view.getApplicationContext(), MealDatabase.class, "meals_database").build();
+        mealDao = db.mealDao();
     }
 
     @Override

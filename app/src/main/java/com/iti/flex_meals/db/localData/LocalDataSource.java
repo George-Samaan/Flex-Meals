@@ -23,5 +23,16 @@ public interface LocalDataSource {
 
     void deletePlanMeal(final String mealId);
 
+    LiveData<List<MealPlan>> getBreakfastMeals(String uid);
 
+    LiveData<List<MealPlan>> getLunchMealsForUid(String uid);
+
+    LiveData<List<MealPlan>> getDinnerMealsForUid(String uid);
+
+
+    LiveData<List<MealPlan>> getBreakfastMealsByUidAndDate(String uid, long date);
+
+    LiveData<List<MealPlan>> getLunchMealsByUidAndDate(String uid, long date);
+
+    LiveData<List<MealPlan>> getDinnerMealsByUidAndDate(String uid, long date);
 }
