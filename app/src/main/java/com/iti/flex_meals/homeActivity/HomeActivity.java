@@ -42,7 +42,7 @@ public class HomeActivity extends AppCompatActivity {
         initPageTitle();
         setDrawerItemListeners();
         repository = new RepositoryImpl(new SharedPreferencesDataSourceImpl(this),
-                new RemoteDataSourceImpl(), new LocalDataSourceImpl(this));
+                new RemoteDataSourceImpl(), new LocalDataSourceImpl(getApplication()));
 //        drawerLayout.setScrimColor(Color.argb(50, 0, 0, 0));
 
     }

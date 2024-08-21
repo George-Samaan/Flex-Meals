@@ -1,5 +1,6 @@
 package com.iti.flex_meals.homeActivity.favouriteFragment.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,10 +22,12 @@ import com.iti.flex_meals.db.repository.Repository;
 import com.iti.flex_meals.db.repository.RepositoryImpl;
 import com.iti.flex_meals.db.retrofit.pojo.mealDetails.MealsItem;
 import com.iti.flex_meals.db.sharedPreferences.SharedPreferencesDataSourceImpl;
+import com.iti.flex_meals.homeActivity.planFragment.view.OnMealPlanDelete;
+import com.iti.flex_meals.mealDetailedActivity.view.MealDetailedActivity;
 
 import java.util.List;
 
-public class FavouritesFragment extends Fragment implements OnMealClick {
+public class FavouritesFragment extends Fragment implements OnMealClick, OnMealPlanDelete {
 
     Repository repository;
     RecyclerView recyclerView;
@@ -50,8 +53,9 @@ public class FavouritesFragment extends Fragment implements OnMealClick {
         super.onViewCreated(view, savedInstanceState);
 
         recyclerView = view.findViewById(R.id.favRecyclerView);
-        favouritesAdapter = new FavouritesAdapter(this);
+        favouritesAdapter = new FavouritesAdapter(this, this);
         recyclerView.setLayoutManager(new GridLayoutManager(requireContext(), 2, RecyclerView.VERTICAL, false));
+        recyclerView.setAdapter(favouritesAdapter);
 
         repository.getAllFavoriteMeals(repository.getUserUid()).observe(requireActivity(), new Observer<List<MealsItem>>() {
             @Override
@@ -60,11 +64,17 @@ public class FavouritesFragment extends Fragment implements OnMealClick {
                 Log.d("TAG", "onChanged: " + mealsItems.size());
             }
         });
-        recyclerView.setAdapter(favouritesAdapter);
     }
 
     @Override
     public void onMealClick(String id) {
+        Intent intent = new Intent(requireContext(), MealDetailedActivity.class);
+        intent.putExtra("FAVORITE_ID", id);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onMealDelete(String mealId) {
 
     }
 }

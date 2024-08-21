@@ -14,6 +14,8 @@ import androidx.core.content.ContextCompat;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.Calendar;
+
 public class Utils {
 
     public static void showCustomSnackbar(View view, String message, int backgroundColor, int textColor) {
@@ -60,4 +62,18 @@ public class Utils {
         }
         return false;
     }
+
+    public static long getDateOnly(Calendar calendar) {
+        Calendar dateOnly = Calendar.getInstance();
+        dateOnly.set(
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH),
+                0,
+                0,
+                0);
+        dateOnly.set(Calendar.MILLISECOND, 0);
+        return dateOnly.getTime().getTime();
+    }
+
 }

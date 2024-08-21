@@ -14,7 +14,6 @@ public class MealsItem {
     private String idMeal;
     @NonNull
     private String UID;
-    private boolean isFavorite;
 
     public String getUID() {
         return UID;
@@ -24,12 +23,6 @@ public class MealsItem {
         this.UID = UID;
     }
 
-    public boolean isFavorite() {
-        return isFavorite;
-    }
-    public void setFavorite(boolean favorite) {
-        isFavorite = favorite;
-    }
     public void setStrIngredient10(String strIngredient10) {
         this.strIngredient10 = strIngredient10;
     }
@@ -489,6 +482,7 @@ public class MealsItem {
         addPairToList(pairs, strIngredient20, strMeasure20);
         return pairs;
     }
+
 
     private void addPairToList(List<Pair<String, String>> list, String ingredient, String measure) {
         if (ingredient != null && !ingredient.trim().isEmpty() && measure != null && !measure.trim().isEmpty()) {

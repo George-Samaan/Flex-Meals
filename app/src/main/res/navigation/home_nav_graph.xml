@@ -27,7 +27,7 @@
         tools:layout="@layout/fragment_profile" />
     <fragment
         android:id="@+id/planFragment"
-        android:name="com.iti.flex_meals.PlanFragment"
+        android:name="com.iti.flex_meals.homeActivity.planFragment.view.PlanFragment"
         android:label="fragment_plan"
         tools:layout="@layout/fragment_plan" />
 </navigation>

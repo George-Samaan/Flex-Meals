@@ -16,6 +16,9 @@
         android:theme="@style/Theme.FlexMeals"
         tools:targetApi="31">
         <activity
+            android:name=".MyApplication"
+            android:exported="false" />
+        <activity
             android:name=".mealDetailedActivity.view.MealDetailedActivity"
             android:exported="false" />
         <activity
