@@ -73,4 +73,6 @@ public interface Repository {
     LiveData<List<MealPlan>> getDinnerMealsForUid(String uid);
 
 
+    void getMealByUidAndDate(String uid, long date, MealFetchCallBack mealFetchCallBack);
+
 }

@@ -1,5 +1,7 @@
 package com.iti.flex_meals.homeActivity.planFragment.view;
 
+import static com.iti.flex_meals.utils.Utils.getDateOnly;
+
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -28,8 +30,7 @@ import com.iti.flex_meals.homeActivity.planFragment.presenter.PlanPresenterImpl;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 
-import org.threeten.bp.LocalDate;
-
+import java.util.Calendar;
 import java.util.List;
 
 
@@ -43,7 +44,6 @@ public class PlanFragment extends Fragment implements PlanView, OnMealClick, OnM
     RecyclerView recyclerViewLunch;
     RecyclerView recyclerViewDinner;
     MaterialCalendarView calendarView;
-    LocalDate currentDate = LocalDate.now();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -68,47 +68,51 @@ public class PlanFragment extends Fragment implements PlanView, OnMealClick, OnM
         initRecyclerBreakfast();
         initRecyclerLunch();
         initRecyclerDinner();
-        fetchData();
-
+        fetchTheCurrentDate();
+        fetchDataByCalendar();
     }
 
-    private void fetchData() {
-        presenter.fetchBreakfastMealsFromRoom();
-        presenter.fetchLunchMealsFromRoom();
-        presenter.fetchDinnerMealsFromRoom();
+    private void fetchTheCurrentDate() {
+        Calendar currentDate = Calendar.getInstance();
+        long dateOnly = getDateOnly(currentDate);
+        presenter.fetchMealsByDate(dateOnly);
     }
-
     private void initRecyclerDinner() {
         dinnerItemView = new FavouritesAdapter(this, this);
         recyclerViewDinner.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false));
         recyclerViewDinner.setAdapter(dinnerItemView);
     }
-
     private void initRecyclerLunch() {
         recyclerViewBreakfast.setAdapter(breakfastItemView);
         recyclerViewLunch.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false));
         recyclerViewLunch.setAdapter(lunchItemView);
     }
-
     private void initRecyclerBreakfast() {
         breakfastItemView = new FavouritesAdapter(this, this);
         lunchItemView = new FavouritesAdapter(this, this);
         recyclerViewBreakfast.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false));
     }
-
     private void iniViews(@NonNull View view) {
         recyclerViewBreakfast = view.findViewById(R.id.rv_meals);
         recyclerViewLunch = view.findViewById(R.id.rv_lucnh);
         recyclerViewDinner = view.findViewById(R.id.rv_dinner);
         calendarView = view.findViewById(R.id.calendarView);
+    }
+
+    private void fetchDataByCalendar() {
         calendarView.setSelectedDate(CalendarDay.today());
         calendarView.setOnDateChangedListener((widget, date, selected) -> {
             if (selected) {
-                currentDate = LocalDate.of(date.getYear(), date.getMonth(), date.getDay());
+                Calendar currentDate = Calendar.getInstance();
+                currentDate.set(date.getYear(), date.getMonth() - 1, date.getDay());
+                long dateOnly = getDateOnly(currentDate);
+                presenter.fetchMealsByDate(dateOnly);
+                Log.d("DateSend", "Date: " + dateOnly);
+                breakfastItemView.notifyDataSetChanged();
+                lunchItemView.notifyDataSetChanged();
+                dinnerItemView.notifyDataSetChanged();
             }
-            presenter.fetchBreakfastMealsFromRoom();
-            presenter.fetchLunchMealsFromRoom();
-            presenter.fetchDinnerMealsFromRoom();
+
         });
     }
 

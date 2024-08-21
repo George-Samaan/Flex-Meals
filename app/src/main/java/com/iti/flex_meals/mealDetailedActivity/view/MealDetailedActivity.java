@@ -1,6 +1,8 @@
 package com.iti.flex_meals.mealDetailedActivity.view;
 
 
+import static com.iti.flex_meals.utils.Utils.getDateOnly;
+
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -77,6 +79,7 @@ public class MealDetailedActivity extends AppCompatActivity implements MealDetai
     private MealDao mealDao; // Declare DAO
     private MealsItem currentMeal;
     private RepositoryImpl repository;
+    Calendar calendarDateOnly;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,7 +149,13 @@ public class MealDetailedActivity extends AppCompatActivity implements MealDetai
         mealPlan.setStrYoutube(meal.getStrYoutube());
         mealPlan.setIngredientsAndMeasurements(meal.filterIngredientsAndMeasurements());
         mealPlan.setMealType(selectedMeal);
-        mealPlan.setDate(selectedDate);
+        calendarDateOnly = Calendar.getInstance();
+        calendarDateOnly.set(Calendar.DAY_OF_MONTH, Integer.parseInt(selectedDate.split("/")[0]));
+        calendarDateOnly.set(Calendar.MONTH, Integer.parseInt(selectedDate.split("/")[1]) - 1);
+        calendarDateOnly.set(Calendar.YEAR, Integer.parseInt(selectedDate.split("/")[2]));
+        long dateOnly = getDateOnly(calendarDateOnly);
+        mealPlan.setDate(dateOnly);
+        Log.d("Date", "Date Saved in DataBase is: " + String.valueOf(dateOnly));
         return mealPlan;
     }
 
@@ -171,6 +180,7 @@ public class MealDetailedActivity extends AppCompatActivity implements MealDetai
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
         return formatter.format(calendar.getTime());
     }
+
 
     private boolean isValidated() {
         boolean isValid = true;

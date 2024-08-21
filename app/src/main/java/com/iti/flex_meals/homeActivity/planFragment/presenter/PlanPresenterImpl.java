@@ -1,7 +1,9 @@
 package com.iti.flex_meals.homeActivity.planFragment.presenter;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 
+import com.iti.flex_meals.db.repository.MealFetchCallBack;
 import com.iti.flex_meals.db.repository.Repository;
 import com.iti.flex_meals.homeActivity.planFragment.model.MealPlan;
 import com.iti.flex_meals.homeActivity.planFragment.view.PlanFragment;
@@ -56,5 +58,39 @@ public class PlanPresenterImpl implements PlanPresenter {
         }).start();
     }
 
+    @Override
+    public void fetchMealsByDate(long date) {
+        repository.getMealByUidAndDate(repository.getUserUid(), date, new MealFetchCallBack() {
 
+            @Override
+            public void onBreakfastMealsFetched(LiveData<List<MealPlan>> breakfastMeals) {
+                breakfastMeals.observe(view.getViewLifecycleOwner(), new Observer<List<MealPlan>>() {
+                    @Override
+                    public void onChanged(List<MealPlan> mealPlans) {
+                        view.showBreakfastMeals(mealPlans);
+                    }
+                });
+            }
+
+            @Override
+            public void onLunchMealsFetched(LiveData<List<MealPlan>> lunchMeals) {
+                lunchMeals.observe(view.getViewLifecycleOwner(), new Observer<List<MealPlan>>() {
+                    @Override
+                    public void onChanged(List<MealPlan> mealPlans) {
+                        view.showLunchMeals(mealPlans);
+                    }
+                });
+            }
+
+            @Override
+            public void onDinnerMealsFetched(LiveData<List<MealPlan>> dinnerMeals) {
+                dinnerMeals.observe(view.getViewLifecycleOwner(), new Observer<List<MealPlan>>() {
+                    @Override
+                    public void onChanged(List<MealPlan> mealPlans) {
+                        view.showDinnerMeals(mealPlans);
+                    }
+                });
+            }
+        });
+    }
 }

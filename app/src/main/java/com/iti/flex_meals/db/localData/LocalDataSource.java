@@ -30,4 +30,9 @@ public interface LocalDataSource {
     LiveData<List<MealPlan>> getDinnerMealsForUid(String uid);
 
 
+    LiveData<List<MealPlan>> getBreakfastMealsByUidAndDate(String uid, long date);
+
+    LiveData<List<MealPlan>> getLunchMealsByUidAndDate(String uid, long date);
+
+    LiveData<List<MealPlan>> getDinnerMealsByUidAndDate(String uid, long date);
 }
