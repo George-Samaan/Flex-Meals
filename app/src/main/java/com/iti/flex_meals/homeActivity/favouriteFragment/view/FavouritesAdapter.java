@@ -57,29 +57,29 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Vi
             holder.mealName.setText(meal.getStrMeal());
             Glide.with(holder.itemView.getContext()).load(meal.getStrMealThumb()).into(holder.mealImage);
             holder.itemView.setOnClickListener(v -> onMealClick.onMealClick(meal.getIdMeal()));
+
         } else if (breakfastPlan.size() + favourites.size() > position) {
             MealPlan mealPlan = breakfastPlan.get(position - favourites.size());
-            Animation animation = AnimationUtils.loadAnimation(holder.itemView.getContext(), R.anim.scale_in_animation);
-            holder.itemView.startAnimation(animation);
-            holder.mealName.setText(mealPlan.getStrMeal());
-            Log.d("mealImage", mealPlan.getStrMealThumb());
-            Glide.with(holder.itemView.getContext()).load(mealPlan.getStrMealThumb()).into(holder.mealImage);
-            onMealPlanLonClickAndShortClick(holder, mealPlan);
+            setupMealPlanViewHolder(holder, mealPlan);
+
         } else if (lunchPlan.size() + breakfastPlan.size() + favourites.size() > position) {
             MealPlan mealPlan = lunchPlan.get(position - breakfastPlan.size() - favourites.size());
-            Animation animation = AnimationUtils.loadAnimation(holder.itemView.getContext(), R.anim.scale_in_animation);
-            holder.itemView.startAnimation(animation);
-            holder.mealName.setText(mealPlan.getStrMeal());
-            Glide.with(holder.itemView.getContext()).load(mealPlan.getStrMealThumb()).into(holder.mealImage);
-            onMealPlanLonClickAndShortClick(holder, mealPlan);
+            setupMealPlanViewHolder(holder, mealPlan);
+
+
         } else {
             MealPlan mealPlan = dinnerPlan.get(position - breakfastPlan.size() - lunchPlan.size() - favourites.size());
-            Animation animation = AnimationUtils.loadAnimation(holder.itemView.getContext(), R.anim.scale_in_animation);
-            holder.itemView.startAnimation(animation);
-            holder.mealName.setText(mealPlan.getStrMeal());
-            Glide.with(holder.itemView.getContext()).load(mealPlan.getStrMealThumb()).into(holder.mealImage);
-            onMealPlanLonClickAndShortClick(holder, mealPlan);
+            setupMealPlanViewHolder(holder, mealPlan);
+
         }
+    }
+
+    private void setupMealPlanViewHolder(@NonNull ViewHolder holder, MealPlan mealPlan) {
+        Animation animation = AnimationUtils.loadAnimation(holder.itemView.getContext(), R.anim.scale_in_animation);
+        holder.itemView.startAnimation(animation);
+        holder.mealName.setText(mealPlan.getStrMeal());
+        Glide.with(holder.itemView.getContext()).load(mealPlan.getStrMealThumb()).into(holder.mealImage);
+        onMealPlanLonClickAndShortClick(holder, mealPlan);
     }
 
     private void onMealPlanLonClickAndShortClick(@NonNull ViewHolder holder, MealPlan mealPlan) {

@@ -114,5 +114,14 @@ public class MealDetailPresenterImpl implements MealDetailPresenter {
         });
     }
 
+    @Override
+    public void getMealPlanDetailById(String id) {
+        MealPlan mealPlan = repository.getMealById(id);
+        if (mealPlan != null) {
+            view.showMealPlanDetails(mealPlan);
+        } else {
+            view.showError("Meal not found");
+        }
 
+    }
 }

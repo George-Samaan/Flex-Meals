@@ -29,5 +29,16 @@
         <item name="android:textColor">@color/colorText</item> <!-- Set text color -->
     </style>
 
+    <style name="MyDatePickerDialogTheme" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">@color/colorPrimary</item>
+    </style>
+
+    <style name="CustomDatePickerDialog" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
+        <item name="background">@color/colorBackgroundLight</item>
+        <item name="colorAccent">@color/colorAccent1</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="android:textColorPrimary">@color/colorText</item>
+    </style>
+
 
 </resources>

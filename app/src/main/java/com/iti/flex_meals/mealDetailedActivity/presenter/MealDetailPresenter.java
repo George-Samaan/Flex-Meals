@@ -20,4 +20,6 @@ public interface MealDetailPresenter {
 
     void getFavoriteMealDetail(String mealId);
 
+    void getMealPlanDetailById(String id);
+
 }

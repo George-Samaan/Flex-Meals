@@ -2,6 +2,7 @@ package com.iti.flex_meals.mealDetailedActivity.view;
 
 
 import static com.iti.flex_meals.utils.Utils.getDateOnly;
+import static com.iti.flex_meals.utils.Utils.isNetworkAvailable;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
@@ -34,7 +35,6 @@ import com.iti.flex_meals.db.localData.LocalDataSourceImpl;
 import com.iti.flex_meals.db.remoteData.RemoteDataSourceImpl;
 import com.iti.flex_meals.db.repository.RepositoryImpl;
 import com.iti.flex_meals.db.retrofit.pojo.mealDetails.MealsItem;
-import com.iti.flex_meals.db.room.MealDao;
 import com.iti.flex_meals.db.sharedPreferences.SharedPreferencesDataSourceImpl;
 import com.iti.flex_meals.homeActivity.planFragment.model.MealPlan;
 import com.iti.flex_meals.mealDetailedActivity.presenter.MealDetailPresenter;
@@ -44,6 +44,8 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -53,11 +55,11 @@ public class MealDetailedActivity extends AppCompatActivity implements MealDetai
     String key;
     String favKey;
     String randomKey;
+    String calendarKey;
     ImageView calendarBtn;
     MealDetailPresenter presenter;
     ImageView favClick;
     ImageView mealBackButton;
-    TextView meaID;
     TextView mealName;
     TextView mealArea;
     TextView mealCategory;
@@ -76,9 +78,7 @@ public class MealDetailedActivity extends AppCompatActivity implements MealDetai
     RadioButton selectedRadioButton;
     String selectedMeal;
     BottomSheetDialog bottomSheetDialog;
-    private MealDao mealDao; // Declare DAO
     private MealsItem currentMeal;
-    private RepositoryImpl repository;
     Calendar calendarDateOnly;
 
     @Override
@@ -98,43 +98,8 @@ public class MealDetailedActivity extends AppCompatActivity implements MealDetai
         checkFavoriteStatus();
         onFavouriteClick();
         onBackClick();
-        calendarBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                View bottomSheetView = getLayoutInflater().inflate(R.layout.calendar_bottomsheet, null);
-                bottomSheetDialog = new BottomSheetDialog(MealDetailedActivity.this);
-                bottomSheetDialog.setContentView(bottomSheetView);
-                bottomSheetDialog.show();
-                dateInput = bottomSheetView.findViewById(R.id.select_date_til);
-                selectDateTv = bottomSheetView.findViewById(R.id.select_date_tv);
-                addMeal = bottomSheetView.findViewById(R.id.add_meal);
-                selectedMealRadioGroup = bottomSheetView.findViewById(R.id.select_meal_rg);
-                dateInput.setOnClickListener(v1 -> showDatePicker());
-
-                addMeal.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (!isValidated()) {
-                            return;
-                        }
-                        selectedDate = selectDateTv.getText().toString();
-                        selectedRadioButtonText = selectedMealRadioGroup.getCheckedRadioButtonId();
-                        selectedRadioButton = bottomSheetView.findViewById(selectedRadioButtonText);
-                        selectedMeal = selectedRadioButton.getText().toString();
-                        Log.d("jeo", selectedDate);
-                        Log.d("jeo", selectedMeal);
-                        // i want to save here
-//                        String userUid = repository.getUserUid();
-                        MealPlan mealPlan = mapMealsItemToMealPlan(currentMeal);
-
-                        new Thread(() -> presenter.saveMealToMealPlan(mealPlan)).start();
-                        bottomSheetDialog.dismiss();
-                    }
-                });
-            }
-        });
+        onCalendarClick();
     }
-
     private MealPlan mapMealsItemToMealPlan(MealsItem meal) {
         MealPlan mealPlan = new MealPlan();
         mealPlan.setIdMeal(meal.getIdMeal());
@@ -161,20 +126,27 @@ public class MealDetailedActivity extends AppCompatActivity implements MealDetai
 
     private void showDatePicker() {
         Calendar calendar = Calendar.getInstance();
-        DatePickerDialog datePicker = new DatePickerDialog(this);
-        datePicker.setOnDateSetListener(new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                // Set the selected date in the calendar
-                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                calendar.set(Calendar.YEAR, year);
-                calendar.set(Calendar.MONTH, monthOfYear);
-                selectDateTv.setText(formatDate(calendar));
-                dateInput.setError(null);
-            }
-        });
+        DatePickerDialog datePicker = new DatePickerDialog(
+                this,
+                R.style.CustomDatePickerDialog, // Apply custom style here
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        // Set the selected date in the calendar
+                        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                        calendar.set(Calendar.YEAR, year);
+                        calendar.set(Calendar.MONTH, monthOfYear);
+                        selectDateTv.setText(formatDate(calendar));
+                        dateInput.setError(null);
+                    }
+                },
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)
+        );
         datePicker.show();
     }
+
 
     private String formatDate(Calendar calendar) {
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
@@ -200,6 +172,7 @@ public class MealDetailedActivity extends AppCompatActivity implements MealDetai
         key = getIntent().getStringExtra("MEAL_ID");
         randomKey = getIntent().getStringExtra("RANDOM_MEAL_ID");
         favKey = getIntent().getStringExtra("FAVORITE_ID");
+        calendarKey = getIntent().getStringExtra("CALENDAR_MEAL_ID");
     }
 
     private void initViews() {
@@ -225,6 +198,9 @@ public class MealDetailedActivity extends AppCompatActivity implements MealDetai
         }
         if (favKey != null && !favKey.isEmpty()) {
             presenter.getFavoriteMealDetail(favKey);
+        }
+        if (calendarKey != null && !calendarKey.isEmpty()) {
+            new Thread(() -> presenter.getMealPlanDetailById(calendarKey)).start();
         }
     }
 
@@ -253,26 +229,32 @@ public class MealDetailedActivity extends AppCompatActivity implements MealDetai
         adapter.setIngredientsAndMeasurements(meal.filterIngredientsAndMeasurements());
     }
 
-    private void youtubePlayerView(MealsItem meal) {
-        youTubePlayerView.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
-            @Override
-            public void onReady(@NonNull YouTubePlayer youTubePlayer) {
-                super.onReady(youTubePlayer);
-                String youtubeUrl = meal.getStrYoutube();
-                String videoId = null;
-                if (youtubeUrl != null && youtubeUrl.contains("=")) {
-                    String[] parts = youtubeUrl.split("=");
-                    if (parts.length > 1) {
-                        videoId = parts[1];
+    private <T> void youtubePlayerView(T meal) {
+        try {
+            // Use reflection to get the getStrYoutube method
+            Method getStrYoutubeMethod = meal.getClass().getMethod("getStrYoutube");
+            String youtubeUrl = (String) getStrYoutubeMethod.invoke(meal);
+
+            if (youtubeUrl == null || !youtubeUrl.contains("=") || !isNetworkAvailable(this)) {
+                youTubePlayerView.setVisibility(View.GONE);
+                Toast.makeText(MealDetailedActivity.this, "Error: No network or Invalid YouTube URL", Toast.LENGTH_SHORT).show();
+            } else {
+                youTubePlayerView.setVisibility(View.VISIBLE);
+                youTubePlayerView.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
+                    @Override
+                    public void onReady(@NonNull YouTubePlayer youTubePlayer) {
+                        super.onReady(youTubePlayer);
+                        String videoId = youtubeUrl.split("=")[1];
+                        youTubePlayer.cueVideo(videoId, 0);
                     }
-                }
-                if (videoId != null) {
-                    youTubePlayer.cueVideo(videoId, 0);
-                } else {
-                    Toast.makeText(MealDetailedActivity.this, "Error: Invalid YouTube URL", Toast.LENGTH_SHORT).show();
-                }
+                });
             }
-        });
+
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+            Toast.makeText(MealDetailedActivity.this, "Error: Unable to retrieve YouTube URL", Toast.LENGTH_SHORT).show();
+            youTubePlayerView.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -293,12 +275,31 @@ public class MealDetailedActivity extends AppCompatActivity implements MealDetai
     @Override
     public void showMessage(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-
     }
 
     @Override
     public LifecycleOwner getLifecycleOwner() {
         return this;
+    }
+
+    @Override
+    public void showMealPlanDetails(MealPlan mealPlan) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Log.d("meal_name", mealPlan.getStrMeal());
+                Glide.with(MealDetailedActivity.this).load(mealPlan.getStrMealThumb()).into(mealCover);
+                Log.d("mealPlanImg", "imagelink" + mealPlan.getStrMealThumb());
+                mealName.setText(mealPlan.getStrMeal());
+                mealInstructions.setText(mealPlan.getStrInstructions());
+                mealArea.setText(mealPlan.getStrArea());
+                mealCategory.setText(mealPlan.getStrCategory());
+//                youTubePlayerView.setVisibility(View.GONE);
+                youtubePlayerView(mealPlan);
+                adapter.setIngredientsAndMeasurements(mealPlan.filterIngredientsAndMeasurements());
+                calendarBtn.setVisibility(View.GONE);
+            }
+        });
     }
 
     private void checkFavoriteStatus() {
@@ -307,7 +308,7 @@ public class MealDetailedActivity extends AppCompatActivity implements MealDetai
             presenter.isMealExistsInFavourite(selectedKey, presenter.getUserUid(), exists -> {
                 runOnUiThread(() -> {
                     isFavorite = exists;
-                    updateImageFavouriteColor(presenter.getUserUid());  // Update the FAB color based on the favorite status
+                    updateImageFavouriteColor(presenter.getUserUid());  // Update the xml fav color based on the favorite status
                 });
             });
         }
@@ -324,13 +325,7 @@ public class MealDetailedActivity extends AppCompatActivity implements MealDetai
     private void onFavouriteClick() {
         favClick.setOnClickListener(v -> {
             if (!presenter.checkingCredentialOfUser()) {
-                Utils.showConfirmationDialog(
-                        this,
-                        "Login Required",
-                        "You must log in to save this meal",
-                        (dialog, which) -> navigateToStartAsUser(),  // Navigate to login
-                        (dialog, which) -> dialog.dismiss()  // Dismiss dialog
-                );
+                dialogLoginRequired();
                 return;
             }
             String selectedKey = getSelectedKey();
@@ -352,6 +347,63 @@ public class MealDetailedActivity extends AppCompatActivity implements MealDetai
         });
     }
 
+    private void dialogLoginRequired() {
+        Utils.showConfirmationDialog(
+                this,
+                "Login Required",
+                "You must log in to save this meal",
+                (dialog, which) -> navigateToStartAsUser(),  // Navigate to login
+                (dialog, which) -> dialog.dismiss()  // Dismiss dialog
+        );
+    }
+
+    private void onCalendarClick() {
+        calendarBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!presenter.checkingCredentialOfUser()) {
+                    dialogLoginRequired();
+                    return;
+                }
+                View bottomSheetView = getLayoutInflater().inflate(R.layout.calendar_bottomsheet, null);
+                intiBottomSheet(bottomSheetView);
+                dateInput.setOnClickListener(v1 -> showDatePicker());
+                addMeal.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (!isValidated()) {
+                            return;
+                        }
+                        extractingDataFromBottomSheet();
+                        Log.d("jeo", selectedDate);
+                        Log.d("jeo", selectedMeal);
+                        // i want to save here
+                        MealPlan mealPlan = mapMealsItemToMealPlan(currentMeal);
+                        presenter.saveMealToMealPlan(mealPlan);    //ehtmal tehtag thread lw 3amal crash tant
+                        bottomSheetDialog.dismiss();
+                    }
+
+                    private void extractingDataFromBottomSheet() {
+                        selectedDate = selectDateTv.getText().toString();
+                        selectedRadioButtonText = selectedMealRadioGroup.getCheckedRadioButtonId();
+                        selectedRadioButton = bottomSheetView.findViewById(selectedRadioButtonText);
+                        selectedMeal = selectedRadioButton.getText().toString();
+                    }
+                });
+            }
+
+            private void intiBottomSheet(View bottomSheetView) {
+                bottomSheetDialog = new BottomSheetDialog(MealDetailedActivity.this);
+                bottomSheetDialog.setContentView(bottomSheetView);
+                bottomSheetDialog.show();
+                dateInput = bottomSheetView.findViewById(R.id.select_date_til);
+                selectDateTv = bottomSheetView.findViewById(R.id.select_date_tv);
+                addMeal = bottomSheetView.findViewById(R.id.add_meal);
+                selectedMealRadioGroup = bottomSheetView.findViewById(R.id.select_meal_rg);
+            }
+        });
+    }
+
     @Nullable
     private String getSelectedKey() {
         String selectedKey = null;
@@ -362,6 +414,8 @@ public class MealDetailedActivity extends AppCompatActivity implements MealDetai
             selectedKey = randomKey;
         } else if (key != null && !key.isEmpty()) {
             selectedKey = key;
+        } else if (calendarKey != null && !calendarKey.isEmpty()) {
+            selectedKey = calendarKey;
         }
         return selectedKey;
     }

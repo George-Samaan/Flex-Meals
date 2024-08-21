@@ -38,6 +38,12 @@ public class LocalDataSourceImpl implements LocalDataSource {
     }
 
     @Override
+    public MealPlan getMealById(String id) {
+        return mealPlanDao.getMealById(id);
+    }
+
+
+    @Override
     public LiveData<List<MealsItem>> getAllFavoriteMeals(String uid) {
         return mealDao.getAllFavoriteMeals(uid);
     }

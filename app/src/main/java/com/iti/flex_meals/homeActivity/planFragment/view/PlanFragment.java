@@ -2,6 +2,7 @@ package com.iti.flex_meals.homeActivity.planFragment.view;
 
 import static com.iti.flex_meals.utils.Utils.getDateOnly;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -27,6 +28,7 @@ import com.iti.flex_meals.homeActivity.favouriteFragment.view.FavouritesAdapter;
 import com.iti.flex_meals.homeActivity.planFragment.model.MealPlan;
 import com.iti.flex_meals.homeActivity.planFragment.presenter.PlanPresenter;
 import com.iti.flex_meals.homeActivity.planFragment.presenter.PlanPresenterImpl;
+import com.iti.flex_meals.mealDetailedActivity.view.MealDetailedActivity;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 
@@ -44,6 +46,7 @@ public class PlanFragment extends Fragment implements PlanView, OnMealClick, OnM
     RecyclerView recyclerViewLunch;
     RecyclerView recyclerViewDinner;
     MaterialCalendarView calendarView;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -77,21 +80,25 @@ public class PlanFragment extends Fragment implements PlanView, OnMealClick, OnM
         long dateOnly = getDateOnly(currentDate);
         presenter.fetchMealsByDate(dateOnly);
     }
+
     private void initRecyclerDinner() {
         dinnerItemView = new FavouritesAdapter(this, this);
         recyclerViewDinner.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false));
         recyclerViewDinner.setAdapter(dinnerItemView);
     }
+
     private void initRecyclerLunch() {
         recyclerViewBreakfast.setAdapter(breakfastItemView);
         recyclerViewLunch.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false));
         recyclerViewLunch.setAdapter(lunchItemView);
     }
+
     private void initRecyclerBreakfast() {
         breakfastItemView = new FavouritesAdapter(this, this);
         lunchItemView = new FavouritesAdapter(this, this);
         recyclerViewBreakfast.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false));
     }
+
     private void iniViews(@NonNull View view) {
         recyclerViewBreakfast = view.findViewById(R.id.rv_meals);
         recyclerViewLunch = view.findViewById(R.id.rv_lucnh);
@@ -101,6 +108,7 @@ public class PlanFragment extends Fragment implements PlanView, OnMealClick, OnM
 
     private void fetchDataByCalendar() {
         calendarView.setSelectedDate(CalendarDay.today());
+        Log.d("DateSend", "Date: " + CalendarDay.today().getDate());
         calendarView.setOnDateChangedListener((widget, date, selected) -> {
             if (selected) {
                 Calendar currentDate = Calendar.getInstance();
@@ -119,7 +127,9 @@ public class PlanFragment extends Fragment implements PlanView, OnMealClick, OnM
 
     @Override
     public void onMealClick(String id) {
-        // Implementation for meal click handling
+        Intent intent = new Intent(requireContext(), MealDetailedActivity.class);
+        intent.putExtra("CALENDAR_MEAL_ID", id);
+        startActivity(intent);
     }
 
     @Override
@@ -150,10 +160,9 @@ public class PlanFragment extends Fragment implements PlanView, OnMealClick, OnM
         });
     }
 
+
     @Override
     public void onMealDelete(String mealId) {
         presenter.deleteMeal(mealId);
-
     }
-
 }
