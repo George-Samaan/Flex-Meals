@@ -145,6 +145,23 @@ public class RepositoryImpl implements Repository {
 
     @Override
     public void removeMealFromMealPlan(String mealId) {
-        localDataSource.deleteMeal(mealId);
+        localDataSource.deletePlanMeal(mealId);
     }
+
+    @Override
+    public LiveData<List<MealPlan>> getBreakfastMeals(String uid) {
+        return localDataSource.getBreakfastMeals(uid);
+    }
+
+    @Override
+    public LiveData<List<MealPlan>> getLunchMealsForUid(String uid) {
+        return localDataSource.getLunchMealsForUid(uid);
+    }
+
+    @Override
+    public LiveData<List<MealPlan>> getDinnerMealsForUid(String uid) {
+        return localDataSource.getDinnerMealsForUid(uid);
+    }
+
+
 }

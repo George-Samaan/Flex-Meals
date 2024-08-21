@@ -70,4 +70,19 @@ public class LocalDataSourceImpl implements LocalDataSource {
         }).start();
     }
 
+    @Override
+    public LiveData<List<MealPlan>> getBreakfastMeals(String uid) {
+        return mealPlanDao.getBreakfastForUid(uid);
+    }
+
+    @Override
+    public LiveData<List<MealPlan>> getLunchMealsForUid(String uid) {
+        return mealPlanDao.getLunchMealsForUid(uid);
+    }
+
+    @Override
+    public LiveData<List<MealPlan>> getDinnerMealsForUid(String uid) {
+        return mealPlanDao.getDinnerMealsForUid(uid);
+    }
+
 }

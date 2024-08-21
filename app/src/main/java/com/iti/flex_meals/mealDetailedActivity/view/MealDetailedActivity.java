@@ -20,7 +20,6 @@ import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.room.Room;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -34,7 +33,6 @@ import com.iti.flex_meals.db.remoteData.RemoteDataSourceImpl;
 import com.iti.flex_meals.db.repository.RepositoryImpl;
 import com.iti.flex_meals.db.retrofit.pojo.mealDetails.MealsItem;
 import com.iti.flex_meals.db.room.MealDao;
-import com.iti.flex_meals.db.room.MealDatabase;
 import com.iti.flex_meals.db.sharedPreferences.SharedPreferencesDataSourceImpl;
 import com.iti.flex_meals.homeActivity.planFragment.model.MealPlan;
 import com.iti.flex_meals.mealDetailedActivity.presenter.MealDetailPresenter;
@@ -83,8 +81,8 @@ public class MealDetailedActivity extends AppCompatActivity implements MealDetai
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        MealDatabase db = Room.databaseBuilder(getApplicationContext(), MealDatabase.class, "meals_database").build();
-        mealDao = db.mealDao();
+//        MealDatabase db = Room.databaseBuilder(getApplicationContext(), MealDatabase.class, "meals_database").build();
+//        mealDao = db.mealDao();
         setContentView(R.layout.activity_mel_detailed);
         presenter = new MealDetailPresenterImpl(this,
                 new RepositoryImpl(SharedPreferencesDataSourceImpl.getInstance(this),
@@ -367,8 +365,5 @@ public class MealDetailedActivity extends AppCompatActivity implements MealDetai
         });
     }
 
-    public void onMealPlanSaved() {
-//        Toast.makeText(this, "Meal plan saved", Toast.LENGTH_SHORT).show();
-    }
 }
 

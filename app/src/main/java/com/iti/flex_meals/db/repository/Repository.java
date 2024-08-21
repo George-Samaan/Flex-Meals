@@ -60,12 +60,17 @@ public interface Repository {
 
     LiveData<MealsItem> getFavoriteMealById(String mealId);
 
-
     void isMealExistsInFavourite(String mealId, String uid, OnMealExistsCallback callback);
 
     void addMealToMealPlan(MealPlan mealPlan);
 
     void removeMealFromMealPlan(String mealId);
+
+    LiveData<List<MealPlan>> getBreakfastMeals(String uid);
+
+    LiveData<List<MealPlan>> getLunchMealsForUid(String uid);
+
+    LiveData<List<MealPlan>> getDinnerMealsForUid(String uid);
 
 
 }
