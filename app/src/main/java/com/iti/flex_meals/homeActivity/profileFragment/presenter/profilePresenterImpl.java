@@ -56,4 +56,36 @@ public class profilePresenterImpl implements ProfilePresenter {
             }
         });
     }
+
+    @Override
+    public void sync() {
+        fireBaseAuth.getFavouriteItems(repository.getUserUid(), new IFirebaseAuth.OnCompleteListener<List<MealsItem>>() {
+            @Override
+            public void onComplete(Task<List<MealsItem>> task) {
+                Log.d("gogo", "onComplete: " + task.getResult());
+                for (MealsItem item : task.getResult()) {
+//                    repository.clearFavoriteMeals();
+                    repository.addMealToFavourites(item);
+                    Log.d("gogo", "onComplete: " + item.getStrMeal());
+                }
+            }
+        });
+        fireBaseAuth.getMealPlanItems(repository.getUserUid(), new IFirebaseAuth.OnCompleteListener<List<MealPlan>>() {
+            @Override
+            public void onComplete(Task<List<MealPlan>> task) {
+                Log.d("gogo", "onComplete: " + task.getResult());
+                for (MealPlan item : task.getResult()) {
+                    repository.addMealToMealPlan(item);
+                    Log.d("gogo", "onComplete: " + item.getStrMeal());
+                }
+            }
+        });
+    }
+
+    @Override
+    public void getEmail() {
+        String email = repository.getEmail();
+        Log.d("JEOOOOOOOO", "getEmail: " + email);
+        view.showEmail(email);
+    }
 }

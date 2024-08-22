@@ -8,4 +8,7 @@ public interface HomePresenter {
     void showCountriesList();
 
     void showIngredients();
+
+    void fetchDataFromFirebase();
+
 }

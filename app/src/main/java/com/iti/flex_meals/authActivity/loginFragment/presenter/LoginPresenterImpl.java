@@ -1,15 +1,8 @@
 package com.iti.flex_meals.authActivity.loginFragment.presenter;
 
-import android.util.Log;
-
-import com.google.android.gms.tasks.Task;
 import com.iti.flex_meals.authActivity.loginFragment.view.LoginView;
 import com.iti.flex_meals.db.repository.Repository;
-import com.iti.flex_meals.db.retrofit.pojo.mealDetails.MealsItem;
 import com.iti.flex_meals.firebase.IFirebaseAuth;
-import com.iti.flex_meals.homeActivity.planFragment.model.MealPlan;
-
-import java.util.List;
 
 public class LoginPresenterImpl implements LoginPresenter {
     LoginView view;
@@ -107,28 +100,6 @@ public class LoginPresenterImpl implements LoginPresenter {
     @Override
     public void handleGuestLogin() {
         view.showGuestDialog();
-    }
-
-    @Override
-    public void fetchDataFromFirebase() {
-        firebaseAuth.getFavouriteItems(repository.getUserUid(), new IFirebaseAuth.OnCompleteListener<List<MealsItem>>() {
-            @Override
-            public void onComplete(Task<List<MealsItem>> task) {
-                Log.d("FIREBASE_DATA", "onComplete: " + task.getResult());
-                for (MealsItem item : task.getResult()) {
-                    repository.addMealToFavourites(item);
-                }
-            }
-        });
-        firebaseAuth.getMealPlanItems(repository.getUserUid(), new IFirebaseAuth.OnCompleteListener<List<MealPlan>>() {
-            @Override
-            public void onComplete(Task<List<MealPlan>> task) {
-                Log.d("FIREBASE_DATA", "onComplete: " + task.getResult());
-                for (MealPlan item : task.getResult()) {
-                    repository.addMealToMealPlan(item);
-                }
-            }
-        });
     }
 
 }
