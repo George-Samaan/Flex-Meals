@@ -20,7 +20,6 @@ import com.iti.flex_meals.homeActivity.planFragment.model.MealPlan;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class FireBaseAuthImpl implements IFirebaseAuth {
     private final FirebaseAuth mAuth;
@@ -194,6 +193,7 @@ public class FireBaseAuthImpl implements IFirebaseAuth {
                     .whereEqualTo("UID", uid)
                     .get()
                     .addOnCompleteListener(task -> {
+                        Log.d("TAGGGGGGGG", "getFavouriteItems: " + uid);
                         if (task.isSuccessful() && task.getResult() != null) {
                             Log.d("TAGGGGGGGG", "getFavouriteItems: " + task.getResult().size());
                             List<MealsItem> mealsItems = new ArrayList<>();
@@ -204,10 +204,37 @@ public class FireBaseAuthImpl implements IFirebaseAuth {
                             }
                             onCompleteListener.onComplete(Tasks.forResult(mealsItems));
                         } else {
-                            onCompleteListener.onComplete(Tasks.forException(Objects.requireNonNull(task.getException())));
+//                            onCompleteListener.onComplete(Tasks.forException(Objects.requireNonNull(task.getException())));
                         }
                     });
         }
+    }
+
+    @Override
+    public void getMealPlanItems(String userId, OnCompleteListener<List<MealPlan>> onCompleteListener) {
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            String uid = currentUser.getUid();
+            firestore.collection(MEAL_PLAN_COLLECTION)
+                    .whereEqualTo("UID", uid)
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        Log.d("TAGGGGGGGG", "getFavouriteItems: " + uid);
+                        if (task.isSuccessful() && task.getResult() != null) {
+                            Log.d("TAGGGGGGGG", "getFavouriteItems: " + task.getResult().size());
+                            List<MealPlan> mealPlans = new ArrayList<>();
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                MealPlan mealPlan = MealPlan.fromMap(document.getData());
+                                Log.d("TAGGGGGGGG", "getFavouriteItems: " + mealPlan.getStrMeal());
+                                mealPlans.add(mealPlan);
+                            }
+                            onCompleteListener.onComplete(Tasks.forResult(mealPlans));
+                        } else {
+//                            onCompleteListener.onComplete(Tasks.forException(Objects.requireNonNull(task.getException())));
+                        }
+                    });
+        }
+
     }
 }
 

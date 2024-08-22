@@ -19,6 +19,8 @@ public interface IFirebaseAuth {
 
     void getFavouriteItems(String userId, OnCompleteListener<List<MealsItem>> onCompleteListener);
 
+    void getMealPlanItems(String userId, OnCompleteListener<List<MealPlan>> onCompleteListener);
+
 
 
 

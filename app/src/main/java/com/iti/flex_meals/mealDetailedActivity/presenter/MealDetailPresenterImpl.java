@@ -43,22 +43,31 @@ public class MealDetailPresenterImpl implements MealDetailPresenter {
         });
     }
 
+//    @Override
+//    public void saveMealToFavorites(String id) {
+//        repository.getMealById(id, new OnMealDetailsNetworkCallBack() {
+//            @Override
+//            public void onSuccess(MealsItem mealDetails) {
+//                    String userUid = repository.getUserUid();
+//                    mealDetails.setUID(userUid);
+//                    repository.addMealToFavourites(mealDetails);
+//                    view.onMealSaved();
+//            }
+//            @Override
+//            public void onError(String message) {
+//                view.showError(message);
+//            }
+//        });
+//    }
+
     @Override
-    public void saveMealToFavorites(String id) {
-        repository.getMealById(id, new OnMealDetailsNetworkCallBack() {
-            @Override
-            public void onSuccess(MealsItem mealDetails) {
-                    String userUid = repository.getUserUid();
-                    mealDetails.setUID(userUid);
-                    repository.addMealToFavourites(mealDetails);
-                    view.onMealSaved();
-            }
-            @Override
-            public void onError(String message) {
-                view.showError(message);
-            }
-        });
+    public void saveMealToRoom(MealsItem mealsItem) {
+        String userUid = repository.getUserUid();
+        mealsItem.setUID(userUid);
+        repository.addMealToFavourites(mealsItem);
+        Log.d("MealDetailPresenter", "Meal saved successfully: " + mealsItem.getStrMeal());
     }
+
 
     @Override
     public void saveMealToMealPlan(MealPlan mealPlan) {

@@ -1,7 +1,28 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.FlexMeals" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
-    </style>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <!-- Main Color -->
+    <color name="colorPrimary">#00ADB5</color> <!-- Keep the same, or slightly darken if needed -->
+    <color name="colorPrimaryVariant">#005F65</color> <!-- Darkened variant -->
+    <color name="colorPrimaryLight">#00A3A7</color> <!-- Slightly darkened light variant -->
+
+    <!-- Accent Colors -->
+    <color name="colorAccent1">#FF7043</color> <!-- Slightly lighter accent -->
+    <color name="colorAccent2">#FFD54F</color> <!-- Slightly lighter accent -->
+
+    <!-- Neutral Colors -->
+    <color name="colorBackgroundLight">#1B1B1B</color> <!-- Dark background -->
+    <color name="colorBackgroundDark">#121212
+    </color> <!-- Even darker background for high contrast -->
+    <color name="colorText">#DDDDDD</color> <!-- Lightened text color for readability -->
+
+    <!-- Success/Info Colors -->
+    <color name="colorSuccess">#66BB6A</color> <!-- Lighter green for success -->
+    <color name="colorWarning">#FFB74D</color> <!-- Lighter orange for warning -->
+    <color name="colorError">#E57373</color> <!-- Lighter red for error -->
+
+    <color name="colorFavorite">#FF5252</color> <!-- Slightly lighter red for favorite -->
+    <color name="colorNonFavorite">@color/colorPrimaryVariant
+    </color> <!-- Reuse the darkened primary variant -->
 </resources>
