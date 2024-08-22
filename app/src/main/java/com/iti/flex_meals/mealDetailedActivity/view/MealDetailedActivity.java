@@ -262,10 +262,10 @@ public class MealDetailedActivity extends AppCompatActivity implements MealDetai
         Toast.makeText(this, errorMssg, Toast.LENGTH_SHORT).show();
     }
 
-    @Override
-    public void onMealSaved() {
-        Toast.makeText(MealDetailedActivity.this, "Added to favourites", Toast.LENGTH_SHORT).show();
-    }
+//    @Override
+//    public void onMealSaved() {
+//        Toast.makeText(MealDetailedActivity.this, "Added to favourites", Toast.LENGTH_SHORT).show();
+//    }
 
     @Override
     public void onMealRemoved() {
@@ -339,8 +339,7 @@ public class MealDetailedActivity extends AppCompatActivity implements MealDetai
                 Log.d("jeooo", "mas7thhha");
                 favClick.setColorFilter(ContextCompat.getColor(MealDetailedActivity.this, R.color.colorBackgroundLight));
             } else {
-                presenter.saveMealToFavorites(selectedKey);
-
+                presenter.saveMealToRoom(currentMeal);
                 favClick.setColorFilter(ContextCompat.getColor(MealDetailedActivity.this, R.color.colorAccent1));
             }
             isFavorite = !isFavorite;

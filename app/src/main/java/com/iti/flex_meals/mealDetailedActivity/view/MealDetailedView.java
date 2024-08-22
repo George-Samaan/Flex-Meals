@@ -11,7 +11,7 @@ public interface MealDetailedView {
 
     void showError(String errorMssg);
 
-    void onMealSaved();
+//    void onMealSaved();
 
     void onMealRemoved();
 
