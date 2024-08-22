@@ -20,6 +20,9 @@ public interface MealDao {
     @Delete
     void deleteMeal(MealsItem meal);
 
+//    @Query("DELETE FROM MealDetailsTable")
+//    void deleteAllMeals();
+
     @Query("SELECT * FROM MealDetailsTable WHERE idMeal = :id")
     MealsItem getMealById(String id);
 
@@ -31,5 +34,6 @@ public interface MealDao {
 
     @Query("SELECT * FROM MealDetailsTable WHERE idMeal = :mealId LIMIT 1")
     LiveData<MealsItem> getFavoriteMeal(String mealId);
+
 
 }

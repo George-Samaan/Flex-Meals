@@ -72,6 +72,7 @@ public class HomeFragment extends Fragment implements RandomMealView, OnCategory
         homePresenter = new HomePresenterImpl(this,
                 new RepositoryImpl(SharedPreferencesDataSourceImpl.getInstance(getContext()),
                         new RemoteDataSourceImpl(), new LocalDataSourceImpl(requireContext())));
+        homePresenter.fetchDataFromFirebase();
     }
 
     @Override

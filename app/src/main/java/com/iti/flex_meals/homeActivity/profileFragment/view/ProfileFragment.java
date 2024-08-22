@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,6 +23,8 @@ public class ProfileFragment extends Fragment implements ProfileView {
     Button backupBtn;
     ;
     ProfilePresenter presenter;
+    TextView emailtv;
+    Button sync;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -41,8 +44,18 @@ public class ProfileFragment extends Fragment implements ProfileView {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        backupBtn = view.findViewById(R.id.button2);
+        backupBtn = view.findViewById(R.id.backup);
+        emailtv = view.findViewById(R.id.textView);
+        sync = view.findViewById(R.id.sync);
         onBackUpClick();
+        presenter.getEmail();
+        sync.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                presenter.sync();
+            }
+        });
+
     }
 
     private void onBackUpClick() {
@@ -54,4 +67,9 @@ public class ProfileFragment extends Fragment implements ProfileView {
         });
     }
 
+    @Override
+    public void showEmail(String email) {
+        emailtv.setText(email);
+        emailtv.setVisibility(View.VISIBLE);
+    }
 }

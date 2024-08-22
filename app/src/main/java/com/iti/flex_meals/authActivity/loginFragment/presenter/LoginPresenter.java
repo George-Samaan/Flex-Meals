@@ -7,6 +7,4 @@ public interface LoginPresenter {
 
     void handleGuestLogin();
 
-
-    void fetchDataFromFirebase();
 }
