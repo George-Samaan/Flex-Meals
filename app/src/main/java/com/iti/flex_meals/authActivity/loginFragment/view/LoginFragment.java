@@ -35,6 +35,7 @@ import com.iti.flex_meals.db.repository.RepositoryImpl;
 import com.iti.flex_meals.db.sharedPreferences.SharedPreferencesDataSourceImpl;
 import com.iti.flex_meals.firebase.FireBaseAuthImpl;
 import com.iti.flex_meals.homeActivity.HomeActivity;
+import com.iti.flex_meals.utils.NetworkUtility;
 import com.iti.flex_meals.utils.Utils;
 
 
@@ -48,7 +49,7 @@ public class LoginFragment extends Fragment implements LoginView {
     private GoogleSignInClient mGoogleSignInClient;
     SignInButton googleSignInButton;
     private final int RC_SIGN_IN = 20;
-
+    boolean isNetworkAvailable;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -70,6 +71,7 @@ public class LoginFragment extends Fragment implements LoginView {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        NetworkUtility.getInstance(requireContext());
         buildGoogle();
         initViews(view);
         onGoogleClick();
@@ -95,13 +97,16 @@ public class LoginFragment extends Fragment implements LoginView {
 
     private void onGoogleClick() {
         googleSignInButton.setOnClickListener(v -> {
-            if (Utils.isNetworkAvailable(requireContext())) {
+            // Check the network status before starting Google Sign-In
+            isNetworkAvailable = NetworkUtility.getInstance(requireContext()).getNetworkStatus();
+            if (isNetworkAvailable) {
                 startGoogleSignIn();
             } else {
-                Toast.makeText(requireContext(), "Please check your internet connection", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), R.string.please_check_your_internet_connection, Toast.LENGTH_SHORT).show();
             }
         });
     }
+
 
     private void startGoogleSignIn() {
         Intent intent = mGoogleSignInClient.getSignInIntent();
@@ -138,7 +143,8 @@ public class LoginFragment extends Fragment implements LoginView {
 
     private void onLoginClick() {
         btnLogin.setOnClickListener(v -> {
-            if (Utils.isNetworkAvailable(getContext())) {
+            isNetworkAvailable = NetworkUtility.getInstance(requireContext()).getNetworkStatus();
+            if (isNetworkAvailable) {
                 String email = emailEditText.getText().toString();
                 String password = passwordEditText.getText().toString();
                 if (validateInput(email, password)) {
@@ -146,7 +152,7 @@ public class LoginFragment extends Fragment implements LoginView {
                     loginPresenter.performFirebaseLogin(email, password);
                 }
             } else {
-                Toast.makeText(getContext(), "Please check your internet connection", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.please_check_your_internet_connection, Toast.LENGTH_SHORT).show();
             }
         });
     }

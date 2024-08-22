@@ -58,6 +58,9 @@ public interface Repository {
 
     LiveData<List<MealsItem>> getAllFavoriteMeals(String uid);
 
+    LiveData<List<MealPlan>> getAllMealPlanItems(String uid);
+
+
     LiveData<MealsItem> getFavoriteMealById(String mealId);
 
     void isMealExistsInFavourite(String mealId, String uid, OnMealExistsCallback callback);

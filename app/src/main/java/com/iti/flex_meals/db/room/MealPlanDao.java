@@ -22,6 +22,9 @@ public interface MealPlanDao {
     @Query("SELECT * FROM MEAL_PLAN WHERE idMeal = :id")
     MealPlan getMealById(String id);
 
+    @Query("SELECT * FROM MEAL_PLAN WHERE UID = :uid")
+    LiveData<List<MealPlan>> getAllMealsForUid(String uid);
+
 
     @Query("SELECT * FROM MEAL_PLAN WHERE UID = :uid AND mealType = 'Breakfast'")
     LiveData<List<MealPlan>> getBreakfastForUid(String uid);

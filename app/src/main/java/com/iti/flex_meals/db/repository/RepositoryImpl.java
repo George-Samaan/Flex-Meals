@@ -129,6 +129,11 @@ public class RepositoryImpl implements Repository {
     }
 
     @Override
+    public LiveData<List<MealPlan>> getAllMealPlanItems(String uid) {
+        return localDataSource.getAllMealPlanItems(uid);
+    }
+
+    @Override
     public LiveData<MealsItem> getFavoriteMealById(String mealId) {
         return localDataSource.getFavoriteMeal(mealId);
     }

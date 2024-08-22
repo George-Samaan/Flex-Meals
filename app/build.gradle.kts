@@ -59,6 +59,8 @@ dependencies {
     implementation ("com.google.firebase:firebase-auth:19.4.0")
     implementation("com.google.firebase:firebase-database:21.0.0")
     implementation ("com.google.android.gms:play-services-auth:19.0.0")
+    implementation("com.google.firebase:firebase-firestore")
+
 
     //retrofit
     implementation("com.squareup.retrofit2:retrofit:2.11.0")
@@ -81,6 +83,10 @@ dependencies {
     //Calendar
     implementation("com.github.prolificinteractive:material-calendarview:2.0.0")
     implementation("com.jakewharton.threetenabp:threetenabp:1.4.0")
+
+    //swipeRefresh
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+
 
 
 

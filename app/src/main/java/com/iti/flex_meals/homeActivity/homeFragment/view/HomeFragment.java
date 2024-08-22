@@ -2,7 +2,11 @@ package com.iti.flex_meals.homeActivity.homeFragment.view;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,6 +25,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
@@ -36,6 +41,7 @@ import com.iti.flex_meals.db.retrofit.pojo.randomMeal.RandomMealItem;
 import com.iti.flex_meals.db.sharedPreferences.SharedPreferencesDataSourceImpl;
 import com.iti.flex_meals.homeActivity.homeFragment.presenter.HomePresenterImpl;
 import com.iti.flex_meals.mealDetailedActivity.view.MealDetailedActivity;
+import com.iti.flex_meals.utils.NetworkUtility;
 
 import java.util.List;
 
@@ -52,7 +58,12 @@ public class HomeFragment extends Fragment implements RandomMealView, OnCategory
     private RecyclerView ingredientsRecyclerView;
     private CountriesListAdapter countriesListAdapter;
     private IngredientsAdapter ingredientsAdapter;
-    private TextView textView;
+    SwipeRefreshLayout swipeRefreshLayout;
+    boolean isNetworkAvailable;
+    TextView categories;
+    TextView countries;
+    TextView ingredients;
+    private TextView seeMore;
 
 
     @Override
@@ -70,6 +81,12 @@ public class HomeFragment extends Fragment implements RandomMealView, OnCategory
         return inflater.inflate(R.layout.fragment_home, container, false);
 
     }
+    private BroadcastReceiver networkChangeReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            updateSwipeRefreshLayout();
+        }
+    };
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -77,17 +94,77 @@ public class HomeFragment extends Fragment implements RandomMealView, OnCategory
         initViews(view);
         initRecyclerView();
         onSeemMoreClick();
+        NetworkUtility.getInstance(requireContext());
 
+        fetchData();
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if (NetworkUtility.getInstance(requireContext()).getNetworkStatus()) {
+                    fetchData();
+                }
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+        updateSwipeRefreshLayout();
+
+    }
+
+    private void updateSwipeRefreshLayout() {
+        isNetworkAvailable = NetworkUtility.getInstance(requireContext()).getNetworkStatus();
+        swipeRefreshLayout.setEnabled(isNetworkAvailable);
+        updateDataVisibility();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        requireContext().registerReceiver(networkChangeReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        requireContext().unregisterReceiver(networkChangeReceiver);
+    }
+
+
+    private void updateDataVisibility() {
+        boolean isNetworkAvailable = NetworkUtility.getInstance(requireContext()).getNetworkStatus();
+        if (isNetworkAvailable) {
+            // NETWORK AVAILABLE
+            categoriesRecyclerView.setVisibility(View.VISIBLE);
+            countriesRecyclerView.setVisibility(View.VISIBLE);
+            ingredientsRecyclerView.setVisibility(View.VISIBLE);
+            seeMore.setVisibility(View.VISIBLE);
+            categories.setVisibility(View.VISIBLE);
+            countries.setVisibility(View.VISIBLE);
+            ingredients.setVisibility(View.VISIBLE);
+            progressBarCategories.setVisibility(View.GONE);
+            progressBarIngredients.setVisibility(View.GONE);
+            progressBarCountries.setVisibility(View.GONE);
+            fetchData();
+        } else {
+            categoriesRecyclerView.setVisibility(View.GONE);
+            countriesRecyclerView.setVisibility(View.GONE);
+            ingredientsRecyclerView.setVisibility(View.GONE);
+            progressBarCategories.setVisibility(View.GONE);
+            progressBarIngredients.setVisibility(View.GONE);
+            progressBarCountries.setVisibility(View.GONE);
+            seeMore.setVisibility(View.GONE);
+//            categories.setVisibility(View.GONE);
+            countries.setVisibility(View.GONE);
+            ingredients.setVisibility(View.GONE);
+        }
+    }
+
+    private void fetchData() {
         homePresenter.showRandomMeal();
         homePresenter.showMealCategories();
         homePresenter.showCountriesList();
         homePresenter.showIngredients();
         homePresenter.showIngredients();
-
-
-
     }
-
 
     private void initRecyclerView() {
         categoriesListAdapter = new CategoriesListAdapter();
@@ -114,7 +191,11 @@ public class HomeFragment extends Fragment implements RandomMealView, OnCategory
         categoriesRecyclerView = view.findViewById(R.id.categoryRecView);
         countriesRecyclerView = view.findViewById(R.id.countriesRecView);
         ingredientsRecyclerView = view.findViewById(R.id.ingredientdRecView);
-        textView = view.findViewById(R.id.seeMoreTxt);
+        swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
+        seeMore = view.findViewById(R.id.seeMoreTxt);
+        categories = view.findViewById(R.id.categoriesTextView);
+        countries = view.findViewById(R.id.countriesTextView);
+        ingredients = view.findViewById(R.id.ingredientsTextView);
     }
 
     @Override
@@ -191,7 +272,6 @@ public class HomeFragment extends Fragment implements RandomMealView, OnCategory
         ingredientsAdapter.notifyDataSetChanged();
     }
 
-
     @Override
     public void onCategoryClick(String categoryName) {
         Intent intent = new Intent(requireContext(), ViewerListCategoriesActivity.class);
@@ -207,7 +287,7 @@ public class HomeFragment extends Fragment implements RandomMealView, OnCategory
     }
 
     private void onSeemMoreClick() {
-        textView.setOnClickListener(new View.OnClickListener() {
+        seeMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(requireContext(), ViewerListCategoriesActivity.class);

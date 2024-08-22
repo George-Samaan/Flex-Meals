@@ -6,7 +6,9 @@ import androidx.annotation.NonNull;
 import androidx.room.Entity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Entity(tableName = "meal_plan", primaryKeys = {"idMeal", "UID"})
 public class MealPlan {
@@ -584,4 +586,120 @@ public class MealPlan {
             list.add(new Pair<>(ingredient, measure));
         }
     }
+
+    public static MealPlan fromMap(Map<String, Object> map) {
+        MealPlan mealPlan = new MealPlan();
+        mealPlan.setIdMeal((String) map.get("idMeal"));
+        mealPlan.setUID((String) map.get("UID"));
+        mealPlan.setDate((Long) map.get("date"));
+        mealPlan.setMealType((String) map.get("mealType"));
+        mealPlan.setDayName((String) map.get("dayName"));
+        mealPlan.setStrIngredient1((String) map.get("strIngredient1"));
+        mealPlan.setStrIngredient2((String) map.get("strIngredient2"));
+        mealPlan.setStrIngredient3((String) map.get("strIngredient3"));
+        mealPlan.setStrIngredient4((String) map.get("strIngredient4"));
+        mealPlan.setStrIngredient5((String) map.get("strIngredient5"));
+        mealPlan.setStrIngredient6((String) map.get("strIngredient6"));
+        mealPlan.setStrIngredient7((String) map.get("strIngredient7"));
+        mealPlan.setStrIngredient8((String) map.get("strIngredient8"));
+        mealPlan.setStrIngredient9((String) map.get("strIngredient9"));
+        mealPlan.setStrIngredient10((String) map.get("strIngredient10"));
+        mealPlan.setStrIngredient11((String) map.get("strIngredient11"));
+        mealPlan.setStrIngredient12((String) map.get("strIngredient12"));
+        mealPlan.setStrIngredient13((String) map.get("strIngredient13"));
+        mealPlan.setStrIngredient14((String) map.get("strIngredient14"));
+        mealPlan.setStrIngredient15((String) map.get("strIngredient15"));
+        mealPlan.setStrIngredient16((String) map.get("strIngredient16"));
+        mealPlan.setStrIngredient17((String) map.get("strIngredient17"));
+        mealPlan.setStrIngredient18((String) map.get("strIngredient18"));
+        mealPlan.setStrIngredient19((String) map.get("strIngredient19"));
+        mealPlan.setStrIngredient20((String) map.get("strIngredient20"));
+        mealPlan.setStrCategory((String) map.get("strCategory"));
+        mealPlan.setStrArea((String) map.get("strArea"));
+        mealPlan.setStrInstructions((String) map.get("strInstructions"));
+        mealPlan.setStrMealThumb((String) map.get("strMealThumb"));
+        mealPlan.setStrYoutube((String) map.get("strYoutube"));
+        mealPlan.setStrMeal((String) map.get("strMeal"));
+        mealPlan.setStrMeasure1((String) map.get("strMeasure1"));
+        mealPlan.setStrMeasure2((String) map.get("strMeasure2"));
+        mealPlan.setStrMeasure3((String) map.get("strMeasure3"));
+        mealPlan.setStrMeasure4((String) map.get("strMeasure4"));
+        mealPlan.setStrMeasure5((String) map.get("strMeasure5"));
+        mealPlan.setStrMeasure6((String) map.get("strMeasure6"));
+        mealPlan.setStrMeasure7((String) map.get("strMeasure7"));
+        mealPlan.setStrMeasure8((String) map.get("strMeasure8"));
+        mealPlan.setStrMeasure9((String) map.get("strMeasure9"));
+        mealPlan.setStrMeasure10((String) map.get("strMeasure10"));
+        mealPlan.setStrMeasure11((String) map.get("strMeasure11"));
+        mealPlan.setStrMeasure12((String) map.get("strMeasure12"));
+        mealPlan.setStrMeasure13((String) map.get("strMeasure13"));
+        mealPlan.setStrMeasure14((String) map.get("strMeasure14"));
+        mealPlan.setStrMeasure15((String) map.get("strMeasure15"));
+        mealPlan.setStrMeasure16((String) map.get("strMeasure16"));
+        mealPlan.setStrMeasure17((String) map.get("strMeasure17"));
+        mealPlan.setStrMeasure18((String) map.get("strMeasure18"));
+        mealPlan.setStrMeasure19((String) map.get("strMeasure19"));
+        mealPlan.setStrMeasure20((String) map.get("strMeasure20"));
+        mealPlan.setStrSource((String) map.get("strSource"));
+        return mealPlan;
+    }
+
+    public Map<String, Object> toMap() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("idMeal", idMeal);
+        map.put("UID", UID);
+        map.put("date", date);
+        map.put("mealType", mealType);
+        map.put("dayName", dayName);
+        map.put("strIngredient1", strIngredient1);
+        map.put("strIngredient2", strIngredient2);
+        map.put("strIngredient3", strIngredient3);
+        map.put("strIngredient4", strIngredient4);
+        map.put("strIngredient5", strIngredient5);
+        map.put("strIngredient6", strIngredient6);
+        map.put("strIngredient7", strIngredient7);
+        map.put("strIngredient8", strIngredient8);
+        map.put("strIngredient9", strIngredient9);
+        map.put("strIngredient10", strIngredient10);
+        map.put("strIngredient11", strIngredient11);
+        map.put("strIngredient12", strIngredient12);
+        map.put("strIngredient13", strIngredient13);
+        map.put("strIngredient14", strIngredient14);
+        map.put("strIngredient15", strIngredient15);
+        map.put("strIngredient16", strIngredient16);
+        map.put("strIngredient17", strIngredient17);
+        map.put("strIngredient18", strIngredient18);
+        map.put("strIngredient19", strIngredient19);
+        map.put("strIngredient20", strIngredient20);
+        map.put("strCategory", strCategory);
+        map.put("strArea", strArea);
+        map.put("strInstructions", strInstructions);
+        map.put("strMealThumb", strMealThumb);
+        map.put("strYoutube", strYoutube);
+        map.put("strMeal", strMeal);
+        map.put("strMeasure1", strMeasure1);
+        map.put("strMeasure2", strMeasure2);
+        map.put("strMeasure3", strMeasure3);
+        map.put("strMeasure4", strMeasure4);
+        map.put("strMeasure5", strMeasure5);
+        map.put("strMeasure6", strMeasure6);
+        map.put("strMeasure7", strMeasure7);
+        map.put("strMeasure8", strMeasure8);
+        map.put("strMeasure9", strMeasure9);
+        map.put("strMeasure10", strMeasure10);
+        map.put("strMeasure11", strMeasure11);
+        map.put("strMeasure12", strMeasure12);
+        map.put("strMeasure13", strMeasure13);
+        map.put("strMeasure14", strMeasure14);
+        map.put("strMeasure15", strMeasure15);
+        map.put("strMeasure16", strMeasure16);
+        map.put("strMeasure17", strMeasure17);
+        map.put("strMeasure18", strMeasure18);
+        map.put("strMeasure19", strMeasure19);
+        map.put("strMeasure20", strMeasure20);
+        map.put("strSource", strSource);
+        return map;
+    }
+
+
 }
