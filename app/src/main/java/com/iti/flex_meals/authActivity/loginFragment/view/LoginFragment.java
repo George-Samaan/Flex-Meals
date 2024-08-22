@@ -101,6 +101,8 @@ public class LoginFragment extends Fragment implements LoginView {
             isNetworkAvailable = NetworkUtility.getInstance(requireContext()).getNetworkStatus();
             if (isNetworkAvailable) {
                 startGoogleSignIn();
+                loginPresenter.fetchDataFromFirebase();
+
             } else {
                 Toast.makeText(requireContext(), R.string.please_check_your_internet_connection, Toast.LENGTH_SHORT).show();
             }
@@ -150,6 +152,7 @@ public class LoginFragment extends Fragment implements LoginView {
                 if (validateInput(email, password)) {
                     showLoadingIndicator();
                     loginPresenter.performFirebaseLogin(email, password);
+                    loginPresenter.fetchDataFromFirebase();
                 }
             } else {
                 Toast.makeText(getContext(), R.string.please_check_your_internet_connection, Toast.LENGTH_SHORT).show();
