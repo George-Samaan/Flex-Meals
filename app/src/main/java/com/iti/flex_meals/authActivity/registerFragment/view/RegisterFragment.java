@@ -17,6 +17,7 @@ import com.iti.flex_meals.R;
 import com.iti.flex_meals.authActivity.registerFragment.presenter.RegisterPresenter;
 import com.iti.flex_meals.authActivity.registerFragment.presenter.RegisterPresenterImpl;
 import com.iti.flex_meals.firebase.FireBaseAuthImpl;
+import com.iti.flex_meals.utils.NetworkUtility;
 import com.iti.flex_meals.utils.Utils;
 
 public class RegisterFragment extends Fragment implements RegisterView {
@@ -34,8 +35,7 @@ public class RegisterFragment extends Fragment implements RegisterView {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_register, container, false);
     }
@@ -44,6 +44,7 @@ public class RegisterFragment extends Fragment implements RegisterView {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         presenter = new RegisterPresenterImpl(this, new FireBaseAuthImpl());
+        NetworkUtility.getInstance(requireContext());
         initViews(view);
         onBackClick();
         onRegisterClick();
@@ -71,15 +72,17 @@ public class RegisterFragment extends Fragment implements RegisterView {
         btn_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (Utils.isNetworkAvailable(requireContext())) {
+                boolean isNetworkAvailable = NetworkUtility.getInstance(requireContext()).getNetworkStatus();
+                if (isNetworkAvailable) {
                     String email = edt_email.getText().toString();
                     String password = edt_password.getText().toString();
                     String confirmPassword = edt_confirmPassword.getText().toString();
                     if (validateInput(email, password, confirmPassword)) {
                         presenter.performRegisterFireBase(email, password);
                     }
+                } else {
+                    Toast.makeText(getContext(), R.string.please_check_your_internet_connection, Toast.LENGTH_SHORT).show();
                 }
-                Toast.makeText(getContext(), "Please check your internet connection", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -120,8 +123,7 @@ public class RegisterFragment extends Fragment implements RegisterView {
             edt_password.setError("Please enter password");
             return false;
         }
-        if(!password.equals(confirmPassword))
-        {
+        if (!password.equals(confirmPassword)) {
             edt_confirmPassword.setError("Password doesn't match");
             return false;
         }
@@ -129,7 +131,7 @@ public class RegisterFragment extends Fragment implements RegisterView {
             edt_email.setError("Invalid email format");
             return false;
         }
-        if(!isValidPassword(password)){
+        if (!isValidPassword(password)) {
             edt_password.setError("Password must be at least 4 characters long, include one digit, one uppercase letter, one special character, and no spaces");
             return false;
         }

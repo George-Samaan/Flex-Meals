@@ -49,6 +49,11 @@ public class LocalDataSourceImpl implements LocalDataSource {
     }
 
     @Override
+    public LiveData<List<MealPlan>> getAllMealPlanItems(String uid) {
+        return mealPlanDao.getAllMealsForUid(uid);
+    }
+
+    @Override
     public void isMealExistsInFavourite(String mealId, String uid, OnMealExistsCallback callback) {
         new Thread(() -> {
             boolean exists = mealDao.isMealExistsInFavourite(mealId, uid);

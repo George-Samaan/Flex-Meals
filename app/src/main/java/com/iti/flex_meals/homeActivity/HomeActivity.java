@@ -22,15 +22,17 @@ import com.iti.flex_meals.db.remoteData.RemoteDataSourceImpl;
 import com.iti.flex_meals.db.repository.Repository;
 import com.iti.flex_meals.db.repository.RepositoryImpl;
 import com.iti.flex_meals.db.sharedPreferences.SharedPreferencesDataSourceImpl;
+import com.iti.flex_meals.utils.NetworkUtility;
 import com.iti.flex_meals.utils.Utils;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity implements NetworkUtility.NetworkChangeListener {
     NavigationView navigationView;
     DrawerLayout drawerLayout;
     ImageView menuIcon;
     TextView tv_title;
     NavController navController;
     Repository repository;
+    TextView networkBanner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,8 +45,8 @@ public class HomeActivity extends AppCompatActivity {
         setDrawerItemListeners();
         repository = new RepositoryImpl(new SharedPreferencesDataSourceImpl(this),
                 new RemoteDataSourceImpl(), new LocalDataSourceImpl(getApplication()));
-//        drawerLayout.setScrimColor(Color.argb(50, 0, 0, 0));
-
+        NetworkUtility.getInstance(this).setNetworkChangeListener(this);
+        updateNetworkBanner(NetworkUtility.getInstance(this).getNetworkStatus());
     }
 
     private boolean isGuestUser() {
@@ -104,6 +106,7 @@ public class HomeActivity extends AppCompatActivity {
         drawerLayout = findViewById(R.id.main);
         menuIcon = findViewById(R.id.menuIcon);
         tv_title = findViewById(R.id.pagetitle);
+        networkBanner = findViewById(R.id.network_error_banner);
     }
 
     private void showGuestLoginDialog() {
@@ -173,5 +176,47 @@ public class HomeActivity extends AppCompatActivity {
             super.onBackPressed();
         }
     }
+
+    @Override
+    public void onNetworkChange(boolean isNetworkAvailable) {
+        updateNetworkBanner(isNetworkAvailable);
+    }
+
+    private void updateNetworkBanner(boolean networkStatus) {
+        networkBanner.setVisibility(networkStatus ? View.GONE : View.VISIBLE);
+    }
+
+//    @Override
+//    protected void onPause() {
+//        super.onPause();
+//        NetworkUtility.getInstance(this).setNetworkChangeListener(this);
+//        updateNetworkBanner(NetworkUtility.getInstance(this).getNetworkStatus());
+//    }
+//
+//    @Override
+//    protected void onStop() {
+//        super.onStop();
+//        NetworkUtility.getInstance(this).setNetworkChangeListener(this);
+//        updateNetworkBanner(NetworkUtility.getInstance(this).getNetworkStatus());
+//    }
+//
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+//        NetworkUtility.getInstance(this).setNetworkChangeListener(this);
+//        updateNetworkBanner(NetworkUtility.getInstance(this).getNetworkStatus());
+//    }
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        NetworkUtility.getInstance(this).setNetworkChangeListener(this);
+//        updateNetworkBanner(NetworkUtility.getInstance(this).getNetworkStatus());
+//    }
+//
+//    @Override
+//    protected void onDestroy() {
+//        super.onDestroy();
+//        NetworkUtility.getInstance(this).unregisterNetworkCallback();
+//    }
 }
 

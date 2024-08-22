@@ -1,12 +1,15 @@
 package com.iti.flex_meals.db.retrofit.pojo.mealDetails;
 
+
 import android.util.Pair;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Entity(tableName = "MealDetailsTable", primaryKeys = {"idMeal", "UID"})
 public class MealsItem {
@@ -73,6 +76,7 @@ public class MealsItem {
     public void setStrArea(String strArea) {
         this.strArea = strArea;
     }
+
     private String strCategory;
     private String strIngredient13;
     private String strIngredient16;
@@ -116,6 +120,7 @@ public class MealsItem {
     public void setStrIngredient7(String strIngredient7) {
         this.strIngredient7 = strIngredient7;
     }
+
     private String strIngredient19;
     private String strInstructions;
     private String strIngredient1;
@@ -169,6 +174,7 @@ public class MealsItem {
     public void setStrMeasure11(String strMeasure11) {
         this.strMeasure11 = strMeasure11;
     }
+
     private String strIngredient6;
     private String strIngredient9;
     private String strIngredient8;
@@ -246,6 +252,7 @@ public class MealsItem {
     public void setStrMeasure15(String strMeasure15) {
         this.strMeasure15 = strMeasure15;
     }
+
     private String strMeasure7;
     private String strMeasure8;
     private String strMeasure5;
@@ -489,4 +496,132 @@ public class MealsItem {
             list.add(new Pair<>(ingredient, measure));
         }
     }
+
+    public static MealsItem fromMap(Map<String, Object> map) {
+        MealsItem mealsItem = new MealsItem();
+
+        // Set the primary keys
+        mealsItem.setIdMeal((String) map.get("idMeal"));
+        mealsItem.setUID((String) map.get("UID"));
+
+        // Set ingredients
+        mealsItem.setStrIngredient1((String) map.get("strIngredient1"));
+        mealsItem.setStrIngredient2((String) map.get("strIngredient2"));
+        mealsItem.setStrIngredient3((String) map.get("strIngredient3"));
+        mealsItem.setStrIngredient4((String) map.get("strIngredient4"));
+        mealsItem.setStrIngredient5((String) map.get("strIngredient5"));
+        mealsItem.setStrIngredient6((String) map.get("strIngredient6"));
+        mealsItem.setStrIngredient7((String) map.get("strIngredient7"));
+        mealsItem.setStrIngredient8((String) map.get("strIngredient8"));
+        mealsItem.setStrIngredient9((String) map.get("strIngredient9"));
+        mealsItem.setStrIngredient10((String) map.get("strIngredient10"));
+        mealsItem.setStrIngredient11((String) map.get("strIngredient11"));
+        mealsItem.setStrIngredient12((String) map.get("strIngredient12"));
+        mealsItem.setStrIngredient13((String) map.get("strIngredient13"));
+        mealsItem.setStrIngredient14((String) map.get("strIngredient14"));
+        mealsItem.setStrIngredient15((String) map.get("strIngredient15"));
+        mealsItem.setStrIngredient16((String) map.get("strIngredient16"));
+        mealsItem.setStrIngredient17((String) map.get("strIngredient17"));
+        mealsItem.setStrIngredient18((String) map.get("strIngredient18"));
+        mealsItem.setStrIngredient19((String) map.get("strIngredient19"));
+        mealsItem.setStrIngredient20((String) map.get("strIngredient20"));
+
+        // Set measurements
+        mealsItem.setStrMeasure1((String) map.get("strMeasure1"));
+        mealsItem.setStrMeasure2((String) map.get("strMeasure2"));
+        mealsItem.setStrMeasure3((String) map.get("strMeasure3"));
+        mealsItem.setStrMeasure4((String) map.get("strMeasure4"));
+        mealsItem.setStrMeasure5((String) map.get("strMeasure5"));
+        mealsItem.setStrMeasure6((String) map.get("strMeasure6"));
+        mealsItem.setStrMeasure7((String) map.get("strMeasure7"));
+        mealsItem.setStrMeasure8((String) map.get("strMeasure8"));
+        mealsItem.setStrMeasure9((String) map.get("strMeasure9"));
+        mealsItem.setStrMeasure10((String) map.get("strMeasure10"));
+        mealsItem.setStrMeasure11((String) map.get("strMeasure11"));
+        mealsItem.setStrMeasure12((String) map.get("strMeasure12"));
+        mealsItem.setStrMeasure13((String) map.get("strMeasure13"));
+        mealsItem.setStrMeasure14((String) map.get("strMeasure14"));
+        mealsItem.setStrMeasure15((String) map.get("strMeasure15"));
+        mealsItem.setStrMeasure16((String) map.get("strMeasure16"));
+        mealsItem.setStrMeasure17((String) map.get("strMeasure17"));
+        mealsItem.setStrMeasure18((String) map.get("strMeasure18"));
+        mealsItem.setStrMeasure19((String) map.get("strMeasure19"));
+        mealsItem.setStrMeasure20((String) map.get("strMeasure20"));
+
+        // Set other details
+        mealsItem.setStrMeal((String) map.get("strMeal"));
+        mealsItem.setStrMealThumb((String) map.get("strMealThumb"));
+        mealsItem.setStrYoutube((String) map.get("strYoutube"));
+        mealsItem.setStrInstructions((String) map.get("strInstructions"));
+        mealsItem.setStrCategory((String) map.get("strCategory"));
+        mealsItem.setStrArea((String) map.get("strArea"));
+        mealsItem.setStrSource((String) map.get("strSource"));
+
+        return mealsItem;
+    }
+
+
+    public Map<String, String> toMap() {
+        Map<String, String> map = new HashMap<>();
+
+        // Add primary keys
+        map.put("idMeal", getIdMeal());
+        map.put("UID", getUID());
+
+        // Add ingredients
+        map.put("strIngredient1", getStrIngredient1());
+        map.put("strIngredient2", getStrIngredient2());
+        map.put("strIngredient3", getStrIngredient3());
+        map.put("strIngredient4", getStrIngredient4());
+        map.put("strIngredient5", getStrIngredient5());
+        map.put("strIngredient6", getStrIngredient6());
+        map.put("strIngredient7", getStrIngredient7());
+        map.put("strIngredient8", getStrIngredient8());
+        map.put("strIngredient9", getStrIngredient9());
+        map.put("strIngredient10", getStrIngredient10());
+        map.put("strIngredient11", getStrIngredient11());
+        map.put("strIngredient12", getStrIngredient12());
+        map.put("strIngredient13", getStrIngredient13());
+        map.put("strIngredient14", getStrIngredient14());
+        map.put("strIngredient15", getStrIngredient15());
+        map.put("strIngredient16", getStrIngredient16());
+        map.put("strIngredient17", getStrIngredient17());
+        map.put("strIngredient18", getStrIngredient18());
+        map.put("strIngredient19", getStrIngredient19());
+        map.put("strIngredient20", getStrIngredient20());
+
+        // Add measurements
+        map.put("strMeasure1", getStrMeasure1());
+        map.put("strMeasure2", getStrMeasure2());
+        map.put("strMeasure3", getStrMeasure3());
+        map.put("strMeasure4", getStrMeasure4());
+        map.put("strMeasure5", getStrMeasure5());
+        map.put("strMeasure6", getStrMeasure6());
+        map.put("strMeasure7", getStrMeasure7());
+        map.put("strMeasure8", getStrMeasure8());
+        map.put("strMeasure9", getStrMeasure9());
+        map.put("strMeasure10", getStrMeasure10());
+        map.put("strMeasure11", getStrMeasure11());
+        map.put("strMeasure12", getStrMeasure12());
+        map.put("strMeasure13", getStrMeasure13());
+        map.put("strMeasure14", getStrMeasure14());
+        map.put("strMeasure15", getStrMeasure15());
+        map.put("strMeasure16", getStrMeasure16());
+        map.put("strMeasure17", getStrMeasure17());
+        map.put("strMeasure18", getStrMeasure18());
+        map.put("strMeasure19", getStrMeasure19());
+        map.put("strMeasure20", getStrMeasure20());
+
+        // Add other details
+        map.put("strMeal", getStrMeal());
+        map.put("strMealThumb", getStrMealThumb());
+        map.put("strYoutube", getStrYoutube());
+        map.put("strInstructions", getStrInstructions());
+        map.put("strCategory", getStrCategory());
+        map.put("strArea", getStrArea());
+        map.put("strSource", getStrSource());
+
+        return map;
+    }
+
 }

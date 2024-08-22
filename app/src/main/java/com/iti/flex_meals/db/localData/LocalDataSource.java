@@ -16,6 +16,8 @@ public interface LocalDataSource {
 
     LiveData<List<MealsItem>> getAllFavoriteMeals(String uid);
 
+    LiveData<List<MealPlan>> getAllMealPlanItems(String uid);
+
     void isMealExistsInFavourite(String mealId, String uid, OnMealExistsCallback callback);
 
     LiveData<MealsItem> getFavoriteMeal(String mealId);
