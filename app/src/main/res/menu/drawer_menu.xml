@@ -5,33 +5,31 @@
         <item
             android:id="@+id/profileFragment"
             android:icon="@drawable/person"
-            android:title="Profile" />
+            android:title="@string/profile" />
         <item
             android:id="@+id/planFragment"
             android:icon="@drawable/lunch"
-            android:title="Today's Meals" />
+            android:title="@string/today_s_meals" />
         <item
             android:id="@+id/homeFragment"
             android:icon="@drawable/home"
-            android:title="Home" />
+            android:title="@string/home" />
         <item
             android:id="@+id/favouritesFragment"
             android:icon="@drawable/favorite"
-            android:title="Favourites" />
+            android:title="@string/favourites" />
         <item
             android:id="@+id/searchFragment"
             android:icon="@drawable/search"
-            android:title="Search" />
+            android:title="@string/search" />
         <item
             android:id="@+id/logout"
             android:icon="@drawable/logout"
-            android:title="Logout" />
+            android:title="@string/logout" />
         <item
             android:id="@+id/exit"
             android:icon="@drawable/exit"
-            android:title="Exit" />
+            android:title="@string/exit" />
 
     </group>
-
-
 </menu>

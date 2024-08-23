@@ -14,7 +14,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <!-- ImageView as the background -->
         <ImageView
             android:id="@+id/category_image"
             android:layout_width="match_parent"
@@ -28,7 +27,6 @@
             tools:srcCompat="@drawable/app_logo" />
 
 
-        <!-- Overlay with gradient -->
         <View
             android:id="@+id/overlay"
             android:layout_width="match_parent"
@@ -38,10 +36,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHeight_default="wrap"
-
             app:layout_constraintStart_toStartOf="parent" />
 
-        <!-- TextView on top of the overlay -->
         <TextView
             android:id="@+id/category_name"
             android:layout_width="wrap_content"
@@ -51,7 +47,7 @@
             android:gravity="center"
             android:maxLines="1"
             android:padding="4dp"
-            android:text="Category Name"
+            tools:text="Category Name"
             android:textColor="@color/colorAccent2"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="@id/overlay"

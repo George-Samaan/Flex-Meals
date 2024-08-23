@@ -22,7 +22,7 @@
             android:name=".mealDetailedActivity.view.MealDetailedActivity"
             android:exported="false" />
         <activity
-            android:name=".categoriesMealsActivity.view.ViewerListCategoriesActivity"
+            android:name=".ViewerListActivity.view.ViewerListCategoriesActivity"
             android:exported="false" />
         <activity
             android:name=".homeActivity.HomeActivity"

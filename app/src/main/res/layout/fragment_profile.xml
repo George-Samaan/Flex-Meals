@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".homeActivity.profileFragment.view.ProfileFragment">
+    tools:context=".profileFragment.view.ProfileFragment">
 
 
     <com.airbnb.lottie.LottieAnimationView
@@ -25,10 +25,10 @@
 
     <Button
         android:id="@+id/backup"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
+        android:layout_width="120dp"
+        android:layout_height="65dp"
         android:layout_gravity="center"
-        android:text="Backup"
+        android:text="@string/backup"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/sync"
         app:layout_constraintHorizontal_bias="0.5"
@@ -38,10 +38,10 @@
 
     <Button
         android:id="@+id/sync"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
+        android:layout_width="120dp"
+        android:layout_height="65dp"
         android:layout_gravity="center"
-        android:text="Sync"
+        android:text="@string/sync_now"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

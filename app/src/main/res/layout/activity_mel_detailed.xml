@@ -120,7 +120,7 @@
                     android:layout_marginTop="12dp"
                     android:drawableStart="@drawable/ingredients_measurments"
                     android:drawablePadding="8dp"
-                    android:text="Ingredients - Measurments"
+                    android:text="@string/ingredients_measurements"
                     android:textColor="@color/colorPrimaryVariant"
                     android:textSize="22sp"
                     android:textStyle="bold" />

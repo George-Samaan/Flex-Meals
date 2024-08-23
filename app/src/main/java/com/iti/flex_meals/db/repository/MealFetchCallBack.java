@@ -2,7 +2,7 @@ package com.iti.flex_meals.db.repository;
 
 import androidx.lifecycle.LiveData;
 
-import com.iti.flex_meals.homeActivity.planFragment.model.MealPlan;
+import com.iti.flex_meals.planFragment.model.MealPlan;
 
 import java.util.List;
 

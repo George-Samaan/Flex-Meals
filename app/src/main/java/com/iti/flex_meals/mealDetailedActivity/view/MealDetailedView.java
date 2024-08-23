@@ -2,8 +2,8 @@ package com.iti.flex_meals.mealDetailedActivity.view;
 
 import androidx.lifecycle.LifecycleOwner;
 
-import com.iti.flex_meals.db.retrofit.pojo.mealDetails.MealsItem;
-import com.iti.flex_meals.homeActivity.planFragment.model.MealPlan;
+import com.iti.flex_meals.model.pojo.mealDetails.MealsItem;
+import com.iti.flex_meals.planFragment.model.MealPlan;
 
 public interface MealDetailedView {
 

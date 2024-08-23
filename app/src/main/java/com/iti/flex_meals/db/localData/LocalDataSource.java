@@ -2,8 +2,8 @@ package com.iti.flex_meals.db.localData;
 
 import androidx.lifecycle.LiveData;
 
-import com.iti.flex_meals.db.retrofit.pojo.mealDetails.MealsItem;
-import com.iti.flex_meals.homeActivity.planFragment.model.MealPlan;
+import com.iti.flex_meals.model.pojo.mealDetails.MealsItem;
+import com.iti.flex_meals.planFragment.model.MealPlan;
 
 import java.util.List;
 

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".homeActivity.planFragment.view.PlanFragment">
+    tools:context=".planFragment.view.PlanFragment">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
@@ -53,7 +53,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="8dp"
                 android:layout_marginStart="8dp"
-                android:text="Breakfast"
+                android:text="@string/breakfast"
                 android:textColor="@color/colorPrimaryVariant"
                 android:textSize="22sp"
                 android:textStyle="bold"
@@ -73,7 +73,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="8dp"
                 android:layout_marginStart="8dp"
-                android:text="Lunch"
+                android:text="@string/lunch"
                 android:textColor="@color/colorPrimaryVariant"
                 android:textSize="22sp"
                 android:textStyle="bold"
@@ -94,7 +94,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="8dp"
                 android:layout_marginStart="8dp"
-                android:text="Dinner"
+                android:text="@string/dinner"
                 android:textColor="@color/colorPrimaryVariant"
                 android:textSize="22sp"
                 android:textStyle="bold"
