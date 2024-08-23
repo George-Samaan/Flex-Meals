@@ -5,7 +5,6 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.iti.flex_meals.db.room.MealDatabase;
-import com.iti.flex_meals.utils.NetworkUtility;
 import com.jakewharton.threetenabp.AndroidThreeTen;
 
 public class MyApplication extends AppCompatActivity {
@@ -15,6 +14,5 @@ public class MyApplication extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         AndroidThreeTen.init(this);
         MealDatabase.getInstance(this);
-        NetworkUtility.getInstance(this);
     }
 }

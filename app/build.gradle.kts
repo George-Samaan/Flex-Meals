@@ -87,6 +87,10 @@ dependencies {
     //swipeRefresh
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 
+    //alerter
+    implementation("com.github.tapadoo:alerter:7.2.4")
+
+
 
 
 
