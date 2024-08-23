@@ -274,9 +274,11 @@ public class HomeFragment extends Fragment implements RandomMealView, OnCategory
         if (ingredients.isEmpty()) {
             ingredientsRecyclerView.setVisibility(View.GONE);
             this.ingredients.setVisibility(View.GONE);
+            seeMore.setVisibility(View.GONE);
         } else {
             ingredientsRecyclerView.setVisibility(View.VISIBLE);
             this.ingredients.setVisibility(View.VISIBLE);
+            seeMore.setVisibility(View.VISIBLE);
         }
     }
 

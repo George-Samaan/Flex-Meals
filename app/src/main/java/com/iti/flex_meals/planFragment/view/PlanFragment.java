@@ -47,14 +47,12 @@ public class PlanFragment extends Fragment implements PlanView, OnMealClick, OnM
     MaterialCalendarView calendarView;
     TextView tvBreakfast, tvLunch, tvDinner;
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         presenter = new PlanPresenterImpl(this, new RepositoryImpl(SharedPreferencesDataSourceImpl.getInstance(requireContext()),
                 new RemoteDataSourceImpl(),
                 new LocalDataSourceImpl(requireContext())));
-
     }
 
     @Override

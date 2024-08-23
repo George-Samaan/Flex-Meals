@@ -121,9 +121,9 @@ public class HomeActivity extends AppCompatActivity implements HomeView {
                 tv_title.setText(getString(R.string.home));
             } else if (destinationId == R.id.profileFragment) {
                 handleGuestUser(getString(R.string.profile));
-            } else if (destinationId == R.id.searchFragment) {
+            }/* else if (destinationId == R.id.searchFragment) {
                 tv_title.setText(getString(R.string.search));
-            } else if (destinationId == R.id.favouritesFragment) {
+            }*/ else if (destinationId == R.id.favouritesFragment) {
                 handleGuestUser(getString(R.string.favourites));
             } else if (destinationId == R.id.planFragment) {
                 handleGuestUser(getString(R.string.today_s_meals));

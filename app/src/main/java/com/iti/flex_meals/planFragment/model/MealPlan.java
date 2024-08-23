@@ -5,12 +5,14 @@ import android.util.Pair;
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Entity(tableName = "meal_plan", primaryKeys = {"idMeal", "UID"})
+@Entity(tableName = "meal_plan", primaryKeys = {"idMeal", "UID", "daySelected"})
 public class MealPlan {
     @NonNull
     private String idMeal;
@@ -18,7 +20,70 @@ public class MealPlan {
     private String UID;
     private long date;
     private String mealType;
-    private String dayName;
+
+    @NotNull
+    private long daySelected;
+
+    public static MealPlan fromMap(Map<String, Object> map) {
+        MealPlan mealPlan = new MealPlan();
+        mealPlan.setIdMeal((String) map.get("idMeal"));
+        mealPlan.setUID((String) map.get("UID"));
+        mealPlan.setDate((Long) map.get("date"));
+        mealPlan.setMealType((String) map.get("mealType"));
+        mealPlan.setDaySelected((Long) map.get("dayName"));
+        mealPlan.setStrIngredient1((String) map.get("strIngredient1"));
+        mealPlan.setStrIngredient2((String) map.get("strIngredient2"));
+        mealPlan.setStrIngredient3((String) map.get("strIngredient3"));
+        mealPlan.setStrIngredient4((String) map.get("strIngredient4"));
+        mealPlan.setStrIngredient5((String) map.get("strIngredient5"));
+        mealPlan.setStrIngredient6((String) map.get("strIngredient6"));
+        mealPlan.setStrIngredient7((String) map.get("strIngredient7"));
+        mealPlan.setStrIngredient8((String) map.get("strIngredient8"));
+        mealPlan.setStrIngredient9((String) map.get("strIngredient9"));
+        mealPlan.setStrIngredient10((String) map.get("strIngredient10"));
+        mealPlan.setStrIngredient11((String) map.get("strIngredient11"));
+        mealPlan.setStrIngredient12((String) map.get("strIngredient12"));
+        mealPlan.setStrIngredient13((String) map.get("strIngredient13"));
+        mealPlan.setStrIngredient14((String) map.get("strIngredient14"));
+        mealPlan.setStrIngredient15((String) map.get("strIngredient15"));
+        mealPlan.setStrIngredient16((String) map.get("strIngredient16"));
+        mealPlan.setStrIngredient17((String) map.get("strIngredient17"));
+        mealPlan.setStrIngredient18((String) map.get("strIngredient18"));
+        mealPlan.setStrIngredient19((String) map.get("strIngredient19"));
+        mealPlan.setStrIngredient20((String) map.get("strIngredient20"));
+        mealPlan.setStrCategory((String) map.get("strCategory"));
+        mealPlan.setStrArea((String) map.get("strArea"));
+        mealPlan.setStrInstructions((String) map.get("strInstructions"));
+        mealPlan.setStrMealThumb((String) map.get("strMealThumb"));
+        mealPlan.setStrYoutube((String) map.get("strYoutube"));
+        mealPlan.setStrMeal((String) map.get("strMeal"));
+        mealPlan.setStrMeasure1((String) map.get("strMeasure1"));
+        mealPlan.setStrMeasure2((String) map.get("strMeasure2"));
+        mealPlan.setStrMeasure3((String) map.get("strMeasure3"));
+        mealPlan.setStrMeasure4((String) map.get("strMeasure4"));
+        mealPlan.setStrMeasure5((String) map.get("strMeasure5"));
+        mealPlan.setStrMeasure6((String) map.get("strMeasure6"));
+        mealPlan.setStrMeasure7((String) map.get("strMeasure7"));
+        mealPlan.setStrMeasure8((String) map.get("strMeasure8"));
+        mealPlan.setStrMeasure9((String) map.get("strMeasure9"));
+        mealPlan.setStrMeasure10((String) map.get("strMeasure10"));
+        mealPlan.setStrMeasure11((String) map.get("strMeasure11"));
+        mealPlan.setStrMeasure12((String) map.get("strMeasure12"));
+        mealPlan.setStrMeasure13((String) map.get("strMeasure13"));
+        mealPlan.setStrMeasure14((String) map.get("strMeasure14"));
+        mealPlan.setStrMeasure15((String) map.get("strMeasure15"));
+        mealPlan.setStrMeasure16((String) map.get("strMeasure16"));
+        mealPlan.setStrMeasure17((String) map.get("strMeasure17"));
+        mealPlan.setStrMeasure18((String) map.get("strMeasure18"));
+        mealPlan.setStrMeasure19((String) map.get("strMeasure19"));
+        mealPlan.setStrMeasure20((String) map.get("strMeasure20"));
+        mealPlan.setStrSource((String) map.get("strSource"));
+        return mealPlan;
+    }
+
+    public long getDaySelected() {
+        return daySelected;
+    }
     private String strIngredient10;
     private String strIngredient12;
     private String strIngredient11;
@@ -92,13 +157,6 @@ public class MealPlan {
         this.mealType = mealType;
     }
 
-    public String getDayName() {
-        return dayName;
-    }
-
-    public void setDayName(String dayName) {
-        this.dayName = dayName;
-    }
 
     public String getIdMeal() {
         return idMeal;
@@ -587,61 +645,8 @@ public class MealPlan {
         }
     }
 
-    public static MealPlan fromMap(Map<String, Object> map) {
-        MealPlan mealPlan = new MealPlan();
-        mealPlan.setIdMeal((String) map.get("idMeal"));
-        mealPlan.setUID((String) map.get("UID"));
-        mealPlan.setDate((Long) map.get("date"));
-        mealPlan.setMealType((String) map.get("mealType"));
-        mealPlan.setDayName((String) map.get("dayName"));
-        mealPlan.setStrIngredient1((String) map.get("strIngredient1"));
-        mealPlan.setStrIngredient2((String) map.get("strIngredient2"));
-        mealPlan.setStrIngredient3((String) map.get("strIngredient3"));
-        mealPlan.setStrIngredient4((String) map.get("strIngredient4"));
-        mealPlan.setStrIngredient5((String) map.get("strIngredient5"));
-        mealPlan.setStrIngredient6((String) map.get("strIngredient6"));
-        mealPlan.setStrIngredient7((String) map.get("strIngredient7"));
-        mealPlan.setStrIngredient8((String) map.get("strIngredient8"));
-        mealPlan.setStrIngredient9((String) map.get("strIngredient9"));
-        mealPlan.setStrIngredient10((String) map.get("strIngredient10"));
-        mealPlan.setStrIngredient11((String) map.get("strIngredient11"));
-        mealPlan.setStrIngredient12((String) map.get("strIngredient12"));
-        mealPlan.setStrIngredient13((String) map.get("strIngredient13"));
-        mealPlan.setStrIngredient14((String) map.get("strIngredient14"));
-        mealPlan.setStrIngredient15((String) map.get("strIngredient15"));
-        mealPlan.setStrIngredient16((String) map.get("strIngredient16"));
-        mealPlan.setStrIngredient17((String) map.get("strIngredient17"));
-        mealPlan.setStrIngredient18((String) map.get("strIngredient18"));
-        mealPlan.setStrIngredient19((String) map.get("strIngredient19"));
-        mealPlan.setStrIngredient20((String) map.get("strIngredient20"));
-        mealPlan.setStrCategory((String) map.get("strCategory"));
-        mealPlan.setStrArea((String) map.get("strArea"));
-        mealPlan.setStrInstructions((String) map.get("strInstructions"));
-        mealPlan.setStrMealThumb((String) map.get("strMealThumb"));
-        mealPlan.setStrYoutube((String) map.get("strYoutube"));
-        mealPlan.setStrMeal((String) map.get("strMeal"));
-        mealPlan.setStrMeasure1((String) map.get("strMeasure1"));
-        mealPlan.setStrMeasure2((String) map.get("strMeasure2"));
-        mealPlan.setStrMeasure3((String) map.get("strMeasure3"));
-        mealPlan.setStrMeasure4((String) map.get("strMeasure4"));
-        mealPlan.setStrMeasure5((String) map.get("strMeasure5"));
-        mealPlan.setStrMeasure6((String) map.get("strMeasure6"));
-        mealPlan.setStrMeasure7((String) map.get("strMeasure7"));
-        mealPlan.setStrMeasure8((String) map.get("strMeasure8"));
-        mealPlan.setStrMeasure9((String) map.get("strMeasure9"));
-        mealPlan.setStrMeasure10((String) map.get("strMeasure10"));
-        mealPlan.setStrMeasure11((String) map.get("strMeasure11"));
-        mealPlan.setStrMeasure12((String) map.get("strMeasure12"));
-        mealPlan.setStrMeasure13((String) map.get("strMeasure13"));
-        mealPlan.setStrMeasure14((String) map.get("strMeasure14"));
-        mealPlan.setStrMeasure15((String) map.get("strMeasure15"));
-        mealPlan.setStrMeasure16((String) map.get("strMeasure16"));
-        mealPlan.setStrMeasure17((String) map.get("strMeasure17"));
-        mealPlan.setStrMeasure18((String) map.get("strMeasure18"));
-        mealPlan.setStrMeasure19((String) map.get("strMeasure19"));
-        mealPlan.setStrMeasure20((String) map.get("strMeasure20"));
-        mealPlan.setStrSource((String) map.get("strSource"));
-        return mealPlan;
+    public void setDaySelected(long daySelected) {
+        this.daySelected = daySelected;
     }
 
     public Map<String, Object> toMap() {
@@ -650,7 +655,7 @@ public class MealPlan {
         map.put("UID", UID);
         map.put("date", date);
         map.put("mealType", mealType);
-        map.put("dayName", dayName);
+        map.put("dayName", daySelected);
         map.put("strIngredient1", strIngredient1);
         map.put("strIngredient2", strIngredient2);
         map.put("strIngredient3", strIngredient3);
