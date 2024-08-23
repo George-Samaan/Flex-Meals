@@ -18,6 +18,7 @@ import com.iti.flex_meals.db.repository.RepositoryImpl;
 import com.iti.flex_meals.db.sharedPreferences.SharedPreferencesDataSourceImpl;
 import com.iti.flex_meals.profileFragment.presenter.ProfilePresenter;
 import com.iti.flex_meals.profileFragment.presenter.profilePresenterImpl;
+import com.iti.flex_meals.utils.Utils;
 
 public class ProfileFragment extends Fragment implements ProfileView {
     Button backupBtn;
@@ -48,20 +49,32 @@ public class ProfileFragment extends Fragment implements ProfileView {
         sync = view.findViewById(R.id.sync);
         onBackUpClick();
         presenter.getEmail();
+        onSyncClick();
+
+    }
+
+    private void onSyncClick() {
         sync.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                presenter.sync();
+                if (!Utils.isNetworkAvailable(requireContext())) {
+                    Utils.toastNoInternetOnItemClick(requireContext());
+                } else {
+                    presenter.sync();
+                }
             }
         });
-
     }
 
     private void onBackUpClick() {
         backupBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                presenter.backUp();
+                if (!Utils.isNetworkAvailable(requireContext())) {
+                    Utils.toastNoInternetOnItemClick(requireContext());
+                } else {
+                    presenter.backUp();
+                }
             }
         });
     }

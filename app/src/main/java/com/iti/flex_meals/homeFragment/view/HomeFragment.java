@@ -5,6 +5,7 @@ import static com.iti.flex_meals.utils.Constants.COUNTRY_NAME;
 import static com.iti.flex_meals.utils.Constants.INGREDIENT_DETAIL;
 import static com.iti.flex_meals.utils.Constants.INGREDIENT_NAME;
 import static com.iti.flex_meals.utils.Constants.RANDOM_MEAL_ID;
+import static com.iti.flex_meals.utils.Utils.toastNoInternetOnItemClick;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
@@ -47,7 +48,7 @@ import com.iti.flex_meals.model.pojo.categories.CategoryListItem;
 import com.iti.flex_meals.model.pojo.countries.CountryItem;
 import com.iti.flex_meals.model.pojo.ingredients.IngredientItem;
 import com.iti.flex_meals.model.pojo.randomMeal.RandomMealItem;
-import com.iti.flex_meals.utils.NetworkUtility;
+import com.iti.flex_meals.utils.Utils;
 
 import java.util.List;
 
@@ -64,20 +65,20 @@ public class HomeFragment extends Fragment implements RandomMealView, OnCategory
     SwipeRefreshLayout swipeRefreshLayout;
     boolean isNetworkAvailable;
     private boolean wasNetworkDisconnected = false;
-
+    private boolean isFetchingData = false;
     private final BroadcastReceiver networkChangeReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (ConnectivityManager.CONNECTIVITY_ACTION.equals(intent.getAction())) {
                 boolean noConnection = intent.getBooleanExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY, false);
+                isNetworkAvailable = !noConnection; // Update network availability status
                 updateSwipeRefreshLayout();
 
-                // Handle reconnection logic
-                if (wasNetworkDisconnected && !noConnection) {
+                if (wasNetworkDisconnected && isNetworkAvailable) {
                     wasNetworkDisconnected = false;
-                    fetchData();  // Fetch data automatically when the network is reconnected
-                } else {
-                    wasNetworkDisconnected = noConnection;
+                    fetchData();
+                } else if (!isNetworkAvailable) {
+                    wasNetworkDisconnected = true;
                 }
             }
         }
@@ -88,6 +89,13 @@ public class HomeFragment extends Fragment implements RandomMealView, OnCategory
         super.onStart();
         requireContext().registerReceiver(networkChangeReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
     }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        requireContext().unregisterReceiver(networkChangeReceiver);
+    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -103,7 +111,6 @@ public class HomeFragment extends Fragment implements RandomMealView, OnCategory
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_home, container, false);
-
     }
 
     @Override
@@ -113,35 +120,32 @@ public class HomeFragment extends Fragment implements RandomMealView, OnCategory
         initRecyclerView();
         onSeemMoreClick();
         fetchData();
+        onSwipeRefresh();
+    }
 
+    private void onSwipeRefresh() {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                if (isNetworkAvailable) {
-                    fetchData();
-                }
+                fetchData();
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
-
-        // Initialize network state
-        isNetworkAvailable = NetworkUtility.getInstance(requireContext()).getNetworkStatus();
         updateSwipeRefreshLayout();
-
     }
 
     private void updateSwipeRefreshLayout() {
-        isNetworkAvailable = NetworkUtility.getInstance(requireContext()).getNetworkStatus();
         swipeRefreshLayout.setEnabled(isNetworkAvailable);
     }
 
-
     private void fetchData() {
+        if (isFetchingData) return;
         homePresenter.showRandomMeal();
         homePresenter.showMealCategories();
         homePresenter.showCountriesList();
         homePresenter.showIngredients();
         homePresenter.showIngredients();
+        isFetchingData = false;
     }
 
     private void initRecyclerView() {
@@ -186,10 +190,15 @@ public class HomeFragment extends Fragment implements RandomMealView, OnCategory
         randomMeal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(requireContext(), MealDetailedActivity.class);
-                intent.putExtra(RANDOM_MEAL_ID, item.getIdMeal());
-                requireContext().startActivity(intent);
-                Log.d("TAG", "onClick: " + item.getIdMeal());
+                if (Utils.isNetworkAvailable(requireContext())) {
+                    Intent intent = new Intent(requireContext(), MealDetailedActivity.class);
+                    intent.putExtra(RANDOM_MEAL_ID, item.getIdMeal());
+                    requireContext().startActivity(intent);
+                    Log.d("TAG", "onClick: " + item.getIdMeal());
+                } else {
+                    toastNoInternetOnItemClick(requireContext());
+                }
+
             }
         });
     }
@@ -273,33 +282,50 @@ public class HomeFragment extends Fragment implements RandomMealView, OnCategory
 
     @Override
     public void onCategoryClick(String categoryName) {
-        Intent intent = new Intent(requireContext(), ViewerListCategoriesActivity.class);
-        intent.putExtra(CATEGORY_NAME, categoryName);
-        requireContext().startActivity(intent);
+        if (!Utils.isNetworkAvailable(requireContext())) {
+            toastNoInternetOnItemClick(requireContext());
+        } else {
+            Intent intent = new Intent(requireContext(), ViewerListCategoriesActivity.class);
+            intent.putExtra(CATEGORY_NAME, categoryName);
+            requireContext().startActivity(intent);
+        }
     }
 
     @Override
     public void onCountryClick(String countryName) {
-        Intent intent = new Intent(requireContext(), ViewerListCategoriesActivity.class);
-        intent.putExtra(COUNTRY_NAME, countryName);
-        requireContext().startActivity(intent);
+        if (!Utils.isNetworkAvailable(requireContext())) {
+            toastNoInternetOnItemClick(requireContext());
+        } else {
+            Intent intent = new Intent(requireContext(), ViewerListCategoriesActivity.class);
+            intent.putExtra(COUNTRY_NAME, countryName);
+            requireContext().startActivity(intent);
+        }
     }
 
     private void onSeemMoreClick() {
         seeMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(requireContext(), ViewerListCategoriesActivity.class);
-                intent.putExtra(INGREDIENT_NAME, "All Ingredients");
-                requireContext().startActivity(intent);
+                if (!Utils.isNetworkAvailable(requireContext())) {
+                    toastNoInternetOnItemClick(requireContext());
+                } else {
+                    Intent intent = new Intent(requireContext(), ViewerListCategoriesActivity.class);
+                    intent.putExtra(INGREDIENT_NAME, "All Ingredients");
+                    requireContext().startActivity(intent);
+                }
             }
         });
     }
 
     @Override
     public void onIngredientClick(String ingredientDetail) {
-        Intent intent = new Intent(requireContext(), ViewerListCategoriesActivity.class);
-        intent.putExtra(INGREDIENT_DETAIL, ingredientDetail);
-        requireContext().startActivity(intent);
+        if (!Utils.isNetworkAvailable(requireContext())) {
+            toastNoInternetOnItemClick(requireContext());
+
+        } else {
+            Intent intent = new Intent(requireContext(), ViewerListCategoriesActivity.class);
+            intent.putExtra(INGREDIENT_DETAIL, ingredientDetail);
+            requireContext().startActivity(intent);
+        }
     }
 }

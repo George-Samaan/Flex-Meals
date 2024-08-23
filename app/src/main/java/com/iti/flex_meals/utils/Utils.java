@@ -7,6 +7,7 @@ import android.net.NetworkCapabilities;
 import android.os.Build;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
@@ -19,7 +20,7 @@ import java.util.Calendar;
 
 public class Utils {
 
-    public static void showCustomSnackbar(View view, String message, int backgroundColor, int textColor) {
+    public static void showCustomSnackBar(View view, String message, int backgroundColor, int textColor) {
         Snackbar snackbar = Snackbar.make(view, message, BaseTransientBottomBar.LENGTH_LONG);
 
         snackbar.setBackgroundTint(ContextCompat.getColor(view.getContext(), backgroundColor));
@@ -75,6 +76,10 @@ public class Utils {
                 0);
         dateOnly.set(Calendar.MILLISECOND, 0);
         return dateOnly.getTime().getTime();
+    }
+
+    public static void toastNoInternetOnItemClick(Context context) {
+        Toast.makeText(context, R.string.please_check_your_internet_connection, Toast.LENGTH_SHORT).show();
     }
 
 }

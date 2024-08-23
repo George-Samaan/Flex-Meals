@@ -17,7 +17,6 @@ import com.iti.flex_meals.R;
 import com.iti.flex_meals.network.firebase.FireBaseAuthImpl;
 import com.iti.flex_meals.registerFragment.presenter.RegisterPresenter;
 import com.iti.flex_meals.registerFragment.presenter.RegisterPresenterImpl;
-import com.iti.flex_meals.utils.NetworkUtility;
 import com.iti.flex_meals.utils.Utils;
 
 public class RegisterFragment extends Fragment implements RegisterView {
@@ -44,7 +43,6 @@ public class RegisterFragment extends Fragment implements RegisterView {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         presenter = new RegisterPresenterImpl(this, new FireBaseAuthImpl());
-        NetworkUtility.getInstance(requireContext());
         initViews(view);
         onBackClick();
         onRegisterClick();
@@ -72,8 +70,7 @@ public class RegisterFragment extends Fragment implements RegisterView {
         btn_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean isNetworkAvailable = NetworkUtility.getInstance(requireContext()).getNetworkStatus();
-                if (isNetworkAvailable) {
+                if (Utils.isNetworkAvailable(requireContext())) {
                     String email = edt_email.getText().toString();
                     String password = edt_password.getText().toString();
                     String confirmPassword = edt_confirmPassword.getText().toString();
@@ -103,13 +100,13 @@ public class RegisterFragment extends Fragment implements RegisterView {
 
     @Override
     public void showError(String message) {
-        Utils.showCustomSnackbar(getView(), message, R.color.colorAccent1, R.color.colorText);
+        Utils.showCustomSnackBar(getView(), message, R.color.colorAccent1, R.color.colorText);
 
     }
 
     @Override
     public void showSuccess() {
-        Utils.showCustomSnackbar(getView(), getString(R.string.register_success), R.color.colorSuccess, R.color.colorText);
+        Utils.showCustomSnackBar(getView(), getString(R.string.register_success), R.color.colorSuccess, R.color.colorText);
         navController.popBackStack();
     }
 

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -27,24 +28,10 @@ import com.iti.flex_meals.db.repository.Repository;
 import com.iti.flex_meals.db.repository.RepositoryImpl;
 import com.iti.flex_meals.db.sharedPreferences.SharedPreferencesDataSourceImpl;
 import com.iti.flex_meals.utils.Utils;
+import com.tapadoo.alerter.Alerter;
+import com.tapadoo.alerter.OnHideAlertListener;
 
 public class HomeActivity extends AppCompatActivity {
-
-    private boolean wasNetworkDisconnected = false;
-    private BroadcastReceiver networkChangeReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (ConnectivityManager.CONNECTIVITY_ACTION.equals(intent.getAction())) {
-                boolean noConnection = intent.getBooleanExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY, false);
-                updateNetworkBanner(noConnection);
-                if (wasNetworkDisconnected && !noConnection) {
-                    wasNetworkDisconnected = false;
-                } else {
-                    wasNetworkDisconnected = noConnection;
-                }
-            }
-        }
-    };
     NavigationView navigationView;
     DrawerLayout drawerLayout;
     ImageView menuIcon;
@@ -52,12 +39,56 @@ public class HomeActivity extends AppCompatActivity {
     NavController navController;
     Repository repository;
     TextView networkBanner;
+    private Alerter alerter; // Variable to hold the Alerter
+    private final BroadcastReceiver networkChangeReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (ConnectivityManager.CONNECTIVITY_ACTION.equals(intent.getAction())) {
+                boolean noConnection = intent.getBooleanExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY, false);
+                updateNetworkAlert(noConnection);
+            }
+        }
+    };
+    private boolean isConnected = false;
+
+    public void showNetworkErrorAlert() {
+        if (alerter == null) {
+            alerter = Alerter.create(this)
+                    .setTitle(getString(R.string.no_internet_connection))
+                    .setText(R.string.please_check_your_network_settings_and_try_again)
+                    .setBackgroundColorRes(R.color.colorAccent1) // or use setBackgroundColorInt(int color)
+                    .setIcon(R.drawable.wifi_off_)
+                    .addButton(getString(R.string.dismiss), com.tapadoo.alerter.R.style.AlertButton, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Alerter.hide();
+                        }
+                    })
+                    .addButton(getString(R.string.retry), com.tapadoo.alerter.R.style.AlertButton, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(WifiManager.ACTION_PICK_WIFI_NETWORK);
+                            startActivityForResult(intent, 0);
+                        }
+                    })
+                    .setOnHideListener(new OnHideAlertListener() {
+                        @Override
+                        public void onHide() {
+                            updateNetworkAlert(true);
+                        }
+                    })
+                    .enableInfiniteDuration(true)
+                    .enableSwipeToDismiss();
+            alerter.show();
+        }
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
+        //init broadcast receiver
         IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
         registerReceiver(networkChangeReceiver, filter);
 
@@ -70,6 +101,7 @@ public class HomeActivity extends AppCompatActivity {
                 new RemoteDataSourceImpl(), new LocalDataSourceImpl(getApplication()));
     }
 
+
     private boolean isGuestUser() {
         String authToken = repository.getLoginAuth();
         return authToken == null || authToken.isEmpty(); //  authToken is null --> the user is a guest.
@@ -80,17 +112,17 @@ public class HomeActivity extends AppCompatActivity {
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
             int destinationId = destination.getId();
             if (destinationId == R.id.homeFragment) {
-                tv_title.setText("Home");
+                tv_title.setText(getString(R.string.home));
             } else if (destinationId == R.id.profileFragment) {
-                handleGuestUser("Profile");
+                handleGuestUser(getString(R.string.profile));
             } else if (destinationId == R.id.searchFragment) {
-                tv_title.setText("Search");
+                tv_title.setText(getString(R.string.search));
             } else if (destinationId == R.id.favouritesFragment) {
-                handleGuestUser("Favourites");
+                handleGuestUser(getString(R.string.favourites));
             } else if (destinationId == R.id.planFragment) {
-                handleGuestUser("Today's Meals");
+                handleGuestUser(getString(R.string.today_s_meals));
             } else {
-                tv_title.setText("404");
+                tv_title.setText(R.string._404);
             }
         });
     }
@@ -132,7 +164,7 @@ public class HomeActivity extends AppCompatActivity {
     private void showGuestLoginDialog() {
         Utils.showConfirmationDialog(
                 this,
-                "Login Required", " You need to log in to access this feature.", (dialog, which) -> {
+                getString(R.string.login_required), getString(R.string.you_need_to_log_in_to_access_this_feature), (dialog, which) -> {
                     Intent intent = new Intent(this, AuthActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
@@ -163,15 +195,15 @@ public class HomeActivity extends AppCompatActivity {
 
     private void handleLogOut() {
         if (isGuestUser()) {
-            Toast.makeText(this, "Guest user cannot log out.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.guest_user_cannot_log_out, Toast.LENGTH_SHORT).show();
         } else {
             performLogOut();
         }
     }
 
     private void performLogOut() {
-        Utils.showConfirmationDialog(this, "Log Out", "Are you sure you want to log out?", (dialog, which) -> {
-            Toast.makeText(this, "Logging out...", Toast.LENGTH_SHORT).show();
+        Utils.showConfirmationDialog(this, getString(R.string.log_out), getString(R.string.are_you_sure_you_want_to_log_out), (dialog, which) -> {
+            Toast.makeText(this, R.string.logging_out, Toast.LENGTH_SHORT).show();
             repository.clearAuthData();
             Intent intent = new Intent(this, AuthActivity.class);
             intent.putExtra("navigateTo", "targetFragment");
@@ -181,8 +213,8 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void performExit() {
-        Utils.showConfirmationDialog(this, "Exit", "Are you sure you want to exit?", (dialog, which) -> {
-            Toast.makeText(this, "Exiting the app...", Toast.LENGTH_SHORT).show();
+        Utils.showConfirmationDialog(this, getString(R.string.exit), getString(R.string.are_you_sure_you_want_to_exit), (dialog, which) -> {
+            Toast.makeText(this, R.string.exiting_the_app, Toast.LENGTH_SHORT).show();
             finishAffinity();
         });
     }
@@ -196,16 +228,28 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
-    private void updateNetworkBanner(boolean networkStatus) {
-        runOnUiThread(() -> {
-            networkBanner.setVisibility(networkStatus ? View.VISIBLE : View.GONE);
-        });
+    private void dismissNetworkErrorAlert() {
+        if (alerter != null) {
+            alerter.hide();
+            alerter = null;
+        }
     }
 
+    private void updateNetworkAlert(boolean noConnection) {
+        runOnUiThread(() -> {
+            if (noConnection) {
+                showNetworkErrorAlert(); // Show alert if there's no connection
+            } else {
+                dismissNetworkErrorAlert(); // Dismiss alert if connection is restored
+            }
+        });
+    }
     @Override
     protected void onDestroy() {
         super.onDestroy();
         unregisterReceiver(networkChangeReceiver);
+        dismissNetworkErrorAlert(); // Ensure alert is dismissed on destroy
+
     }
 }
 

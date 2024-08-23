@@ -35,7 +35,6 @@ import com.iti.flex_meals.homeActivity.HomeActivity;
 import com.iti.flex_meals.loginFragment.presenter.LoginPresenter;
 import com.iti.flex_meals.loginFragment.presenter.LoginPresenterImpl;
 import com.iti.flex_meals.network.firebase.FireBaseAuthImpl;
-import com.iti.flex_meals.utils.NetworkUtility;
 import com.iti.flex_meals.utils.Utils;
 
 
@@ -49,7 +48,6 @@ public class LoginFragment extends Fragment implements LoginView {
     private GoogleSignInClient mGoogleSignInClient;
     SignInButton googleSignInButton;
     private final int RC_SIGN_IN = 20;
-    boolean isNetworkAvailable;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -71,7 +69,6 @@ public class LoginFragment extends Fragment implements LoginView {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        NetworkUtility.getInstance(requireContext());
         buildGoogle();
         initViews(view);
         onGoogleClick();
@@ -98,8 +95,7 @@ public class LoginFragment extends Fragment implements LoginView {
     private void onGoogleClick() {
         googleSignInButton.setOnClickListener(v -> {
             // Check the network status before starting Google Sign-In
-            isNetworkAvailable = NetworkUtility.getInstance(requireContext()).getNetworkStatus();
-            if (isNetworkAvailable) {
+            if (Utils.isNetworkAvailable(requireContext())) {
                 startGoogleSignIn();
             } else {
                 Toast.makeText(requireContext(), R.string.please_check_your_internet_connection, Toast.LENGTH_SHORT).show();
@@ -143,8 +139,7 @@ public class LoginFragment extends Fragment implements LoginView {
 
     private void onLoginClick() {
         btnLogin.setOnClickListener(v -> {
-            isNetworkAvailable = NetworkUtility.getInstance(requireContext()).getNetworkStatus();
-            if (isNetworkAvailable) {
+            if (Utils.isNetworkAvailable(requireContext())) {
                 String email = emailEditText.getText().toString();
                 String password = passwordEditText.getText().toString();
                 if (validateInput(email, password)) {
@@ -169,7 +164,7 @@ public class LoginFragment extends Fragment implements LoginView {
 
     @Override
     public void onLoginSuccess(String userId, String email) {
-        Utils.showCustomSnackbar(getView(), getString(R.string.login_successfully), R.color.colorSuccess, R.color.colorText);
+        Utils.showCustomSnackBar(getView(), getString(R.string.login_successfully), R.color.colorSuccess, R.color.colorText);
         Intent intent = new Intent(getActivity(), HomeActivity.class);
         startActivity(intent);
         getActivity().finish();
@@ -177,7 +172,7 @@ public class LoginFragment extends Fragment implements LoginView {
 
     @Override
     public void onLoginFailure(String message) {
-        Utils.showCustomSnackbar(getView(), message, R.color.colorError, R.color.colorText);
+        Utils.showCustomSnackBar(getView(), message, R.color.colorError, R.color.colorText);
     }
 
     @Override
@@ -209,7 +204,7 @@ public class LoginFragment extends Fragment implements LoginView {
 
     @Override
     public void onGoogleLoginSuccess(String userID, String email) {
-        Utils.showCustomSnackbar(getView(), getString(R.string.login_successfully), R.color.colorSuccess, R.color.colorText);
+        Utils.showCustomSnackBar(getView(), getString(R.string.login_successfully), R.color.colorSuccess, R.color.colorText);
         Intent intent = new Intent(getActivity(), HomeActivity.class);
         startActivity(intent);
         getActivity().finish();
@@ -217,7 +212,7 @@ public class LoginFragment extends Fragment implements LoginView {
 
     @Override
     public void onGoogleLoginError(String message) {
-        Utils.showCustomSnackbar(getView(), getString(R.string.login_failed), R.color.colorError, R.color.colorText);
+        Utils.showCustomSnackBar(getView(), getString(R.string.login_failed), R.color.colorError, R.color.colorText);
     }
 
     @Override

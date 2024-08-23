@@ -33,7 +33,6 @@
     <string name="today_s_meals">Today\'s Meals</string>
     <string name="home">Home</string>
     <string name="favourites">Favourites</string>
-    <string name="logout">Logout</string>
     <string name="exit">Exit</string>
     <string name="login_successfully">Login Successfully</string>
     <string name="email_is_required">Email is required</string>
@@ -52,4 +51,16 @@
     <string name="meal_deleted">Meal Deleted</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
+    <string name="_404">404</string>
+    <string name="login_required">Login Required</string>
+    <string name="you_need_to_log_in_to_access_this_feature">" You need to log in to access this feature."</string>
+    <string name="guest_user_cannot_log_out">Guest user cannot log out.</string>
+    <string name="log_out">Log Out</string>
+    <string name="are_you_sure_you_want_to_log_out">Are you sure you want to log out?</string>
+    <string name="logging_out">Logging out...</string>
+    <string name="are_you_sure_you_want_to_exit">Are you sure you want to exit?</string>
+    <string name="exiting_the_app">Exiting the app...</string>
+    <string name="please_check_your_network_settings_and_try_again">Please check your network settings and try again.</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="retry">Retry</string>
 </resources>
