@@ -1,4 +1,5 @@
-package com.iti.flex_meals.homeActivity;
+package com.iti.flex_meals.homeActivity.view;
+
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -27,11 +28,13 @@ import com.iti.flex_meals.db.remoteData.RemoteDataSourceImpl;
 import com.iti.flex_meals.db.repository.Repository;
 import com.iti.flex_meals.db.repository.RepositoryImpl;
 import com.iti.flex_meals.db.sharedPreferences.SharedPreferencesDataSourceImpl;
+import com.iti.flex_meals.homeActivity.presenter.HomePresenter;
+import com.iti.flex_meals.homeActivity.presenter.HomePresenterImpl;
 import com.iti.flex_meals.utils.Utils;
 import com.tapadoo.alerter.Alerter;
 import com.tapadoo.alerter.OnHideAlertListener;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity implements HomeView {
     NavigationView navigationView;
     DrawerLayout drawerLayout;
     ImageView menuIcon;
@@ -39,7 +42,8 @@ public class HomeActivity extends AppCompatActivity {
     NavController navController;
     Repository repository;
     TextView networkBanner;
-    private Alerter alerter; // Variable to hold the Alerter
+    private Alerter alerter;
+    private HomePresenter presenter;
     private final BroadcastReceiver networkChangeReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -51,12 +55,32 @@ public class HomeActivity extends AppCompatActivity {
     };
     private boolean isConnected = false;
 
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_home);
+        presenter = new HomePresenterImpl(this, new RepositoryImpl(new SharedPreferencesDataSourceImpl(this),
+                new RemoteDataSourceImpl(), new LocalDataSourceImpl(getApplication())));
+
+        //init broadcast receiver
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(networkChangeReceiver, filter);
+
+        initViews();
+        setUpNavigation();
+        onMenuIcoClick();
+        initPageTitle();
+        setDrawerItemListeners();
+    }
+
+    @Override
     public void showNetworkErrorAlert() {
         if (alerter == null) {
             alerter = Alerter.create(this)
                     .setTitle(getString(R.string.no_internet_connection))
                     .setText(R.string.please_check_your_network_settings_and_try_again)
-                    .setBackgroundColorRes(R.color.colorAccent1) // or use setBackgroundColorInt(int color)
+                    .setBackgroundColorRes(R.color.colorAccent1)
                     .setIcon(R.drawable.wifi_off_)
                     .addButton(getString(R.string.dismiss), com.tapadoo.alerter.R.style.AlertButton, new View.OnClickListener() {
                         @Override
@@ -74,7 +98,7 @@ public class HomeActivity extends AppCompatActivity {
                     .setOnHideListener(new OnHideAlertListener() {
                         @Override
                         public void onHide() {
-                            updateNetworkAlert(true);
+                            dismissNetworkErrorAlert();
                         }
                     })
                     .enableInfiniteDuration(true)
@@ -83,28 +107,10 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
-        //init broadcast receiver
-        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
-        registerReceiver(networkChangeReceiver, filter);
-
-        initViews();
-        setUpNavigation();
-        onMenuIcoClick();
-        initPageTitle();
-        setDrawerItemListeners();
-        repository = new RepositoryImpl(new SharedPreferencesDataSourceImpl(this),
-                new RemoteDataSourceImpl(), new LocalDataSourceImpl(getApplication()));
-    }
-
-
     private boolean isGuestUser() {
-        String authToken = repository.getLoginAuth();
-        return authToken == null || authToken.isEmpty(); //  authToken is null --> the user is a guest.
+        String token = null;
+        token = presenter.getLoginToken(token);
+        return token == null || token.isEmpty(); //  authToken is null --> the user is a guest.
     }
 
 
@@ -115,9 +121,9 @@ public class HomeActivity extends AppCompatActivity {
                 tv_title.setText(getString(R.string.home));
             } else if (destinationId == R.id.profileFragment) {
                 handleGuestUser(getString(R.string.profile));
-            } else if (destinationId == R.id.searchFragment) {
+            }/* else if (destinationId == R.id.searchFragment) {
                 tv_title.setText(getString(R.string.search));
-            } else if (destinationId == R.id.favouritesFragment) {
+            }*/ else if (destinationId == R.id.favouritesFragment) {
                 handleGuestUser(getString(R.string.favourites));
             } else if (destinationId == R.id.planFragment) {
                 handleGuestUser(getString(R.string.today_s_meals));
@@ -161,7 +167,8 @@ public class HomeActivity extends AppCompatActivity {
         networkBanner = findViewById(R.id.network_error_banner);
     }
 
-    private void showGuestLoginDialog() {
+    @Override
+    public void showGuestLoginDialog() {
         Utils.showConfirmationDialog(
                 this,
                 getString(R.string.login_required), getString(R.string.you_need_to_log_in_to_access_this_feature), (dialog, which) -> {
@@ -204,7 +211,7 @@ public class HomeActivity extends AppCompatActivity {
     private void performLogOut() {
         Utils.showConfirmationDialog(this, getString(R.string.log_out), getString(R.string.are_you_sure_you_want_to_log_out), (dialog, which) -> {
             Toast.makeText(this, R.string.logging_out, Toast.LENGTH_SHORT).show();
-            repository.clearAuthData();
+            presenter.clearAuthData();
             Intent intent = new Intent(this, AuthActivity.class);
             intent.putExtra("navigateTo", "targetFragment");
             startActivity(intent);
@@ -228,7 +235,8 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
-    private void dismissNetworkErrorAlert() {
+    @Override
+    public void dismissNetworkErrorAlert() {
         if (alerter != null) {
             alerter.hide();
             alerter = null;

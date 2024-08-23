@@ -1,6 +1,7 @@
 package com.iti.flex_meals.splashFragment.view;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -18,7 +19,7 @@ import com.iti.flex_meals.db.localData.LocalDataSourceImpl;
 import com.iti.flex_meals.db.remoteData.RemoteDataSourceImpl;
 import com.iti.flex_meals.db.repository.RepositoryImpl;
 import com.iti.flex_meals.db.sharedPreferences.SharedPreferencesDataSourceImpl;
-import com.iti.flex_meals.homeActivity.HomeActivity;
+import com.iti.flex_meals.homeActivity.view.HomeActivity;
 import com.iti.flex_meals.splashFragment.presenter.Splash;
 import com.iti.flex_meals.splashFragment.presenter.SplashPresenterIpml;
 
@@ -33,6 +34,8 @@ public class SplashAuthFragment extends Fragment  implements SplashView {
         presenter = new SplashPresenterIpml(this,
                 new RepositoryImpl(SharedPreferencesDataSourceImpl.getInstance(requireContext())
                         , new RemoteDataSourceImpl(), new LocalDataSourceImpl(requireContext())));
+        requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
 
     }
     @Override

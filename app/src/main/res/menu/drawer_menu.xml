@@ -18,10 +18,10 @@
             android:id="@+id/favouritesFragment"
             android:icon="@drawable/favorite"
             android:title="@string/favourites" />
-        <item
-            android:id="@+id/searchFragment"
-            android:icon="@drawable/search"
-            android:title="@string/search" />
+        <!--        <item-->
+        <!--            android:id="@+id/searchFragment"-->
+        <!--            android:icon="@drawable/search"-->
+        <!--            android:title="@string/search" />-->
         <item
             android:id="@+id/logout"
             android:icon="@drawable/logout"

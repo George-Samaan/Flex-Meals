@@ -172,7 +172,7 @@ public class FireBaseAuthImpl implements IFirebaseAuth {
                         if (deleteTask.isSuccessful()) {
                             List<Task<Void>> uploadTasks = new ArrayList<>();
                             for (MealPlan mealPlanItem : mealsPlanList) {
-                                DocumentReference docRef = mealPlanCollection.document(mealPlanItem.getIdMeal() + userUID);
+                                DocumentReference docRef = mealPlanCollection.document(mealPlanItem.getIdMeal() + userUID + mealPlanItem.getDaySelected());
                                 Task<Void> uploadTask = docRef.set(mealPlanItem.toMap());
                                 uploadTasks.add(uploadTask);
                             }

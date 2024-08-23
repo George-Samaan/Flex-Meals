@@ -108,8 +108,6 @@ public class MealDetailedActivity extends AppCompatActivity implements MealDetai
         MealPlan mealPlan = new MealPlan();
         mealPlan.setIdMeal(meal.getIdMeal());
         Log.d("meal_name", meal.getStrMeal());
-        Log.d("meal_name", meal.getStrMealThumb());
-        Log.d("meal_name", meal.getStrInstructions());
         mealPlan.setStrMeal(meal.getStrMeal());
         mealPlan.setStrMealThumb(meal.getStrMealThumb());
         mealPlan.setStrInstructions(meal.getStrInstructions());
@@ -125,6 +123,9 @@ public class MealDetailedActivity extends AppCompatActivity implements MealDetai
         long dateOnly = getDateOnly(calendarDateOnly);
         mealPlan.setDate(dateOnly);
         Log.d("Date", "Date Saved in DataBase is: " + String.valueOf(dateOnly));
+        long uniqueId = System.currentTimeMillis();
+        mealPlan.setDaySelected(uniqueId);
+        Log.d("DateUnique", "Date Saved in DataBase is: " + String.valueOf(uniqueId));
         return mealPlan;
     }
 

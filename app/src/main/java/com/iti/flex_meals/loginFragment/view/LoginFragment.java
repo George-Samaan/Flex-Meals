@@ -31,7 +31,7 @@ import com.iti.flex_meals.db.localData.LocalDataSourceImpl;
 import com.iti.flex_meals.db.remoteData.RemoteDataSourceImpl;
 import com.iti.flex_meals.db.repository.RepositoryImpl;
 import com.iti.flex_meals.db.sharedPreferences.SharedPreferencesDataSourceImpl;
-import com.iti.flex_meals.homeActivity.HomeActivity;
+import com.iti.flex_meals.homeActivity.view.HomeActivity;
 import com.iti.flex_meals.loginFragment.presenter.LoginPresenter;
 import com.iti.flex_meals.loginFragment.presenter.LoginPresenterImpl;
 import com.iti.flex_meals.network.firebase.FireBaseAuthImpl;

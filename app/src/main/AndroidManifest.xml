@@ -25,7 +25,7 @@
             android:name=".ViewerListActivity.view.ViewerListCategoriesActivity"
             android:exported="false" />
         <activity
-            android:name=".homeActivity.HomeActivity"
+            android:name=".homeActivity.view.HomeActivity"
             android:exported="false"
             android:theme="@style/SplashTheme" />
         <activity
