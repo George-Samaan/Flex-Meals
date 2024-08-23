@@ -11,6 +11,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,7 +40,7 @@ import java.util.Calendar;
 import java.util.List;
 
 
-public class PlanFragment extends Fragment implements PlanView, OnMealClick, OnMealPlanDelete {
+public class PlanFragment extends Fragment implements PlanView, OnMealClick, OnMealPlanInteraction {
     PlanPresenter presenter;
     FavouritesAdapter breakfastItemView, lunchItemView, dinnerItemView;
     RecyclerView recyclerViewBreakfast, recyclerViewLunch, recyclerViewDinner;
@@ -121,7 +123,6 @@ public class PlanFragment extends Fragment implements PlanView, OnMealClick, OnM
                 lunchItemView.notifyDataSetChanged();
                 dinnerItemView.notifyDataSetChanged();
             }
-
         });
     }
 
@@ -183,7 +184,24 @@ public class PlanFragment extends Fragment implements PlanView, OnMealClick, OnM
     }
 
     @Override
-    public void onMealDelete(String mealId) {
-        presenter.deleteMeal(mealId);
+    public void onMealPlanLongClick(MealPlan mealPlan, FavouritesAdapter.ViewHolder holder) {
+        Animation shake = AnimationUtils.loadAnimation(holder.itemView.getContext(), R.anim.shake_anim);
+        holder.deleteButton.startAnimation(shake);
+        holder.deleteButton.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onMealPlanShortClick(MealPlan mealPlan, FavouritesAdapter.ViewHolder holder) {
+        if (holder.deleteButton.getVisibility() == View.VISIBLE) {
+            holder.deleteButton.clearAnimation();
+            holder.deleteButton.setVisibility(View.GONE);
+        } else {
+            onMealClick(mealPlan.getIdMeal());
+        }
+    }
+
+    @Override
+    public void onMealPlanDeleteClick(MealPlan mealPlan, FavouritesAdapter.ViewHolder holder) {
+        presenter.deleteMeal(mealPlan.getIdMeal());
     }
 }

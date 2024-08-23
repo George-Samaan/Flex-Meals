@@ -17,28 +17,26 @@ import com.iti.flex_meals.R;
 import com.iti.flex_meals.ViewerListActivity.view.OnMealClick;
 import com.iti.flex_meals.model.pojo.mealDetails.MealsItem;
 import com.iti.flex_meals.planFragment.model.MealPlan;
-import com.iti.flex_meals.planFragment.view.OnMealPlanDelete;
+import com.iti.flex_meals.planFragment.view.OnMealPlanInteraction;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.ViewHolder> {
-
-
     List<MealsItem> favourites;
     List<MealPlan> breakfastPlan;
     List<MealPlan> lunchPlan;
     List<MealPlan> dinnerPlan;
     private OnMealClick onMealClick;
-    private OnMealPlanDelete onMealPlanDelete;
+    private OnMealPlanInteraction onMealPlanInteraction;
 
-    public FavouritesAdapter(OnMealClick onMealClick, OnMealPlanDelete onMealPlanDelete) {
+    public FavouritesAdapter(OnMealClick onMealClick, OnMealPlanInteraction onMealPlanInteraction) {
         this.favourites = new ArrayList<>();
         this.breakfastPlan = new ArrayList<>();
         this.lunchPlan = new ArrayList<>();
         this.dinnerPlan = new ArrayList<>();
         this.onMealClick = onMealClick;
-        this.onMealPlanDelete = onMealPlanDelete;
+        this.onMealPlanInteraction = onMealPlanInteraction;
     }
 
     @NonNull
@@ -82,35 +80,17 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Vi
     }
 
     private void onMealPlanLonClickAndShortClick(@NonNull ViewHolder holder, MealPlan mealPlan) {
-        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                Animation shake = AnimationUtils.loadAnimation(holder.itemView.getContext(), R.anim.shake_anim);
-                holder.deleteButton.startAnimation(shake);
-                holder.deleteButton.setVisibility(View.VISIBLE);
-                return true;
-            }
-        });
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Hide the delete button and reset its state
-                holder.deleteButton.clearAnimation();
-                holder.deleteButton.setVisibility(View.GONE);
-                onMealClick.onMealClick(mealPlan.getIdMeal());
-            }
+
+        holder.itemView.setOnLongClickListener(v -> {
+            onMealPlanInteraction.onMealPlanLongClick(mealPlan, holder);
+            return true;
         });
 
-        holder.deleteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (onMealPlanDelete != null) {
-                    onMealPlanDelete.onMealDelete(mealPlan.getIdMeal());
-                }
-                holder.deleteButton.setVisibility(View.GONE);
-                holder.deleteButton.clearAnimation();
-                Log.d("Delete emealPlan", mealPlan.getIdMeal());
-            }
+        holder.itemView.setOnClickListener(v -> onMealPlanInteraction.onMealPlanShortClick(mealPlan, holder));
+
+        holder.deleteButton.setOnClickListener(v -> {
+            onMealPlanInteraction.onMealPlanDeleteClick(mealPlan, holder);
+            Log.d("Delete mealPlan", mealPlan.getIdMeal());
         });
     }
 
@@ -143,7 +123,7 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Vi
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView mealName;
         ImageView mealImage;
-        ImageView deleteButton;
+        public ImageView deleteButton;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
