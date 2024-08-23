@@ -22,7 +22,7 @@
             android:theme="@style/Widget.AppCompat.SearchView.ActionBar"
             app:iconifiedByDefault="false"
             app:queryBackground="@android:color/transparent"
-            app:queryHint="Search"
+            app:queryHint="@string/search"
             app:searchIcon="@drawable/search"
             app:submitBackground="@android:color/transparent" />
 

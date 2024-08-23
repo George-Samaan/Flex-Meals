@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginTop="45dp"
-    tools:context=".homeActivity.favouriteFragment.view.FavouritesFragment">
+    tools:context=".favouriteFragment.view.FavouritesFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/favRecyclerView"

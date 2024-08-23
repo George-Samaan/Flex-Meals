@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="40dp"
-        tools:context=".homeActivity.homeFragment.view.HomeFragment">
+        tools:context=".homeFragment.view.HomeFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -22,7 +22,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:text="Our Inspiration Meals"
+                android:text="@string/our_inspiration_meals"
                 android:textColor="@color/colorPrimary"
                 android:textSize="20sp"
                 android:textStyle="bold"
@@ -75,10 +75,11 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:text="Categories"
+                android:text="@string/categories"
                 android:textColor="@color/colorPrimary"
                 android:textSize="20sp"
                 android:textStyle="bold"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/cardView" />
@@ -119,8 +120,9 @@
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="16dp"
                     android:layout_marginBottom="8dp"
+                    android:text="@string/ingredients"
                     android:layout_weight="1"
-                    android:text="Ingredients"
+                    android:visibility="gone"
                     android:textColor="@color/colorPrimary"
                     android:textSize="20sp"
                     android:textStyle="bold" />
@@ -131,8 +133,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
                     android:layout_marginEnd="18dp"
+                    android:text="@string/see_more"
                     android:gravity="right"
-                    android:text="See more..."
+                    android:visibility="gone"
                     android:textColor="@color/colorPrimary"
                     android:textStyle="bold" />
             </LinearLayout>
@@ -163,8 +166,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="Countries"
+                android:text="@string/countries"
                 android:textColor="@color/colorPrimary"
+                android:visibility="gone"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="@+id/categoriesTextView"

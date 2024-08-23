@@ -3,14 +3,14 @@ package com.iti.flex_meals.db.repository;
 import androidx.lifecycle.LiveData;
 
 import com.iti.flex_meals.db.localData.OnMealExistsCallback;
-import com.iti.flex_meals.db.retrofit.networkCallBack.OnCategoriesListCallBack;
-import com.iti.flex_meals.db.retrofit.networkCallBack.OnCategoriesMealNetworkCallBack;
-import com.iti.flex_meals.db.retrofit.networkCallBack.OnCountriesMealNetworkCallBack;
-import com.iti.flex_meals.db.retrofit.networkCallBack.OnIngredientNetworkCallBack;
-import com.iti.flex_meals.db.retrofit.networkCallBack.OnMealDetailsNetworkCallBack;
-import com.iti.flex_meals.db.retrofit.networkCallBack.OnRandomMealNetworkCallBack;
-import com.iti.flex_meals.db.retrofit.pojo.mealDetails.MealsItem;
-import com.iti.flex_meals.homeActivity.planFragment.model.MealPlan;
+import com.iti.flex_meals.model.pojo.mealDetails.MealsItem;
+import com.iti.flex_meals.network.retrofit.networkCallBack.OnCategoriesListCallBack;
+import com.iti.flex_meals.network.retrofit.networkCallBack.OnCategoriesMealNetworkCallBack;
+import com.iti.flex_meals.network.retrofit.networkCallBack.OnCountriesMealNetworkCallBack;
+import com.iti.flex_meals.network.retrofit.networkCallBack.OnIngredientNetworkCallBack;
+import com.iti.flex_meals.network.retrofit.networkCallBack.OnMealDetailsNetworkCallBack;
+import com.iti.flex_meals.network.retrofit.networkCallBack.OnRandomMealNetworkCallBack;
+import com.iti.flex_meals.planFragment.model.MealPlan;
 
 import java.util.List;
 

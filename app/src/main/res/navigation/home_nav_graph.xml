@@ -7,27 +7,27 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.iti.flex_meals.homeActivity.homeFragment.view.HomeFragment"
+        android:name="com.iti.flex_meals.homeFragment.view.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/favouritesFragment"
-        android:name="com.iti.flex_meals.homeActivity.favouriteFragment.view.FavouritesFragment"
+        android:name="com.iti.flex_meals.favouriteFragment.view.FavouritesFragment"
         android:label="fragment_favourites"
         tools:layout="@layout/fragment_favourites" />
     <fragment
         android:id="@+id/searchFragment"
-        android:name="com.iti.flex_meals.homeActivity.searchFragment.SearchFragment"
+        android:name="com.iti.flex_meals.searchFragment.SearchFragment"
         android:label="fragment_search"
         tools:layout="@layout/fragment_search" />
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.iti.flex_meals.homeActivity.profileFragment.view.ProfileFragment"
+        android:name="com.iti.flex_meals.profileFragment.view.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
     <fragment
         android:id="@+id/planFragment"
-        android:name="com.iti.flex_meals.homeActivity.planFragment.view.PlanFragment"
+        android:name="com.iti.flex_meals.planFragment.view.PlanFragment"
         android:label="fragment_plan"
         tools:layout="@layout/fragment_plan" />
 </navigation>

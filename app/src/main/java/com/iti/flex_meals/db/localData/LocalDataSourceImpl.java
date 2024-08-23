@@ -4,11 +4,11 @@ import android.content.Context;
 
 import androidx.lifecycle.LiveData;
 
-import com.iti.flex_meals.db.retrofit.pojo.mealDetails.MealsItem;
 import com.iti.flex_meals.db.room.MealDao;
 import com.iti.flex_meals.db.room.MealDatabase;
 import com.iti.flex_meals.db.room.MealPlanDao;
-import com.iti.flex_meals.homeActivity.planFragment.model.MealPlan;
+import com.iti.flex_meals.model.pojo.mealDetails.MealsItem;
+import com.iti.flex_meals.planFragment.model.MealPlan;
 
 import java.util.List;
 

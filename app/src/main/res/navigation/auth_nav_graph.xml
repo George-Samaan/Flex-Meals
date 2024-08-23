@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/splashAuthFragment"
-        android:name="com.iti.flex_meals.authActivity.splashFragment.view.SplashAuthFragment"
+        android:name="com.iti.flex_meals.splashFragment.view.SplashAuthFragment"
         android:label="fragment_splash_auth"
         tools:layout="@layout/fragment_splash_auth" >
         <action
@@ -21,7 +21,7 @@
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.iti.flex_meals.authActivity.loginFragment.view.LoginFragment"
+        android:name="com.iti.flex_meals.loginFragment.view.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
         <action
@@ -35,7 +35,7 @@
 
     <fragment
         android:id="@+id/registerFragment"
-        android:name="com.iti.flex_meals.authActivity.registerFragment.view.RegisterFragment"
+        android:name="com.iti.flex_meals.registerFragment.view.RegisterFragment"
         android:label="fragment_register"
         tools:layout="@layout/fragment_register" />
 </navigation>

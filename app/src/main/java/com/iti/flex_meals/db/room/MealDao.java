@@ -7,7 +7,7 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
-import com.iti.flex_meals.db.retrofit.pojo.mealDetails.MealsItem;
+import com.iti.flex_meals.model.pojo.mealDetails.MealsItem;
 
 import java.util.List;
 

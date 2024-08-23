@@ -1,6 +1,10 @@
 package com.iti.flex_meals.homeActivity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -22,10 +26,25 @@ import com.iti.flex_meals.db.remoteData.RemoteDataSourceImpl;
 import com.iti.flex_meals.db.repository.Repository;
 import com.iti.flex_meals.db.repository.RepositoryImpl;
 import com.iti.flex_meals.db.sharedPreferences.SharedPreferencesDataSourceImpl;
-import com.iti.flex_meals.utils.NetworkUtility;
 import com.iti.flex_meals.utils.Utils;
 
-public class HomeActivity extends AppCompatActivity implements NetworkUtility.NetworkChangeListener {
+public class HomeActivity extends AppCompatActivity {
+
+    private boolean wasNetworkDisconnected = false;
+    private BroadcastReceiver networkChangeReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (ConnectivityManager.CONNECTIVITY_ACTION.equals(intent.getAction())) {
+                boolean noConnection = intent.getBooleanExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY, false);
+                updateNetworkBanner(noConnection);
+                if (wasNetworkDisconnected && !noConnection) {
+                    wasNetworkDisconnected = false;
+                } else {
+                    wasNetworkDisconnected = noConnection;
+                }
+            }
+        }
+    };
     NavigationView navigationView;
     DrawerLayout drawerLayout;
     ImageView menuIcon;
@@ -38,6 +57,10 @@ public class HomeActivity extends AppCompatActivity implements NetworkUtility.Ne
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(networkChangeReceiver, filter);
+
         initViews();
         setUpNavigation();
         onMenuIcoClick();
@@ -45,14 +68,11 @@ public class HomeActivity extends AppCompatActivity implements NetworkUtility.Ne
         setDrawerItemListeners();
         repository = new RepositoryImpl(new SharedPreferencesDataSourceImpl(this),
                 new RemoteDataSourceImpl(), new LocalDataSourceImpl(getApplication()));
-        NetworkUtility.getInstance(this).setNetworkChangeListener(this);
-        updateNetworkBanner(NetworkUtility.getInstance(this).getNetworkStatus());
     }
 
     private boolean isGuestUser() {
-        // Check if the authentication data is present in shared preferences.
         String authToken = repository.getLoginAuth();
-        return authToken == null || authToken.isEmpty(); // Return true if authToken is null or empty, indicating the user is a guest.
+        return authToken == null || authToken.isEmpty(); //  authToken is null --> the user is a guest.
     }
 
 
@@ -124,7 +144,6 @@ public class HomeActivity extends AppCompatActivity implements NetworkUtility.Ne
         );
     }
 
-
     private void setDrawerItemListeners() {
         navigationView.setNavigationItemSelectedListener(item -> {
             int itemId = item.getItemId();
@@ -177,46 +196,16 @@ public class HomeActivity extends AppCompatActivity implements NetworkUtility.Ne
         }
     }
 
-    @Override
-    public void onNetworkChange(boolean isNetworkAvailable) {
-        updateNetworkBanner(isNetworkAvailable);
-    }
-
     private void updateNetworkBanner(boolean networkStatus) {
-        networkBanner.setVisibility(networkStatus ? View.GONE : View.VISIBLE);
+        runOnUiThread(() -> {
+            networkBanner.setVisibility(networkStatus ? View.VISIBLE : View.GONE);
+        });
     }
 
-//    @Override
-//    protected void onPause() {
-//        super.onPause();
-//        NetworkUtility.getInstance(this).setNetworkChangeListener(this);
-//        updateNetworkBanner(NetworkUtility.getInstance(this).getNetworkStatus());
-//    }
-//
-//    @Override
-//    protected void onStop() {
-//        super.onStop();
-//        NetworkUtility.getInstance(this).setNetworkChangeListener(this);
-//        updateNetworkBanner(NetworkUtility.getInstance(this).getNetworkStatus());
-//    }
-//
-//    @Override
-//    protected void onStart() {
-//        super.onStart();
-//        NetworkUtility.getInstance(this).setNetworkChangeListener(this);
-//        updateNetworkBanner(NetworkUtility.getInstance(this).getNetworkStatus());
-//    }
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        NetworkUtility.getInstance(this).setNetworkChangeListener(this);
-//        updateNetworkBanner(NetworkUtility.getInstance(this).getNetworkStatus());
-//    }
-//
-//    @Override
-//    protected void onDestroy() {
-//        super.onDestroy();
-//        NetworkUtility.getInstance(this).unregisterNetworkCallback();
-//    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(networkChangeReceiver);
+    }
 }
 

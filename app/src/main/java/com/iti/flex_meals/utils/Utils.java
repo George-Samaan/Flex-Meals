@@ -13,6 +13,7 @@ import androidx.core.content.ContextCompat;
 
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
+import com.iti.flex_meals.R;
 
 import java.util.Calendar;
 
@@ -36,8 +37,8 @@ public class Utils {
         new AlertDialog.Builder(context)
                 .setTitle(title)
                 .setMessage(message)
-                .setPositiveButton("OK", onConfirm)
-                .setNegativeButton("Cancel", onCancel)
+                .setPositiveButton(R.string.ok, onConfirm)
+                .setNegativeButton(R.string.cancel, onCancel)
                 .create()
                 .show();
     }

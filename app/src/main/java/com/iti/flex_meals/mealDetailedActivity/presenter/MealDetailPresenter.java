@@ -1,8 +1,8 @@
 package com.iti.flex_meals.mealDetailedActivity.presenter;
 
 import com.iti.flex_meals.db.localData.OnMealExistsCallback;
-import com.iti.flex_meals.db.retrofit.pojo.mealDetails.MealsItem;
-import com.iti.flex_meals.homeActivity.planFragment.model.MealPlan;
+import com.iti.flex_meals.model.pojo.mealDetails.MealsItem;
+import com.iti.flex_meals.planFragment.model.MealPlan;
 
 public interface MealDetailPresenter {
     void getMealDetail(String id);

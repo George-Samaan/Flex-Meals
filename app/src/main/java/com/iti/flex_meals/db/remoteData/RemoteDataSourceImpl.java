@@ -1,19 +1,19 @@
 package com.iti.flex_meals.db.remoteData;
 
-import com.iti.flex_meals.db.retrofit.MealApiService;
-import com.iti.flex_meals.db.retrofit.Retrofit;
-import com.iti.flex_meals.db.retrofit.networkCallBack.OnCategoriesListCallBack;
-import com.iti.flex_meals.db.retrofit.networkCallBack.OnCategoriesMealNetworkCallBack;
-import com.iti.flex_meals.db.retrofit.networkCallBack.OnCountriesMealNetworkCallBack;
-import com.iti.flex_meals.db.retrofit.networkCallBack.OnIngredientNetworkCallBack;
-import com.iti.flex_meals.db.retrofit.networkCallBack.OnMealDetailsNetworkCallBack;
-import com.iti.flex_meals.db.retrofit.networkCallBack.OnRandomMealNetworkCallBack;
-import com.iti.flex_meals.db.retrofit.pojo.categories.CategoryMealResponse;
-import com.iti.flex_meals.db.retrofit.pojo.categoriesList.CategoriesListResponse;
-import com.iti.flex_meals.db.retrofit.pojo.countries.AllCountryResponse;
-import com.iti.flex_meals.db.retrofit.pojo.ingredients.IngredientsResponse;
-import com.iti.flex_meals.db.retrofit.pojo.mealDetails.MealDetailsResponse;
-import com.iti.flex_meals.db.retrofit.pojo.randomMeal.RandomMealResponse;
+import com.iti.flex_meals.model.pojo.categories.CategoryMealResponse;
+import com.iti.flex_meals.model.pojo.categoriesList.CategoriesListResponse;
+import com.iti.flex_meals.model.pojo.countries.AllCountryResponse;
+import com.iti.flex_meals.model.pojo.ingredients.IngredientsResponse;
+import com.iti.flex_meals.model.pojo.mealDetails.MealDetailsResponse;
+import com.iti.flex_meals.model.pojo.randomMeal.RandomMealResponse;
+import com.iti.flex_meals.network.retrofit.MealApiService;
+import com.iti.flex_meals.network.retrofit.Retrofit;
+import com.iti.flex_meals.network.retrofit.networkCallBack.OnCategoriesListCallBack;
+import com.iti.flex_meals.network.retrofit.networkCallBack.OnCategoriesMealNetworkCallBack;
+import com.iti.flex_meals.network.retrofit.networkCallBack.OnCountriesMealNetworkCallBack;
+import com.iti.flex_meals.network.retrofit.networkCallBack.OnIngredientNetworkCallBack;
+import com.iti.flex_meals.network.retrofit.networkCallBack.OnMealDetailsNetworkCallBack;
+import com.iti.flex_meals.network.retrofit.networkCallBack.OnRandomMealNetworkCallBack;
 
 import retrofit2.Call;
 import retrofit2.Callback;

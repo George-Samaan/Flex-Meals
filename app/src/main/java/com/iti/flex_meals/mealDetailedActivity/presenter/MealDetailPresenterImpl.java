@@ -7,12 +7,12 @@ import androidx.room.Room;
 
 import com.iti.flex_meals.db.localData.OnMealExistsCallback;
 import com.iti.flex_meals.db.repository.Repository;
-import com.iti.flex_meals.db.retrofit.networkCallBack.OnMealDetailsNetworkCallBack;
-import com.iti.flex_meals.db.retrofit.pojo.mealDetails.MealsItem;
 import com.iti.flex_meals.db.room.MealDao;
 import com.iti.flex_meals.db.room.MealDatabase;
-import com.iti.flex_meals.homeActivity.planFragment.model.MealPlan;
 import com.iti.flex_meals.mealDetailedActivity.view.MealDetailedActivity;
+import com.iti.flex_meals.model.pojo.mealDetails.MealsItem;
+import com.iti.flex_meals.network.retrofit.networkCallBack.OnMealDetailsNetworkCallBack;
+import com.iti.flex_meals.planFragment.model.MealPlan;
 
 
 public class MealDetailPresenterImpl implements MealDetailPresenter {

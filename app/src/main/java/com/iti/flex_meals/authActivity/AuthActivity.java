@@ -13,7 +13,6 @@ import com.iti.flex_meals.R;
 import com.iti.flex_meals.utils.NetworkUtility;
 
 public class AuthActivity extends AppCompatActivity implements NetworkUtility.NetworkChangeListener {
-    private static final String TAG = "AuthActivity";
     private TextView networkErrorBanner;
 
     @Override

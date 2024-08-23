@@ -1,6 +1,10 @@
 package com.iti.flex_meals.mealDetailedActivity.view;
 
 
+import static com.iti.flex_meals.utils.Constants.CALENDAR_MEAL_ID;
+import static com.iti.flex_meals.utils.Constants.FAVORITE_ID;
+import static com.iti.flex_meals.utils.Constants.MEAL_ID;
+import static com.iti.flex_meals.utils.Constants.RANDOM_MEAL_ID;
 import static com.iti.flex_meals.utils.Utils.getDateOnly;
 import static com.iti.flex_meals.utils.Utils.isNetworkAvailable;
 
@@ -34,11 +38,11 @@ import com.iti.flex_meals.authActivity.AuthActivity;
 import com.iti.flex_meals.db.localData.LocalDataSourceImpl;
 import com.iti.flex_meals.db.remoteData.RemoteDataSourceImpl;
 import com.iti.flex_meals.db.repository.RepositoryImpl;
-import com.iti.flex_meals.db.retrofit.pojo.mealDetails.MealsItem;
 import com.iti.flex_meals.db.sharedPreferences.SharedPreferencesDataSourceImpl;
-import com.iti.flex_meals.homeActivity.planFragment.model.MealPlan;
 import com.iti.flex_meals.mealDetailedActivity.presenter.MealDetailPresenter;
 import com.iti.flex_meals.mealDetailedActivity.presenter.MealDetailPresenterImpl;
+import com.iti.flex_meals.model.pojo.mealDetails.MealsItem;
+import com.iti.flex_meals.planFragment.model.MealPlan;
 import com.iti.flex_meals.utils.Utils;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
@@ -169,10 +173,10 @@ public class MealDetailedActivity extends AppCompatActivity implements MealDetai
     }
 
     private void getIntentKey() {
-        key = getIntent().getStringExtra("MEAL_ID");
-        randomKey = getIntent().getStringExtra("RANDOM_MEAL_ID");
-        favKey = getIntent().getStringExtra("FAVORITE_ID");
-        calendarKey = getIntent().getStringExtra("CALENDAR_MEAL_ID");
+        key = getIntent().getStringExtra(MEAL_ID);
+        randomKey = getIntent().getStringExtra(RANDOM_MEAL_ID);
+        favKey = getIntent().getStringExtra(FAVORITE_ID);
+        calendarKey = getIntent().getStringExtra(CALENDAR_MEAL_ID);
     }
 
     private void initViews() {

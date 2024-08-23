@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".authActivity.registerFragment.view.RegisterFragment">
+    tools:context=".registerFragment.view.RegisterFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -35,7 +35,7 @@
             android:layout_width="145dp"
             android:layout_height="wrap_content"
             android:gravity="start"
-            android:text="Begin your path to better eating!"
+            android:text="@string/begin_your_path_to_better_eating"
             android:textColor="@color/colorPrimary"
             android:textSize="30sp"
             android:textStyle="bold"
@@ -51,7 +51,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="30dp"
             android:layout_marginTop="12dp"
-            android:hint="Email Address"
+            android:hint="@string/email_address"
             app:boxStrokeColor="@color/colorPrimary"
             app:hintTextColor="@color/colorPrimaryVariant"
             app:layout_constraintEnd_toEndOf="parent"
@@ -75,7 +75,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="30dp"
             android:layout_marginTop="15dp"
-            android:hint="Password"
+            android:hint="@string/password"
             app:boxStrokeColor="@color/colorPrimary"
             app:endIconMode="password_toggle"
             app:hintTextColor="@color/colorPrimaryVariant"
@@ -98,7 +98,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="30dp"
             android:layout_marginTop="15dp"
-            android:hint="Confirm Password"
+            android:hint="@string/confirm_password"
             app:boxStrokeColor="@color/colorPrimary"
             app:endIconMode="password_toggle"
             app:hintTextColor="@color/colorPrimaryVariant"
@@ -124,7 +124,7 @@
             android:layout_marginHorizontal="30dp"
             android:layout_marginTop="35dp"
             android:paddingVertical="2dp"
-            android:text="Register"
+            android:text="@string/register"
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

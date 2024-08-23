@@ -23,7 +23,7 @@
         android:layout_marginTop="10dp"
         android:gravity="center"
         android:padding="10dp"
-        android:text="Select the type of the meal"
+        android:text="@string/select_type_of_the_meal"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintTop_toBottomOf="@id/dismiss" />
@@ -44,19 +44,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
-            android:text="Breakfast" />
+            android:text="@string/breakfast" />
 
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
-            android:text="Lunch" />
+            android:text="@string/lunch" />
 
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
-            android:text="Dinner" />
+            android:text="@string/dinner" />
     </RadioGroup>
 
     <com.google.android.material.textfield.TextInputLayout
