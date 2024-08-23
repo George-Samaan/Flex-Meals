@@ -7,6 +7,7 @@ import static com.iti.flex_meals.utils.Constants.INGREDIENT_NAME;
 import static com.iti.flex_meals.utils.Constants.MEAL_ID;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
@@ -133,7 +134,13 @@ public class ViewerListCategoriesActivity extends AppCompatActivity implements C
 
     private void initCategoriesRecyclerView() {
         categoriesDetailedAdapter = new CategoriesDetailedAdapter(this);
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 2, RecyclerView.VERTICAL, false));
+        int spanCount;
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            spanCount = 4;
+        } else {
+            spanCount = 2;
+        }
+        recyclerView.setLayoutManager(new GridLayoutManager(this, spanCount, RecyclerView.VERTICAL, false));
         recyclerView.setAdapter(categoriesDetailedAdapter);
     }
 
