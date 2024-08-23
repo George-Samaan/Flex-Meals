@@ -25,15 +25,16 @@ import com.iti.flex_meals.db.repository.RepositoryImpl;
 import com.iti.flex_meals.db.sharedPreferences.SharedPreferencesDataSourceImpl;
 import com.iti.flex_meals.mealDetailedActivity.view.MealDetailedActivity;
 import com.iti.flex_meals.model.pojo.mealDetails.MealsItem;
-import com.iti.flex_meals.planFragment.view.OnMealPlanDelete;
+import com.iti.flex_meals.planFragment.view.OnMealPlanInteraction;
 
 import java.util.List;
 
-public class FavouritesFragment extends Fragment implements OnMealClick, OnMealPlanDelete {
+public class FavouritesFragment extends Fragment implements OnMealClick {
 
     Repository repository;
     RecyclerView recyclerView;
     FavouritesAdapter favouritesAdapter;
+    OnMealPlanInteraction onMealPlanInteraction;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,7 +56,7 @@ public class FavouritesFragment extends Fragment implements OnMealClick, OnMealP
         super.onViewCreated(view, savedInstanceState);
 
         recyclerView = view.findViewById(R.id.favRecyclerView);
-        favouritesAdapter = new FavouritesAdapter(this, this);
+        favouritesAdapter = new FavouritesAdapter(this, onMealPlanInteraction);
         recyclerView.setLayoutManager(new GridLayoutManager(requireContext(), 2, RecyclerView.VERTICAL, false));
         recyclerView.setAdapter(favouritesAdapter);
 
@@ -75,8 +76,4 @@ public class FavouritesFragment extends Fragment implements OnMealClick, OnMealP
         startActivity(intent);
     }
 
-    @Override
-    public void onMealDelete(String mealId) {
-
-    }
 }
