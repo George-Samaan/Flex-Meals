@@ -23,8 +23,6 @@ public interface IFirebaseAuth {
 
 
 
-
-
     interface AuthResultCallback {
         void onSuccess(String userId);
         void onFailure(String errorMessage);

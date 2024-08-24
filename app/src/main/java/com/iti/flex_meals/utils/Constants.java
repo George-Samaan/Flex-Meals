@@ -9,6 +9,4 @@ public class Constants {
     public static String FAVORITE_ID = "FAVORITE_ID";
     public static String CALENDAR_MEAL_ID = "CALENDAR_MEAL_ID";
     public static String RANDOM_MEAL_ID = "RANDOM_MEAL_ID";
-
-
 }

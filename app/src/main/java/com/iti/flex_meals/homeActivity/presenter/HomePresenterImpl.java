@@ -37,5 +37,4 @@ public class HomePresenterImpl implements HomePresenter {
         return authToken == null || authToken.isEmpty();
     }
 
-
 }

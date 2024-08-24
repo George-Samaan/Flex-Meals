@@ -34,6 +34,4 @@ public interface MealDao {
 
     @Query("SELECT * FROM MealDetailsTable WHERE idMeal = :mealId LIMIT 1")
     LiveData<MealsItem> getFavoriteMeal(String mealId);
-
-
 }

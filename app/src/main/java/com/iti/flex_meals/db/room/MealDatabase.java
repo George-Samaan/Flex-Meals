@@ -24,6 +24,5 @@ public abstract class MealDatabase extends RoomDatabase {
     }
 
     public abstract MealDao mealDao();
-
     public abstract MealPlanDao mealPlanDao();
 }

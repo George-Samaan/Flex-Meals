@@ -26,32 +26,49 @@ public class profilePresenterImpl implements ProfilePresenter {
 
     @Override
     public void backUp() {
+        view.showLoadingBackup();
         repository.getAllFavoriteMeals(repository.getUserUid()).observe(view.getViewLifecycleOwner(), new Observer<List<MealsItem>>() {
             @Override
             public void onChanged(List<MealsItem> mealsItems) {
-                if (mealsItems != null) {
-                    Log.d("JEOOOOOOOO", "onChanged: " + mealsItems.size());
+                if (mealsItems != null && !mealsItems.isEmpty()) {
                     fireBaseAuth.uploadFavouriteItems(mealsItems, new IFirebaseAuth.OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(Task<Void> task) {
                             Log.d("FireBase", "onCompleteUpload ");
+                            if (task.isSuccessful()) {
+                                Log.d("Backup", "Favorite items backed up successfully.");
+                            } else {
+                                Log.d("Backup", "Failed to back up favorite items.");
+                            }
+                            view.hideLoadingBackup();
                         }
                     });
                 } else {
-                    Log.d("JEOOOOOOOO", "onChanged: null");
+                    Log.d("Backup", "No favorite meals to back up.");
+                    view.hideLoadingBackup();
                 }
             }
         });
+
         repository.getAllMealPlanItems(repository.getUserUid()).observe(view.getViewLifecycleOwner(), new Observer<List<MealPlan>>() {
             @Override
             public void onChanged(List<MealPlan> mealPlanList) {
-                if (mealPlanList != null) {
+                if (mealPlanList != null && !mealPlanList.isEmpty()) {
                     fireBaseAuth.uploadMealPlanItems(mealPlanList, new IFirebaseAuth.OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(Task<Void> task) {
                             Log.d("FireBase", "onCompleteUploadMealPlan ");
+                            if (task.isSuccessful()) {
+                                Log.d("Backup", "Meal plan items backed up successfully.");
+                            } else {
+                                Log.d("Backup", "Failed to back up meal plan items.");
+                            }
+                            view.hideLoadingBackup(); // Hide loading after backup
                         }
                     });
+                } else {
+                    Log.d("Backup", "No meal plans to back up.");
+                    view.hideLoadingBackup();
                 }
             }
         });
@@ -59,25 +76,30 @@ public class profilePresenterImpl implements ProfilePresenter {
 
     @Override
     public void sync() {
+        view.showLoading();
         fireBaseAuth.getFavouriteItems(repository.getUserUid(), new IFirebaseAuth.OnCompleteListener<List<MealsItem>>() {
             @Override
             public void onComplete(Task<List<MealsItem>> task) {
-                Log.d("gogo", "onComplete: " + task.getResult());
-                for (MealsItem item : task.getResult()) {
-//                    repository.clearFavoriteMeals();
-                    repository.addMealToFavourites(item);
-                    Log.d("gogo", "onComplete: " + item.getStrMeal());
+                if (task.isSuccessful() && task.getResult() != null) {
+                    for (MealsItem item : task.getResult()) {
+                        repository.addMealToFavourites(item);
+                        Log.d("Sync", "Added to favorites: " + item.getStrMeal());
+                    }
                 }
+                view.hideLoading();
             }
         });
+
         fireBaseAuth.getMealPlanItems(repository.getUserUid(), new IFirebaseAuth.OnCompleteListener<List<MealPlan>>() {
             @Override
             public void onComplete(Task<List<MealPlan>> task) {
-                Log.d("gogo", "onComplete: " + task.getResult());
-                for (MealPlan item : task.getResult()) {
-                    repository.addMealToMealPlan(item);
-                    Log.d("gogo", "onComplete: " + item.getStrMeal());
+                if (task.isSuccessful() && task.getResult() != null) {
+                    for (MealPlan item : task.getResult()) {
+                        repository.addMealToMealPlan(item);
+                        Log.d("Sync", "Added to meal plan: " + item.getStrMeal());
+                    }
                 }
+                view.hideLoading();
             }
         });
     }

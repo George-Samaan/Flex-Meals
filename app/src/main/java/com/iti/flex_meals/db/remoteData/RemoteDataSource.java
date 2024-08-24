@@ -23,6 +23,5 @@ public interface RemoteDataSource {
     void getIngredientsList(String ingredient, OnCategoriesListCallBack onCategoriesListCallBack);
 
     void getMealDetailById(String id, OnMealDetailsNetworkCallBack onMealDetailsNetworkCallBack);
-
 }
 

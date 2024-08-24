@@ -21,5 +21,4 @@ public interface RandomMealView {
     void showCountriesList(List<CountryItem> countries);
 
     void showIngredients(List<IngredientItem> ingredients);
-
 }

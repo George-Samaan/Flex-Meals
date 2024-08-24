@@ -67,7 +67,6 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Vi
         } else {
             MealPlan mealPlan = dinnerPlan.get(position - breakfastPlan.size() - lunchPlan.size() - favourites.size());
             setupMealPlanViewHolder(holder, mealPlan);
-
         }
     }
 
@@ -80,14 +79,11 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Vi
     }
 
     private void onMealPlanLonClickAndShortClick(@NonNull ViewHolder holder, MealPlan mealPlan) {
-
         holder.itemView.setOnLongClickListener(v -> {
             onMealPlanInteraction.onMealPlanLongClick(mealPlan, holder);
             return true;
         });
-
         holder.itemView.setOnClickListener(v -> onMealPlanInteraction.onMealPlanShortClick(mealPlan, holder));
-
         holder.deleteButton.setOnClickListener(v -> {
             onMealPlanInteraction.onMealPlanDeleteClick(mealPlan, holder);
             Log.d("Delete mealPlan", mealPlan.getIdMeal());
@@ -130,7 +126,6 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Vi
             mealName = itemView.findViewById(R.id.category_name);
             mealImage = itemView.findViewById(R.id.category_image);
             deleteButton = itemView.findViewById(R.id.delete_button_image);
-
         }
     }
 }

@@ -14,5 +14,4 @@ public interface SharePreferenceDataSource {
     String getLoginAuth();
 
     void clearAuthData();
-
 }

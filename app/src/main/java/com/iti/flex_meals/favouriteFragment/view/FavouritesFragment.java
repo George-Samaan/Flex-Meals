@@ -32,7 +32,6 @@ import com.iti.flex_meals.planFragment.view.OnMealPlanInteraction;
 import java.util.List;
 
 public class FavouritesFragment extends Fragment implements OnMealClick, FavouritesView {
-
     private RecyclerView recyclerView;
     private FavouritesAdapter favouritesAdapter;
     private FavouritePresenter favouritesPresenter;
@@ -41,7 +40,6 @@ public class FavouritesFragment extends Fragment implements OnMealClick, Favouri
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         favouritesPresenter = new FavouritePresenterImpl(this, new RepositoryImpl(
                 SharedPreferencesDataSourceImpl.getInstance(requireContext()),
                 new RemoteDataSourceImpl(),

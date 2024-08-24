@@ -6,11 +6,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.github.leandroborgesferreira.loadingbutton.customViews.CircularProgressButton;
 import com.iti.flex_meals.R;
 import com.iti.flex_meals.db.localData.LocalDataSourceImpl;
 import com.iti.flex_meals.db.remoteData.RemoteDataSourceImpl;
@@ -21,10 +23,10 @@ import com.iti.flex_meals.profileFragment.presenter.profilePresenterImpl;
 import com.iti.flex_meals.utils.Utils;
 
 public class ProfileFragment extends Fragment implements ProfileView {
-    Button backupBtn;
+    CircularProgressButton backupBtn;
     ProfilePresenter presenter;
     TextView emailTv;
-    Button sync;
+    CircularProgressButton sync;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,7 +52,6 @@ public class ProfileFragment extends Fragment implements ProfileView {
         onBackUpClick();
         presenter.getEmail();
         onSyncClick();
-
     }
 
     private void onSyncClick() {
@@ -60,7 +61,9 @@ public class ProfileFragment extends Fragment implements ProfileView {
                 if (!Utils.isNetworkAvailable(requireContext())) {
                     Utils.toastNoInternetOnItemClick(requireContext());
                 } else {
+                    showLoading();
                     presenter.sync();
+                    Toast.makeText(requireContext(), "Syncing", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -73,7 +76,9 @@ public class ProfileFragment extends Fragment implements ProfileView {
                 if (!Utils.isNetworkAvailable(requireContext())) {
                     Utils.toastNoInternetOnItemClick(requireContext());
                 } else {
+                    showLoadingBackup();
                     presenter.backUp();
+                    Toast.makeText(requireContext(), "Backing Up", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -83,5 +88,25 @@ public class ProfileFragment extends Fragment implements ProfileView {
     public void showEmail(String email) {
         emailTv.setText(email);
         emailTv.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideLoading() {
+        sync.revertAnimation();
+    }
+
+    @Override
+    public void showLoading() {
+        sync.startAnimation();
+    }
+
+    @Override
+    public void showLoadingBackup() {
+        backupBtn.startAnimation();
+    }
+
+    @Override
+    public void hideLoadingBackup() {
+        backupBtn.revertAnimation();
     }
 }

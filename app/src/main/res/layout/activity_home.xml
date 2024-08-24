@@ -43,7 +43,6 @@
         android:layout_width="0dp"
         android:layout_height="0dp">
 
-        <!-- Network Error Banner -->
         <TextView
             android:id="@+id/network_error_banner"
             android:layout_width="match_parent"

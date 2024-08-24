@@ -88,8 +88,6 @@ public class MealDetailedActivity extends AppCompatActivity implements MealDetai
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        MealDatabase db = Room.databaseBuilder(getApplicationContext(), MealDatabase.class, "meals_database").build();
-//        mealDao = db.mealDao();
         setContentView(R.layout.activity_mel_detailed);
         presenter = new MealDetailPresenterImpl(this,
                 new RepositoryImpl(SharedPreferencesDataSourceImpl.getInstance(this),
@@ -104,6 +102,7 @@ public class MealDetailedActivity extends AppCompatActivity implements MealDetai
         onBackClick();
         onCalendarClick();
     }
+
     private MealPlan mapMealsItemToMealPlan(MealsItem meal) {
         MealPlan mealPlan = new MealPlan();
         mealPlan.setIdMeal(meal.getIdMeal());
@@ -313,7 +312,7 @@ public class MealDetailedActivity extends AppCompatActivity implements MealDetai
             presenter.isMealExistsInFavourite(selectedKey, presenter.getUserUid(), exists -> {
                 runOnUiThread(() -> {
                     isFavorite = exists;
-                    updateImageFavouriteColor(presenter.getUserUid());  // Update the xml fav color based on the favorite status
+                    updateImageFavouriteColor(presenter.getUserUid());
                 });
             });
         }
@@ -354,8 +353,8 @@ public class MealDetailedActivity extends AppCompatActivity implements MealDetai
     private void dialogLoginRequired() {
         Utils.showConfirmationDialog(
                 this,
-                "Login Required",
-                "You must log in to save this meal",
+                getString(R.string.login_required),
+                getString(R.string.you_must_log_in_to_save_this_meal),
                 (dialog, which) -> navigateToStartAsUser(),  // Navigate to login
                 (dialog, which) -> dialog.dismiss()  // Dismiss dialog
         );

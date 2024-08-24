@@ -90,7 +90,6 @@ public class ViewerListCategoriesActivity extends AppCompatActivity implements C
 
     private void initPresenters() {
         if (allIngredients != null) {
-            // Show ingredients
             initIngredientsRecyclerView();
             presenter.showIngredients();
         } else {
@@ -108,6 +107,7 @@ public class ViewerListCategoriesActivity extends AppCompatActivity implements C
                 performSearch(query);
                 return true;
             }
+
             @Override
             public boolean onQueryTextChange(String newText) {
                 performSearch(newText);
@@ -146,7 +146,13 @@ public class ViewerListCategoriesActivity extends AppCompatActivity implements C
 
     private void initIngredientsRecyclerView() {
         ingredientsAdapter = new IngredientsAdapter(true, this);
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 5, RecyclerView.VERTICAL, false));
+        int spanCount;
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            spanCount = 9;
+        } else {
+            spanCount = 5;
+        }
+        recyclerView.setLayoutManager(new GridLayoutManager(this, spanCount, RecyclerView.VERTICAL, false));
         recyclerView.setAdapter(ingredientsAdapter);
     }
 
@@ -192,7 +198,7 @@ public class ViewerListCategoriesActivity extends AppCompatActivity implements C
         if (ingredientDetail != null) {
             title.setText(ingredientDetail);
             initCategoriesRecyclerView();
-            isViewingDetail = true; // Set flag to true when viewing detail
+            isViewingDetail = true;
             presenter.showIngredientsDetails(ingredientDetail);
         }
     }
@@ -207,12 +213,10 @@ public class ViewerListCategoriesActivity extends AppCompatActivity implements C
             if (isViewingDetail) {
                 title.setText(allIngredients);
                 isViewingDetail = false;
-
                 initIngredientsRecyclerView();
-                ingredientsAdapter.setIngredients(savedIngredientsList); // Restore the full list
+                ingredientsAdapter.setIngredients(savedIngredientsList);
             } else {
-                // If not viewing a detail, go back as usual
-                finish(); // Close the activity
+                finish();
             }
         });
     }
@@ -221,11 +225,9 @@ public class ViewerListCategoriesActivity extends AppCompatActivity implements C
     public void onBackPressed() {
         if (isViewingDetail) {
             title.setText(allIngredients);
-            isViewingDetail = false; // No longer viewing a detail
-
-
-            initIngredientsRecyclerView(); // Reinitialize the ingredients RecyclerView
-            ingredientsAdapter.setIngredients(savedIngredientsList); // Restore the full list
+            isViewingDetail = false;
+            initIngredientsRecyclerView();
+            ingredientsAdapter.setIngredients(savedIngredientsList);
         } else {
             super.onBackPressed();
         }

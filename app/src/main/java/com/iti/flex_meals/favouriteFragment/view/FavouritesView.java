@@ -8,6 +8,5 @@ import java.util.List;
 
 public interface FavouritesView {
     LifecycleOwner getLifecycleOwner(); // For observing LiveData
-
     void showFavouriteMeals(List<MealsItem> mealsItems);
 }

@@ -7,7 +7,6 @@
     android:layout_height="match_parent"
     tools:context=".mealDetailedActivity.view.MealDetailedActivity">
 
-    <!-- Left side: Image and video -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/leftPane"
         android:layout_width="0dp"
@@ -40,7 +39,6 @@
             app:layout_constraintTop_toBottomOf="@id/mealCover" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!-- Right side: Details and other content -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/rightPane"
         android:layout_width="0dp"

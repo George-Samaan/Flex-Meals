@@ -38,7 +38,6 @@ public class RemoteDataSourceImpl implements RemoteDataSource {
                     onRandomMealNetworkCallBack.onError(response.message());
                 }
             }
-
             @Override
             public void onFailure(Call<RandomMealResponse> call, Throwable throwable) {
                 onRandomMealNetworkCallBack.onError(throwable.getMessage());
@@ -163,8 +162,6 @@ public class RemoteDataSourceImpl implements RemoteDataSource {
             }
         });
     }
-
-
 }
 
 

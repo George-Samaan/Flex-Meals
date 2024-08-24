@@ -44,15 +44,6 @@ public class HomeActivity extends AppCompatActivity implements HomeView {
     TextView networkBanner;
     private Alerter alerter;
     private HomePresenter presenter;
-    private final BroadcastReceiver networkChangeReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (ConnectivityManager.CONNECTIVITY_ACTION.equals(intent.getAction())) {
-                boolean noConnection = intent.getBooleanExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY, false);
-                updateNetworkAlert(noConnection);
-            }
-        }
-    };
     private boolean isConnected = false;
 
 
@@ -73,6 +64,16 @@ public class HomeActivity extends AppCompatActivity implements HomeView {
         initPageTitle();
         setDrawerItemListeners();
     }
+
+    private final BroadcastReceiver networkChangeReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (ConnectivityManager.CONNECTIVITY_ACTION.equals(intent.getAction())) {
+                boolean noConnection = intent.getBooleanExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY, false);
+                updateNetworkAlert(noConnection);
+            }
+        }
+    };
 
     @Override
     public void showNetworkErrorAlert() {
@@ -213,7 +214,7 @@ public class HomeActivity extends AppCompatActivity implements HomeView {
             Toast.makeText(this, R.string.logging_out, Toast.LENGTH_SHORT).show();
             presenter.clearAuthData();
             Intent intent = new Intent(this, AuthActivity.class);
-            intent.putExtra("navigateTo", "targetFragment");
+//            intent.putExtra("navigateTo", "targetFragment");
             startActivity(intent);
             finish();
         });
@@ -248,7 +249,7 @@ public class HomeActivity extends AppCompatActivity implements HomeView {
             if (noConnection) {
                 showNetworkErrorAlert(); // Show alert if there's no connection
             } else {
-                dismissNetworkErrorAlert(); // Dismiss alert if connection is restored
+                dismissNetworkErrorAlert();
             }
         });
     }
@@ -256,7 +257,7 @@ public class HomeActivity extends AppCompatActivity implements HomeView {
     protected void onDestroy() {
         super.onDestroy();
         unregisterReceiver(networkChangeReceiver);
-        dismissNetworkErrorAlert(); // Ensure alert is dismissed on destroy
+        dismissNetworkErrorAlert();
 
     }
 }

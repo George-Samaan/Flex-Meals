@@ -48,7 +48,6 @@ public class SplashAuthFragment extends Fragment  implements SplashView {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        // Use view directly or check if view is not null
         new Handler().postDelayed(() -> {
             if (getView() != null) {
                 presenter.nextPage();

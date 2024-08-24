@@ -185,5 +185,4 @@ public class RepositoryImpl implements Repository {
         mealFetchCallBack.onDinnerMealsFetched(dinnerMeals);
     }
 
-
 }

@@ -24,6 +24,7 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+
     <style name="CustomTextAppearance" parent="TextAppearance.MaterialComponents.Body1">
         <item name="android:textSize">18sp</item> <!-- Adjust text size -->
         <item name="android:textColor">@color/colorText</item> <!-- Set text color -->
