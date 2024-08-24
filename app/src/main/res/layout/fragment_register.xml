@@ -124,7 +124,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/confirmPasswordField"
-            app:spinning_bar_color="@color/colorPrimary" />
+            app:spinning_bar_color="@color/colorAccent2" />
 
         <ImageView
             android:id="@+id/imgBack"

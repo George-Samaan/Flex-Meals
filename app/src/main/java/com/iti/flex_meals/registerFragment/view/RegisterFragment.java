@@ -75,6 +75,7 @@ public class RegisterFragment extends Fragment implements RegisterView {
                     String password = edt_password.getText().toString();
                     String confirmPassword = edt_confirmPassword.getText().toString();
                     if (validateInput(email, password, confirmPassword)) {
+                        showLoading();
                         presenter.performRegisterFireBase(email, password);
                     }
                 } else {
@@ -93,9 +94,7 @@ public class RegisterFragment extends Fragment implements RegisterView {
 
     @Override
     public void hideLoading() {
-        btn_register.stopAnimation();
         btn_register.revertAnimation();
-        btn_register.dispose();
     }
 
     @Override
