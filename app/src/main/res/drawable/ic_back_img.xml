@@ -1,0 +1,24 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="150dp"
+    android:height="160dp"
+    android:viewportWidth="50"
+    android:viewportHeight="50">
+
+    <!-- Circular Background with Gradient -->
+    <path
+        android:fillColor="@color/colorPrimary"
+        android:pathData="M25,5 A20,20 0 1,1 25,45 A20,20 0 1,1 25,5 Z" />
+
+    <!-- Circular Border -->
+    <path
+        android:fillColor="@android:color/transparent"
+        android:pathData="M25,5 A20,20 0 1,1 25,45 A20,20 0 1,1 25,5 Z"
+        android:strokeWidth="1"
+        android:strokeColor="@color/colorAccent1" />
+
+    <!-- Arrow Path Rotated 180 Degrees -->
+    <path
+        android:pathData="M30,20 L23,27 L30,34 L32,32 L27,27 L32,22 Z"
+        android:fillColor="@color/colorAccent2"/>
+
+</vector>

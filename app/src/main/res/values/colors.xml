@@ -2,4 +2,27 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- Main Color -->
+    <color name="colorPrimary">#00ADB5</color>
+    <color name="colorPrimaryVariant">#007A80</color>
+    <color name="colorPrimaryLight">#00CED1</color>
+
+    <!-- Accent Colors -->
+    <color name="colorAccent1">#FF5722</color>
+    <color name="colorAccent2">#FFC107</color>
+
+    <!-- Neutral Colors -->
+    <color name="colorBackgroundLight">#F0F4F8</color>
+    <color name="colorBackgroundDark">#2B2B2B</color>
+    <color name="colorText">#333333</color>
+
+    <!-- Success/Info Colors -->
+    <color name="colorSuccess">#4CAF50</color>
+    <color name="colorWarning">#FF9800</color>
+    <color name="colorError">#F44336</color>
+
+
+    <color name="colorFavorite">#FF0000</color> <!-- Red color for favorite -->
+    <color name="colorNonFavorite">@color/colorPrimaryVariant</color> <!-- Your original color -->
 </resources>
