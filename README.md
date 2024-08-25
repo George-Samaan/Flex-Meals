@@ -35,6 +35,7 @@
 
 ### Architecture
 - **MVP (Model-View-Presenter)**: Ensures clean separation of concerns, making the code easier to maintain and test.
+- **Repository Pattern:** Centralizes data access logic by providing a clean API for data operations, managing data from various sources like remote database, local databases, and shared preferences.
 
 ### Networking
 - **Retrofit**: Handles all network communication seamlessly.
